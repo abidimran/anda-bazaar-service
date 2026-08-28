@@ -3,73 +3,39 @@ package com.andabazaar.mapper;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.andabazaar.dto.subscription.SubscriptionResponseDto;
 import com.andabazaar.entity.UserSubscription;
 
-@Component
-public class SubscriptionMapper {
+@Mapper(componentModel = "spring")
+public interface SubscriptionMapper {
 
-    public SubscriptionResponseDto toDto(
-            UserSubscription subscription) {
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "plan.id", target = "planId")
+    @Mapping(source = "plan.name", target = "planName")
+    @Mapping(target = "daysRemaining", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "durationDays", ignore = true)
+    SubscriptionResponseDto toDto(UserSubscription subscription);
 
-        if (subscription == null) {
-            return null;
-        }
-
+    @AfterMapping
+    default void computeFields(UserSubscription subscription, @MappingTarget SubscriptionResponseDto dto) {
         LocalDate today = LocalDate.now();
 
-        Long daysRemaining = 0L;
-        Boolean active = false;
-
-        if (subscription.getEndDate() != null
-                && !subscription.getEndDate()
-                        .isBefore(today)) {
-
-            daysRemaining = ChronoUnit.DAYS.between(
-                    today,
-                    subscription.getEndDate()
-            );
-
-            active = true;
+        if (subscription.getEndDate() != null && !subscription.getEndDate().isBefore(today)) {
+            dto.setDaysRemaining(ChronoUnit.DAYS.between(today, subscription.getEndDate()));
+            dto.setActive(true);
+        } else {
+            dto.setDaysRemaining(0L);
+            dto.setActive(false);
         }
 
-        Integer durationDays = null;
-
-        if (subscription.getStartDate() != null
-                && subscription.getEndDate() != null) {
-
-            durationDays =
-                    (int) ChronoUnit.DAYS.between(
-                            subscription.getStartDate(),
-                            subscription.getEndDate()
-                    );
+        if (subscription.getStartDate() != null && subscription.getEndDate() != null) {
+            dto.setDurationDays((int) ChronoUnit.DAYS.between(subscription.getStartDate(), subscription.getEndDate()));
         }
-
-        return SubscriptionResponseDto.builder()
-                .id(subscription.getId())
-                .userId(
-                        subscription.getUser() != null
-                                ? subscription.getUser().getId()
-                                : null
-                )
-                .planId(
-                        subscription.getPlan() != null
-                                ? subscription.getPlan().getId()
-                                : null
-                )
-                .planName(
-                        subscription.getPlan() != null
-                                ? subscription.getPlan().getName()
-                                : null
-                )
-                .durationDays(durationDays)
-                .startDate(subscription.getStartDate())
-                .endDate(subscription.getEndDate())
-                .status(subscription.getStatus())
-                .daysRemaining(daysRemaining)
-                .active(active)
-                .build();
     }
 }

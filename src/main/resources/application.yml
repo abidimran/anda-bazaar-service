@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: Anda-Bazaar
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/AndaBazaar?useSSL=false&serverTimezone=Asia/Kolkata
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  secret: AndaBazaarSuperSecretKeyForJwtAuthentication2026VeryLongKey
+  expiration: 86400000
+
+razorpay:
+  key:
+    id: YOUR_RAZORPAY_KEY_ID
+    secret: YOUR_RAZORPAY_KEY_SECRET
+  webhook:
+    secret: YOUR_RAZORPAY_WEBHOOK_SECRET
