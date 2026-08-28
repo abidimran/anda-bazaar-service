@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>andabazaar</groupId>
-	<artifactId>Anda-Bazaar</artifactId>
+	<artifactId>anda-bazaar-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Anda-Bazaar</name>
+	<name>anda-bazaar</name>
 	<description>Egg Market Price Rate Application</description>
 	<url/>
 	<licenses>
