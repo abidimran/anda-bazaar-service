@@ -27,14 +27,9 @@ public class EggPriceController {
     // =====================================================
 
     @PostMapping
-    public ResponseEntity<EggPriceResponseDto> createPrice(
-            @Valid @RequestBody EggPriceRequestDto request) {
+    public ResponseEntity<EggPriceResponseDto> createPrice(@Valid @RequestBody EggPriceRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        eggPriceService.createPrice(request)
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(eggPriceService.createPrice(request));
     }
 
     // =====================================================
@@ -43,16 +38,10 @@ public class EggPriceController {
     // =====================================================
 
     @PutMapping("/{id}")
-    public ResponseEntity<EggPriceResponseDto> updatePrice(
-            @PathVariable Long id,
+    public ResponseEntity<EggPriceResponseDto> updatePrice(@PathVariable Long id,
             @Valid @RequestBody EggPriceRequestDto request) {
 
-        return ResponseEntity.ok(
-                eggPriceService.updatePrice(
-                        id,
-                        request
-                )
-        );
+ return ResponseEntity.ok(eggPriceService.updatePrice(id, request));
     }
 
     // =====================================================
@@ -61,12 +50,9 @@ public class EggPriceController {
     // =====================================================
 
     @GetMapping("/{id}")
-    public ResponseEntity<EggPriceResponseDto> getPrice(
-            @PathVariable Long id) {
+    public ResponseEntity<EggPriceResponseDto> getPrice(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                eggPriceService.getPriceById(id)
-        );
+ return ResponseEntity.ok(eggPriceService.getPriceById(id));
     }
 
     // =====================================================
@@ -75,16 +61,9 @@ public class EggPriceController {
     // =====================================================
 
     @GetMapping("/market/{marketId}")
-    public ResponseEntity<EggPriceResponseDto> getMarketPrice(
-            @PathVariable Long marketId,
-            @RequestParam LocalDate date) {
+    public ResponseEntity<EggPriceResponseDto> getMarketPrice(@PathVariable Long marketId, @RequestParam LocalDate date) {
 
-        return ResponseEntity.ok(
-                eggPriceService.getMarketPrice(
-                        marketId,
-                        date
-                )
-        );
+ return ResponseEntity.ok(eggPriceService.getMarketPrice(marketId, date));
     }
 
     // =====================================================
@@ -96,9 +75,7 @@ public class EggPriceController {
     public ResponseEntity<List<EggPriceResponseDto>>
             getTodayPrices() {
 
-        return ResponseEntity.ok(
-                eggPriceService.getTodayPrices()
-        );
+ return ResponseEntity.ok(eggPriceService.getTodayPrices());
     }
 
     // =====================================================
@@ -110,9 +87,7 @@ public class EggPriceController {
     public ResponseEntity<List<EggPriceResponseDto>>
             getYesterdayPrices() {
 
-        return ResponseEntity.ok(
-                eggPriceService.getYesterdayPrices()
-        );
+ return ResponseEntity.ok(eggPriceService.getYesterdayPrices());
     }
 
     // =====================================================
@@ -122,18 +97,9 @@ public class EggPriceController {
 
     @GetMapping("/history/{marketId}")
     public ResponseEntity<List<EggPriceResponseDto>>
-            getPriceHistory(
-                    @PathVariable Long marketId,
-                    @RequestParam LocalDate startDate,
-                    @RequestParam LocalDate endDate) {
+            getPriceHistory(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                eggPriceService.getPriceHistory(
-                        marketId,
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(eggPriceService.getPriceHistory(marketId, startDate, endDate));
     }
 
     // =====================================================
@@ -150,12 +116,9 @@ public class EggPriceController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<EggPriceResponseDto>>
-            getUserPrices(
-                    @PathVariable Long userId) {
+            getUserPrices(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                eggPriceService.getUserPrices(userId)
-        );
+ return ResponseEntity.ok(eggPriceService.getUserPrices(userId));
     }
 
     // =====================================================
@@ -172,20 +135,12 @@ public class EggPriceController {
 
     @GetMapping("/user/{userId}/history/{marketId}")
     public ResponseEntity<List<EggPriceResponseDto>>
-            getUserPriceHistory(
-                    @PathVariable Long userId,
+            getUserPriceHistory(@PathVariable Long userId,
                     @PathVariable Long marketId,
                     @RequestParam LocalDate startDate,
                     @RequestParam LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                eggPriceService.getUserPriceHistory(
-                        userId,
-                        marketId,
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(eggPriceService.getUserPriceHistory(userId, marketId, startDate, endDate));
     }
 
     // =====================================================
@@ -194,13 +149,10 @@ public class EggPriceController {
     // =====================================================
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePrice(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deletePrice(@PathVariable Long id) {
 
         eggPriceService.deletePrice(id);
 
-        return ResponseEntity
-                .noContent()
-                .build();
+ return ResponseEntity.noContent().build();
     }
 }

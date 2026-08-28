@@ -18,17 +18,12 @@ public interface CouponRepository
 
     List<Coupon> findByActiveTrueOrderByCreatedAtDesc();
 
-    List<Coupon> findByStatusOrderByCreatedAtDesc(
-            CouponStatus status);
+    List<Coupon> findByStatusOrderByCreatedAtDesc( CouponStatus status);
 
-    List<Coupon> findByStatusAndEndDateBefore(
-            CouponStatus status,
-            LocalDateTime date);
+    List<Coupon> findByStatusAndEndDateBefore( CouponStatus status, LocalDateTime date);
 
     List<Coupon>
-    findByActiveTrueAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
-            LocalDateTime startDate,
-            LocalDateTime endDate);
+    findByActiveTrueAndStartDateLessThanEqualAndEndDateGreaterThanEqual( LocalDateTime startDate, LocalDateTime endDate);
 
     long countByStatus(CouponStatus status);
 }

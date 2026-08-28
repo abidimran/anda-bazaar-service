@@ -15,9 +15,7 @@ public class RazorpayWebhookService {
 
     private final RazorpayConfig razorpayConfig;
 
-    public boolean verifyWebhookSignature(
-            String payload,
-            String signature) {
+    public boolean verifyWebhookSignature( String payload, String signature) {
 
         if (payload == null || payload.isBlank()) {
             return false;
@@ -31,8 +29,7 @@ public class RazorpayWebhookService {
             return Utils.verifyWebhookSignature(
                     payload,
                     signature,
-                    razorpayConfig.getWebhookSecret()
-            );
+                    razorpayConfig.getWebhookSecret());
         } catch (Exception e) {
             return false;
         }
@@ -46,8 +43,7 @@ public class RazorpayWebhookService {
         return json.optString("event");
     }
 
-    public String getRazorpayOrderId(
-            String payload) {
+    public String getRazorpayOrderId( String payload) {
 
         JSONObject json =
                 new JSONObject(payload);
@@ -70,8 +66,7 @@ public class RazorpayWebhookService {
             if (entity != null) {
                 return entity.optString(
                         "order_id",
-                        null
-                );
+                        null);
             }
         }
 
@@ -86,16 +81,14 @@ public class RazorpayWebhookService {
             if (entity != null) {
                 return entity.optString(
                         "id",
-                        null
-                );
+                        null);
             }
         }
 
         return null;
     }
 
-    public String getRazorpayPaymentId(
-            String payload) {
+    public String getRazorpayPaymentId( String payload) {
 
         JSONObject json =
                 new JSONObject(payload);
@@ -124,7 +117,6 @@ public class RazorpayWebhookService {
 
         return entity.optString(
                 "id",
-                null
-        );
+                null);
     }
 }

@@ -26,50 +26,40 @@ public class AuditLogServiceImpl implements AuditLogService {
     private final UserRepository userRepository;
 
     @Override
-    public AuditLogResponseDto createLog(
-            AuditLogRequestDto request) {
+    public AuditLogResponseDto createLog( AuditLogRequestDto request) {
 
         User user = null;
 
         if (request.getUserId() != null) {
 
-            user = userRepository.findById(
-                    request.getUserId()
+            user = userRepository.findById( request.getUserId()
             ).orElseThrow(() ->
                     new ResourceNotFoundException(
                             "User not found with id: "
                                     + request.getUserId()
-                    )
-            );
+                    ));
         }
 
         AuditLog log = AuditLog.builder()
                 .user(user)
-                .action(
-                        request.getAction()
+                .action( request.getAction()
                                 .trim()
                                 .toUpperCase()
                 )
-                .entityType(
-                        request.getEntityType()
+                .entityType( request.getEntityType()
                 )
-                .entityId(
-                        request.getEntityId()
+                .entityId( request.getEntityId()
                 )
-                .description(
-                        request.getDescription()
+                .description( request.getDescription()
                 )
-                .ipAddress(
-                        request.getIpAddress()
+                .ipAddress( request.getIpAddress()
                 )
-                .userAgent(
-                        request.getUserAgent()
+                .userAgent( request.getUserAgent()
                 )
                 .build();
 
         return mapToResponse(
-                auditLogRepository.save(log)
-        );
+                auditLogRepository.save(log));
     }
 
     @Override
@@ -77,8 +67,7 @@ public class AuditLogServiceImpl implements AuditLogService {
     public AuditLogResponseDto getLogById(Long id) {
 
         return mapToResponse(
-                findLog(id)
-        );
+                findLog(id));
     }
 
     @Override
@@ -94,15 +83,13 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuditLogResponseDto> getUserLogs(
-            Long userId) {
+    public List<AuditLogResponseDto> getUserLogs( Long userId) {
 
         if (!userRepository.existsById(userId)) {
 
             throw new ResourceNotFoundException(
                     "User not found with id: "
-                            + userId
-            );
+                            + userId);
         }
 
         return auditLogRepository
@@ -114,12 +101,10 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuditLogResponseDto> getLogsByAction(
-            String action) {
+    public List<AuditLogResponseDto> getLogsByAction( String action) {
 
         return auditLogRepository
-                .findByActionOrderByCreatedAtDesc(
-                        action.trim().toUpperCase()
+                .findByActionOrderByCreatedAtDesc( action.trim().toUpperCase()
                 )
                 .stream()
                 .map(this::mapToResponse)
@@ -128,15 +113,10 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuditLogResponseDto> getEntityLogs(
-            String entityType,
-            String entityId) {
+    public List<AuditLogResponseDto> getEntityLogs( String entityType, String entityId) {
 
         return auditLogRepository
-                .findByEntityTypeAndEntityIdOrderByCreatedAtDesc(
-                        entityType,
-                        entityId
-                )
+                .findByEntityTypeAndEntityIdOrderByCreatedAtDesc( entityType, entityId )
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -144,15 +124,10 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuditLogResponseDto> getLogsBetween(
-            LocalDateTime startDate,
-            LocalDateTime endDate) {
+    public List<AuditLogResponseDto> getLogsBetween( LocalDateTime startDate, LocalDateTime endDate) {
 
         return auditLogRepository
-                .findByCreatedAtBetweenOrderByCreatedAtDesc(
-                        startDate,
-                        endDate
-                )
+                .findByCreatedAtBetweenOrderByCreatedAtDesc( startDate, endDate )
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -173,18 +148,14 @@ public class AuditLogServiceImpl implements AuditLogService {
                         new ResourceNotFoundException(
                                 "Audit log not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
-    private AuditLogResponseDto mapToResponse(
-            AuditLog log) {
+    private AuditLogResponseDto mapToResponse( AuditLog log) {
 
         return AuditLogResponseDto.builder()
                 .id(log.getId())
-                .userId(
-                        log.getUser() != null
-                                ? log.getUser().getId()
+                .userId( log.getUser() != null ? log.getUser().getId()
                                 : null
                 )
                 .action(log.getAction())

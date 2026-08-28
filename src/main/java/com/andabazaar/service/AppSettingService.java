@@ -7,18 +7,13 @@ import com.andabazaar.dto.appsetting.AppSettingResponseDto;
 
 public interface AppSettingService {
 
-    AppSettingResponseDto createSetting(
-            AppSettingRequestDto request);
+    AppSettingResponseDto createSetting( AppSettingRequestDto request);
 
-    AppSettingResponseDto updateSetting(
-            Long id,
-            AppSettingRequestDto request);
+    AppSettingResponseDto updateSetting( Long id, AppSettingRequestDto request);
 
-    AppSettingResponseDto getSettingById(
-            Long id);
+    AppSettingResponseDto getSettingById( Long id);
 
-    AppSettingResponseDto getSettingByKey(
-            String key);
+    AppSettingResponseDto getSettingByKey( String key);
 
     List<AppSettingResponseDto> getAllSettings();
 

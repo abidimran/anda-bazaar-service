@@ -11,25 +11,15 @@ import com.andabazaar.enums.TicketStatus;
 public interface SupportTicketRepository
         extends JpaRepository<SupportTicket, Long> {
 
-    Optional<SupportTicket> findByTicketNumber(
-            String ticketNumber
-    );
+    Optional<SupportTicket> findByTicketNumber( String ticketNumber);
 
-    boolean existsByTicketNumber(
-            String ticketNumber
-    );
+    boolean existsByTicketNumber( String ticketNumber);
 
-    List<SupportTicket> findByUserIdOrderByCreatedAtDesc(
-            Long userId
-    );
+    List<SupportTicket> findByUserIdOrderByCreatedAtDesc( Long userId);
 
-    List<SupportTicket> findByStatusOrderByCreatedAtDesc(
-            TicketStatus status
-    );
+    List<SupportTicket> findByStatusOrderByCreatedAtDesc( TicketStatus status);
 
     List<SupportTicket> findAllByOrderByCreatedAtDesc();
 
-    long countByStatus(
-            TicketStatus status
-    );
+    long countByStatus( TicketStatus status);
 }

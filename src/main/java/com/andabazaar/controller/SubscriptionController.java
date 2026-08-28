@@ -31,9 +31,7 @@ public class SubscriptionController {
             List<SubscriptionPlanResponseDto>>
             getActivePlans() {
 
-        return ResponseEntity.ok(
-                subscriptionService.getActivePlans()
-        );
+ return ResponseEntity.ok(subscriptionService.getActivePlans());
     }
 
     @GetMapping("/plans/{id}")
@@ -41,49 +39,29 @@ public class SubscriptionController {
             SubscriptionPlanResponseDto>
             getPlan(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                subscriptionService.getPlanById(id)
-        );
+ return ResponseEntity.ok(subscriptionService.getPlanById(id));
     }
 
     @PostMapping("/user/{userId}")
     public ResponseEntity<SubscriptionResponseDto>
-            subscribe(
-                    @PathVariable Long userId,
-                    @Valid @RequestBody
-                    SubscribeRequestDto request) {
+            subscribe(@PathVariable Long userId, @Valid @RequestBody SubscribeRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                    subscriptionService.subscribe(
-                            userId,
-                            request
-                    )
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionService.subscribe(userId, request));
     }
 
     @GetMapping("/user/{userId}/current")
     public ResponseEntity<SubscriptionResponseDto>
-            getCurrentSubscription(
-                    @PathVariable Long userId) {
+            getCurrentSubscription(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                subscriptionService
-                    .getCurrentSubscription(userId)
-        );
+ return ResponseEntity.ok(subscriptionService.getCurrentSubscription(userId));
     }
 
     @GetMapping("/user/{userId}/history")
     public ResponseEntity<
             List<SubscriptionResponseDto>>
-            getSubscriptionHistory(
-                    @PathVariable Long userId) {
+            getSubscriptionHistory(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                subscriptionService
-                    .getSubscriptionHistory(userId)
-        );
+ return ResponseEntity.ok(subscriptionService.getSubscriptionHistory(userId));
     }
 
     // =========================
@@ -93,42 +71,25 @@ public class SubscriptionController {
     @PostMapping("/admin/plans")
     public ResponseEntity<
             SubscriptionPlanResponseDto>
-            createPlan(
-                    @Valid @RequestBody
-                    SubscriptionPlanRequestDto request) {
+            createPlan(@Valid @RequestBody SubscriptionPlanRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                    subscriptionService.createPlan(
-                            request
-                    )
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionService.createPlan(request));
     }
 
     @PutMapping("/admin/plans/{id}")
     public ResponseEntity<
             SubscriptionPlanResponseDto>
-            updatePlan(
-                    @PathVariable Long id,
-                    @Valid @RequestBody
-                    SubscriptionPlanRequestDto request) {
+            updatePlan(@PathVariable Long id, @Valid @RequestBody SubscriptionPlanRequestDto request) {
 
-        return ResponseEntity.ok(
-                subscriptionService.updatePlan(
-                        id,
-                        request
-                )
-        );
+ return ResponseEntity.ok(subscriptionService.updatePlan(id, request));
     }
 
     @DeleteMapping("/admin/plans/{id}")
     public ResponseEntity<Void>
-            deactivatePlan(
-                    @PathVariable Long id) {
+            deactivatePlan(@PathVariable Long id) {
 
         subscriptionService.deactivatePlan(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

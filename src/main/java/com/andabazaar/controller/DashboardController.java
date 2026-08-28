@@ -23,9 +23,7 @@ public class DashboardController {
     @GetMapping("/admin")
     public ResponseEntity<AdminDashboardDto> getAdminDashboard() {
 
-        return ResponseEntity.ok(
-                dashboardService.getAdminDashboard()
-        );
+ return ResponseEntity.ok(dashboardService.getAdminDashboard());
     }
 
     // =========================
@@ -33,11 +31,8 @@ public class DashboardController {
     // =========================
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<UserDashboardDto> getUserDashboard(
-            @PathVariable Long userId) {
+    public ResponseEntity<UserDashboardDto> getUserDashboard(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                dashboardService.getUserDashboard(userId)
-        );
+ return ResponseEntity.ok(dashboardService.getUserDashboard(userId));
     }
 }

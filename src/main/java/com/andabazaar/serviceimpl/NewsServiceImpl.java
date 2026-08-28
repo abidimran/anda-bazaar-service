@@ -23,8 +23,7 @@ public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
 
     @Override
-    public NewsResponseDto createNews(
-            NewsRequestDto request) {
+    public NewsResponseDto createNews( NewsRequestDto request) {
 
         boolean published =
                 Boolean.TRUE.equals(request.getPublished());
@@ -37,26 +36,19 @@ public class NewsServiceImpl implements NewsService {
                 .sourceUrl(request.getSourceUrl())
                 .sourceName(request.getSourceName())
                 .published(published)
-                .publishedAt(
-                        published
-                                ? LocalDateTime.now()
+                .publishedAt( published ? LocalDateTime.now()
                                 : null
                 )
-                .active(
-                        request.getActive() == null
-                                || request.getActive()
+                .active( request.getActive() == null || request.getActive()
                 )
                 .build();
 
         return mapToResponse(
-                newsRepository.save(news)
-        );
+                newsRepository.save(news));
     }
 
     @Override
-    public NewsResponseDto updateNews(
-            Long id,
-            NewsRequestDto request) {
+    public NewsResponseDto updateNews( Long id, NewsRequestDto request) {
 
         News news = findNews(id);
 
@@ -88,18 +80,15 @@ public class NewsServiceImpl implements NewsService {
         }
 
         return mapToResponse(
-                newsRepository.save(news)
-        );
+                newsRepository.save(news));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public NewsResponseDto getNewsById(
-            Long id) {
+    public NewsResponseDto getNewsById( Long id) {
 
         return mapToResponse(
-                findNews(id)
-        );
+                findNews(id));
     }
 
     @Override
@@ -143,9 +132,7 @@ public class NewsServiceImpl implements NewsService {
         news.setActive(true);
 
         if (news.getPublishedAt() == null) {
-            news.setPublishedAt(
-                    LocalDateTime.now()
-            );
+            news.setPublishedAt( LocalDateTime.now());
         }
 
         newsRepository.save(news);
@@ -187,12 +174,10 @@ public class NewsServiceImpl implements NewsService {
                         new ResourceNotFoundException(
                                 "News not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
-    private NewsResponseDto mapToResponse(
-            News news) {
+    private NewsResponseDto mapToResponse( News news) {
 
         return NewsResponseDto.builder()
                 .id(news.getId())

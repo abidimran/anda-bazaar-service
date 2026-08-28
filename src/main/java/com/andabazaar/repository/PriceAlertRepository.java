@@ -13,31 +13,23 @@ public interface PriceAlertRepository
     // GET ALL ALERTS OF USER
     // =========================================================
 
-    List<PriceAlert> findByUserIdOrderByCreatedAtDesc(
-            Long userId
-    );
+    List<PriceAlert> findByUserIdOrderByCreatedAtDesc( Long userId);
 
     // =========================================================
     // GET ACTIVE ALERTS OF USER
     // =========================================================
 
-    List<PriceAlert> findByUserIdAndActiveTrueOrderByCreatedAtDesc(
-            Long userId
-    );
+    List<PriceAlert> findByUserIdAndActiveTrueOrderByCreatedAtDesc( Long userId);
 
     // =========================================================
     // COUNT ALL ALERTS OF USER
     // =========================================================
 
-    long countByUserId(
-            Long userId
-    );
+    long countByUserId( Long userId);
 
     // =========================================================
     // COUNT ACTIVE ALERTS OF USER
     // =========================================================
 
-    long countByUserIdAndActiveTrue(
-            Long userId
-    );
+    long countByUserIdAndActiveTrue( Long userId);
 }

@@ -27,15 +27,12 @@ public class MarketServiceImpl implements MarketService {
     private final CityRepository cityRepository;
 
     @Override
-    public MarketResponseDto createMarket(
-            MarketRequestDto request) {
+    public MarketResponseDto createMarket( MarketRequestDto request) {
 
         City city = findCity(request.getCityId());
 
         if (marketRepository
-                .existsByNameIgnoreCaseAndCityId(
-                        request.getName(),
-                        request.getCityId())) {
+                .existsByNameIgnoreCaseAndCityId( request.getName(), request.getCityId())) {
 
             throw new BadRequestException(
                     "Market already exists in this city");
@@ -46,10 +43,8 @@ public class MarketServiceImpl implements MarketService {
                 .city(city)
                 .address(request.getAddress())
                 .pincode(request.getPincode())
-                .contactPerson(
-                        request.getContactPerson())
-                .contactNumber(
-                        request.getContactNumber())
+                .contactPerson( request.getContactPerson())
+                .contactNumber( request.getContactNumber())
                 .active(true)
                 .build();
 
@@ -59,8 +54,7 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     @Transactional(readOnly = true)
-    public MarketResponseDto getMarketById(
-            Long id) {
+    public MarketResponseDto getMarketById( Long id) {
 
         return mapToResponse(findMarket(id));
     }
@@ -78,28 +72,23 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MarketResponseDto> getMarketsByCity(
-            Long cityId) {
+    public List<MarketResponseDto> getMarketsByCity( Long cityId) {
 
         findCity(cityId);
 
         return marketRepository
-                .findByCityIdAndActiveTrueOrderByNameAsc(
-                        cityId)
+                .findByCityIdAndActiveTrueOrderByNameAsc( cityId)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
     }
 
     @Override
-    public MarketResponseDto updateMarket(
-            Long id,
-            MarketRequestDto request) {
+    public MarketResponseDto updateMarket( Long id, MarketRequestDto request) {
 
         Market market = findMarket(id);
 
-        City city = findCity(
-                request.getCityId());
+        City city = findCity( request.getCityId());
 
         boolean changed =
                 !market.getName()
@@ -109,9 +98,7 @@ public class MarketServiceImpl implements MarketService {
 
         if (changed &&
                 marketRepository
-                    .existsByNameIgnoreCaseAndCityId(
-                        request.getName(),
-                        request.getCityId())) {
+                    .existsByNameIgnoreCaseAndCityId( request.getName(), request.getCityId())) {
 
             throw new BadRequestException(
                     "Market already exists in this city");
@@ -121,10 +108,8 @@ public class MarketServiceImpl implements MarketService {
         market.setCity(city);
         market.setAddress(request.getAddress());
         market.setPincode(request.getPincode());
-        market.setContactPerson(
-                request.getContactPerson());
-        market.setContactNumber(
-                request.getContactNumber());
+        market.setContactPerson( request.getContactPerson());
+        market.setContactNumber( request.getContactNumber());
 
         return mapToResponse(
                 marketRepository.save(market));
@@ -156,8 +141,7 @@ public class MarketServiceImpl implements MarketService {
                                 "City not found with id: " + id));
     }
 
-    private MarketResponseDto mapToResponse(
-            Market market) {
+    private MarketResponseDto mapToResponse( Market market) {
 
         City city = market.getCity();
 
@@ -170,10 +154,8 @@ public class MarketServiceImpl implements MarketService {
                 .stateName(city.getState().getName())
                 .address(market.getAddress())
                 .pincode(market.getPincode())
-                .contactPerson(
-                        market.getContactPerson())
-                .contactNumber(
-                        market.getContactNumber())
+                .contactPerson( market.getContactPerson())
+                .contactNumber( market.getContactNumber())
                 .active(market.getActive())
                 .build();
     }

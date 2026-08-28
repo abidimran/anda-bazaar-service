@@ -27,13 +27,7 @@ public class PriceAnalyticsController {
 
     @GetMapping("/market/{marketId}")
     public ResponseEntity<PriceAnalyticsResponseDto>
-    getMarketAnalytics(
-            @PathVariable Long marketId,
-
-            @RequestParam
-            @DateTimeFormat(
-                    iso = DateTimeFormat.ISO.DATE
-            )
+    getMarketAnalytics(@PathVariable Long marketId, @RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
             LocalDate startDate,
 
             @RequestParam
@@ -42,13 +36,7 @@ public class PriceAnalyticsController {
             )
             LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                priceAnalyticsService.getMarketAnalytics(
-                        marketId,
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(priceAnalyticsService.getMarketAnalytics(marketId, startDate, endDate));
     }
 
     // =========================================================
@@ -57,13 +45,9 @@ public class PriceAnalyticsController {
 
     @GetMapping("/market/{marketId}/statistics")
     public ResponseEntity<MarketStatisticsDto>
-    getMarketStatistics(
-            @PathVariable Long marketId) {
+    getMarketStatistics(@PathVariable Long marketId) {
 
-        return ResponseEntity.ok(
-                priceAnalyticsService
-                        .getMarketStatistics(marketId)
-        );
+ return ResponseEntity.ok(priceAnalyticsService.getMarketStatistics(marketId));
     }
 
     // =========================================================
@@ -72,13 +56,7 @@ public class PriceAnalyticsController {
 
     @GetMapping("/market/{marketId}/trend")
     public ResponseEntity<List<PriceTrendResponseDto>>
-    getPriceTrend(
-            @PathVariable Long marketId,
-
-            @RequestParam
-            @DateTimeFormat(
-                    iso = DateTimeFormat.ISO.DATE
-            )
+    getPriceTrend(@PathVariable Long marketId, @RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
             LocalDate startDate,
 
             @RequestParam
@@ -87,13 +65,7 @@ public class PriceAnalyticsController {
             )
             LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                priceAnalyticsService.getPriceTrend(
-                        marketId,
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(priceAnalyticsService.getPriceTrend(marketId, startDate, endDate));
     }
 
     // =========================================================
@@ -104,9 +76,6 @@ public class PriceAnalyticsController {
     public ResponseEntity<List<MarketStatisticsDto>>
     getAllMarketStatistics() {
 
-        return ResponseEntity.ok(
-                priceAnalyticsService
-                        .getAllMarketStatistics()
-        );
+ return ResponseEntity.ok(priceAnalyticsService.getAllMarketStatistics());
     }
 }

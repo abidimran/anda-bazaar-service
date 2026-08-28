@@ -26,12 +26,9 @@ public class ReportController {
     // =========================================================
 
     @PostMapping
-    public ResponseEntity<PriceReportResponseDto> createReport(
-            @Valid @RequestBody PriceReportRequestDto request) {
+    public ResponseEntity<PriceReportResponseDto> createReport(@Valid @RequestBody PriceReportRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reportService.createReport(request));
+ return ResponseEntity.status(HttpStatus.CREATED).body(reportService.createReport(request));
     }
 
     // =========================================================
@@ -41,9 +38,7 @@ public class ReportController {
     @GetMapping
     public ResponseEntity<List<PriceReportResponseDto>> getAllReports() {
 
-        return ResponseEntity.ok(
-                reportService.getAllReports()
-        );
+ return ResponseEntity.ok(reportService.getAllReports());
     }
 
     // =========================================================
@@ -51,12 +46,9 @@ public class ReportController {
     // =========================================================
 
     @GetMapping("/{id}")
-    public ResponseEntity<PriceReportResponseDto> getReportById(
-            @PathVariable Long id) {
+    public ResponseEntity<PriceReportResponseDto> getReportById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                reportService.getReportById(id)
-        );
+ return ResponseEntity.ok(reportService.getReportById(id));
     }
 
     // =========================================================
@@ -64,12 +56,9 @@ public class ReportController {
     // =========================================================
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PriceReportResponseDto>> getUserReports(
-            @PathVariable Long userId) {
+    public ResponseEntity<List<PriceReportResponseDto>> getUserReports(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                reportService.getUserReports(userId)
-        );
+ return ResponseEntity.ok(reportService.getUserReports(userId));
     }
 
     // =========================================================
@@ -77,12 +66,9 @@ public class ReportController {
     // =========================================================
 
     @GetMapping("/market/{marketId}")
-    public ResponseEntity<List<PriceReportResponseDto>> getMarketReports(
-            @PathVariable Long marketId) {
+    public ResponseEntity<List<PriceReportResponseDto>> getMarketReports(@PathVariable Long marketId) {
 
-        return ResponseEntity.ok(
-                reportService.getMarketReports(marketId)
-        );
+ return ResponseEntity.ok(reportService.getMarketReports(marketId));
     }
 
     // =========================================================
@@ -90,12 +76,9 @@ public class ReportController {
     // =========================================================
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<PriceReportResponseDto>> getByStatus(
-            @PathVariable String status) {
+    public ResponseEntity<List<PriceReportResponseDto>> getByStatus(@PathVariable String status) {
 
-        return ResponseEntity.ok(
-                reportService.getReportsByStatus(status)
-        );
+ return ResponseEntity.ok(reportService.getReportsByStatus(status));
     }
 
     // =========================================================
@@ -105,9 +88,7 @@ public class ReportController {
     @GetMapping("/pending")
     public ResponseEntity<List<PriceReportResponseDto>> getPendingReports() {
 
-        return ResponseEntity.ok(
-                reportService.getReportsByStatus("PENDING")
-        );
+ return ResponseEntity.ok(reportService.getReportsByStatus("PENDING"));
     }
 
     // =========================================================
@@ -115,12 +96,9 @@ public class ReportController {
     // =========================================================
 
     @GetMapping("/reviewed/{reviewed}")
-    public ResponseEntity<List<PriceReportResponseDto>> getReviewedReports(
-            @PathVariable Boolean reviewed) {
+    public ResponseEntity<List<PriceReportResponseDto>> getReviewedReports(@PathVariable Boolean reviewed) {
 
-        return ResponseEntity.ok(
-                reportService.getReviewedReports(reviewed)
-        );
+ return ResponseEntity.ok(reportService.getReviewedReports(reviewed));
     }
 
     // =========================================================
@@ -128,13 +106,10 @@ public class ReportController {
     // =========================================================
 
     @PutMapping("/{id}/review")
-    public ResponseEntity<PriceReportResponseDto> reviewReport(
-            @PathVariable Long id,
+    public ResponseEntity<PriceReportResponseDto> reviewReport(@PathVariable Long id,
             @Valid @RequestBody PriceReportReviewRequestDto request) {
 
-        return ResponseEntity.ok(
-                reportService.reviewReport(id, request)
-        );
+ return ResponseEntity.ok(reportService.reviewReport(id, request));
     }
 
     // =========================================================
@@ -142,12 +117,11 @@ public class ReportController {
     // =========================================================
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReport(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
 
         reportService.deleteReport(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 
     // =========================================================
@@ -157,8 +131,6 @@ public class ReportController {
     @GetMapping("/count/pending")
     public ResponseEntity<Long> countPendingReports() {
 
-        return ResponseEntity.ok(
-                reportService.countPendingReports()
-        );
+ return ResponseEntity.ok(reportService.countPendingReports());
     }
 }

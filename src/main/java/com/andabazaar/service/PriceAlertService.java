@@ -7,28 +7,15 @@ import com.andabazaar.dto.alert.PriceAlertResponseDto;
 
 public interface PriceAlertService {
 
-    PriceAlertResponseDto createAlert(
-            PriceAlertRequestDto request
-    );
+    PriceAlertResponseDto createAlert( PriceAlertRequestDto request);
 
-    PriceAlertResponseDto getAlertById(
-            Long id
-    );
+    PriceAlertResponseDto getAlertById( Long id);
 
-    List<PriceAlertResponseDto> getUserAlerts(
-            Long userId
-    );
+    List<PriceAlertResponseDto> getUserAlerts( Long userId);
 
-    PriceAlertResponseDto updateAlert(
-            Long id,
-            PriceAlertRequestDto request
-    );
+    PriceAlertResponseDto updateAlert( Long id, PriceAlertRequestDto request);
 
-    void deleteAlert(
-            Long id
-    );
+    void deleteAlert( Long id);
 
-    PriceAlertResponseDto toggleAlert(
-            Long id
-    );
+    PriceAlertResponseDto toggleAlert( Long id);
 }

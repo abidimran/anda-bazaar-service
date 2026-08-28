@@ -7,19 +7,15 @@ import com.andabazaar.dto.market.MarketResponseDto;
 
 public interface MarketService {
 
-    MarketResponseDto createMarket(
-            MarketRequestDto request);
+    MarketResponseDto createMarket( MarketRequestDto request);
 
     MarketResponseDto getMarketById(Long id);
 
     List<MarketResponseDto> getAllMarkets();
 
-    List<MarketResponseDto> getMarketsByCity(
-            Long cityId);
+    List<MarketResponseDto> getMarketsByCity( Long cityId);
 
-    MarketResponseDto updateMarket(
-            Long id,
-            MarketRequestDto request);
+    MarketResponseDto updateMarket( Long id, MarketRequestDto request);
 
     void deleteMarket(Long id);
 }

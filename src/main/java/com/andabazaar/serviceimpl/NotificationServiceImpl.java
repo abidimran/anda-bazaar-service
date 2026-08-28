@@ -29,8 +29,7 @@ public class NotificationServiceImpl
     private final UserRepository userRepository;
 
     @Override
-    public NotificationResponseDto createNotification(
-            NotificationRequestDto request) {
+    public NotificationResponseDto createNotification( NotificationRequestDto request) {
 
         User user = userRepository
                 .findById(request.getUserId())
@@ -50,8 +49,7 @@ public class NotificationServiceImpl
                         .build();
 
         return mapToResponse(
-                notificationRepository.save(notification)
-        );
+                notificationRepository.save(notification));
     }
 
     @Override
@@ -72,9 +70,7 @@ public class NotificationServiceImpl
             getUnreadNotifications(Long userId) {
 
         return notificationRepository
-                .findByUserIdAndReadFalseOrderByCreatedAtDesc(
-                        userId
-                )
+                .findByUserIdAndReadFalseOrderByCreatedAtDesc( userId )
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -89,9 +85,7 @@ public class NotificationServiceImpl
     }
 
     @Override
-    public void markAsRead(
-            Long notificationId,
-            Long userId) {
+    public void markAsRead( Long notificationId, Long userId) {
 
         Notification notification =
                 notificationRepository
@@ -106,14 +100,11 @@ public class NotificationServiceImpl
                 .equals(userId)) {
 
             throw new ResourceNotFoundException(
-                    "Notification not found"
-            );
+                    "Notification not found");
         }
 
         notification.setRead(true);
-        notification.setReadAt(
-                LocalDateTime.now()
-        );
+        notification.setReadAt( LocalDateTime.now());
     }
 
     @Override
@@ -121,15 +112,12 @@ public class NotificationServiceImpl
 
         List<Notification> notifications =
                 notificationRepository
-                    .findByUserIdAndReadFalseOrderByCreatedAtDesc(
-                            userId
-                    );
+                    .findByUserIdAndReadFalseOrderByCreatedAtDesc( userId);
 
         LocalDateTime now =
                 LocalDateTime.now();
 
-        for (Notification notification :
-                notifications) {
+        for (Notification notification : notifications) {
 
             notification.setRead(true);
             notification.setReadAt(now);
@@ -137,9 +125,7 @@ public class NotificationServiceImpl
     }
 
     @Override
-    public void deleteNotification(
-            Long notificationId,
-            Long userId) {
+    public void deleteNotification( Long notificationId, Long userId) {
 
         Notification notification =
                 notificationRepository
@@ -154,29 +140,25 @@ public class NotificationServiceImpl
                 .equals(userId)) {
 
             throw new ResourceNotFoundException(
-                    "Notification not found"
-            );
+                    "Notification not found");
         }
 
         notificationRepository.delete(notification);
     }
 
     private NotificationResponseDto
-            mapToResponse(
-                    Notification notification) {
+            mapToResponse( Notification notification) {
 
         return NotificationResponseDto.builder()
                 .id(notification.getId())
-                .userId(
-                        notification.getUser().getId()
+                .userId( notification.getUser().getId()
                 )
                 .type(notification.getType())
                 .title(notification.getTitle())
                 .message(notification.getMessage())
                 .read(notification.getRead())
                 .sent(notification.getSent())
-                .createdAt(
-                        notification.getCreatedAt()
+                .createdAt( notification.getCreatedAt()
                 )
                 .readAt(notification.getReadAt())
                 .sentAt(notification.getSentAt())

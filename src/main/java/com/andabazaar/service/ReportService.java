@@ -12,17 +12,13 @@ public interface ReportService {
     // CREATE
     // =========================================================
 
-    PriceReportResponseDto createReport(
-            PriceReportRequestDto request
-    );
+    PriceReportResponseDto createReport( PriceReportRequestDto request);
 
     // =========================================================
     // GET BY ID
     // =========================================================
 
-    PriceReportResponseDto getReportById(
-            Long id
-    );
+    PriceReportResponseDto getReportById( Long id);
 
     // =========================================================
     // GET ALL
@@ -34,50 +30,37 @@ public interface ReportService {
     // GET USER REPORTS
     // =========================================================
 
-    List<PriceReportResponseDto> getUserReports(
-            Long userId
-    );
+    List<PriceReportResponseDto> getUserReports( Long userId);
 
     // =========================================================
     // GET MARKET REPORTS
     // =========================================================
 
-    List<PriceReportResponseDto> getMarketReports(
-            Long marketId
-    );
+    List<PriceReportResponseDto> getMarketReports( Long marketId);
 
     // =========================================================
     // GET BY STATUS
     // =========================================================
 
-    List<PriceReportResponseDto> getReportsByStatus(
-            String status
-    );
+    List<PriceReportResponseDto> getReportsByStatus( String status);
 
     // =========================================================
     // GET REVIEWED
     // =========================================================
 
-    List<PriceReportResponseDto> getReviewedReports(
-            Boolean reviewed
-    );
+    List<PriceReportResponseDto> getReviewedReports( Boolean reviewed);
 
     // =========================================================
     // REVIEW
     // =========================================================
 
-    PriceReportResponseDto reviewReport(
-            Long id,
-            PriceReportReviewRequestDto request
-    );
+    PriceReportResponseDto reviewReport( Long id, PriceReportReviewRequestDto request);
 
     // =========================================================
     // DELETE
     // =========================================================
 
-    void deleteReport(
-            Long id
-    );
+    void deleteReport( Long id);
 
     // =========================================================
     // COUNT PENDING

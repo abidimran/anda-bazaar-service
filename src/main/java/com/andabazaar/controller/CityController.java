@@ -21,54 +21,42 @@ public class CityController {
     private final CityService cityService;
 
     @PostMapping
-    public ResponseEntity<CityResponseDto> createCity(
-            @Valid @RequestBody CityRequestDto request) {
+    public ResponseEntity<CityResponseDto> createCity(@Valid @RequestBody CityRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(cityService.createCity(request));
+ return ResponseEntity.status(HttpStatus.CREATED).body(cityService.createCity(request));
     }
 
     @GetMapping
     public ResponseEntity<List<CityResponseDto>>
             getAllCities() {
 
-        return ResponseEntity.ok(
-                cityService.getAllCities());
+ return ResponseEntity.ok(cityService.getAllCities());
     }
 
     @GetMapping("/state/{stateId}")
     public ResponseEntity<List<CityResponseDto>>
-            getCitiesByState(
-                    @PathVariable Long stateId) {
+            getCitiesByState(@PathVariable Long stateId) {
 
-        return ResponseEntity.ok(
-                cityService.getCitiesByState(stateId));
+ return ResponseEntity.ok(cityService.getCitiesByState(stateId));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CityResponseDto> getCity(
-            @PathVariable Long id) {
+    public ResponseEntity<CityResponseDto> getCity(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                cityService.getCityById(id));
+ return ResponseEntity.ok(cityService.getCityById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CityResponseDto> updateCity(
-            @PathVariable Long id,
-            @Valid @RequestBody CityRequestDto request) {
+    public ResponseEntity<CityResponseDto> updateCity(@PathVariable Long id, @Valid @RequestBody CityRequestDto request) {
 
-        return ResponseEntity.ok(
-                cityService.updateCity(id, request));
+ return ResponseEntity.ok(cityService.updateCity(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCity(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
 
         cityService.deleteCity(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

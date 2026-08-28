@@ -39,8 +39,7 @@ public class SupportTicketServiceImpl
     // =========================================================
 
     @Override
-    public SupportTicketResponseDto createTicket(
-            SupportTicketRequestDto request) {
+    public SupportTicketResponseDto createTicket( SupportTicketRequestDto request) {
 
         User user = findUser(request.getUserId());
 
@@ -54,8 +53,7 @@ public class SupportTicketServiceImpl
                 .build();
 
         return mapToResponse(
-                ticketRepository.save(ticket)
-        );
+                ticketRepository.save(ticket));
     }
 
     // =========================================================
@@ -64,12 +62,10 @@ public class SupportTicketServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SupportTicketResponseDto getTicketById(
-            Long id) {
+    public SupportTicketResponseDto getTicketById( Long id) {
 
         return mapToResponse(
-                findTicket(id)
-        );
+                findTicket(id));
     }
 
     // =========================================================
@@ -78,8 +74,7 @@ public class SupportTicketServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SupportTicketResponseDto getTicketByNumber(
-            String ticketNumber) {
+    public SupportTicketResponseDto getTicketByNumber( String ticketNumber) {
 
         SupportTicket ticket =
                 ticketRepository.findByTicketNumber(
@@ -88,8 +83,7 @@ public class SupportTicketServiceImpl
                         new ResourceNotFoundException(
                                 "Support ticket not found with number: "
                                         + ticketNumber
-                        )
-                );
+                        ));
 
         return mapToResponse(ticket);
     }
@@ -115,14 +109,12 @@ public class SupportTicketServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<SupportTicketResponseDto> getUserTickets(
-            Long userId) {
+    public List<SupportTicketResponseDto> getUserTickets( Long userId) {
 
         if (!userRepository.existsById(userId)) {
 
             throw new ResourceNotFoundException(
-                    "User not found with id: " + userId
-            );
+                    "User not found with id: " + userId);
         }
 
         return ticketRepository
@@ -138,16 +130,13 @@ public class SupportTicketServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<SupportTicketResponseDto> getTicketsByStatus(
-            String status) {
+    public List<SupportTicketResponseDto> getTicketsByStatus( String status) {
 
         TicketStatus ticketStatus =
                 parseStatus(status);
 
         return ticketRepository
-                .findByStatusOrderByCreatedAtDesc(
-                        ticketStatus
-                )
+                .findByStatusOrderByCreatedAtDesc( ticketStatus )
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -158,9 +147,7 @@ public class SupportTicketServiceImpl
     // =========================================================
 
     @Override
-    public SupportTicketResponseDto updateTicket(
-            Long id,
-            SupportTicketRequestDto request) {
+    public SupportTicketResponseDto updateTicket( Long id, SupportTicketRequestDto request) {
 
         SupportTicket ticket =
                 findTicket(id);
@@ -170,25 +157,16 @@ public class SupportTicketServiceImpl
 
         ticket.setUser(user);
 
-        ticket.setSubject(
-                request.getSubject().trim()
-        );
+        ticket.setSubject( request.getSubject().trim());
 
-        ticket.setDescription(
-                request.getDescription().trim()
-        );
+        ticket.setDescription( request.getDescription().trim());
 
-        ticket.setPriority(
-                request.getPriority()
-        );
+        ticket.setPriority( request.getPriority());
 
-        ticket.setCategory(
-                request.getCategory()
-        );
+        ticket.setCategory( request.getCategory());
 
         return mapToResponse(
-                ticketRepository.save(ticket)
-        );
+                ticketRepository.save(ticket));
     }
 
     // =========================================================
@@ -196,9 +174,7 @@ public class SupportTicketServiceImpl
     // =========================================================
 
     @Override
-    public void closeTicket(
-            Long id,
-            String resolution) {
+    public void closeTicket( Long id, String resolution) {
 
         SupportTicket ticket =
                 findTicket(id);
@@ -207,21 +183,14 @@ public class SupportTicketServiceImpl
                 TicketStatus.CLOSED) {
 
             throw new BadRequestException(
-                    "Ticket is already closed"
-            );
+                    "Ticket is already closed");
         }
 
-        ticket.setStatus(
-                TicketStatus.CLOSED
-        );
+        ticket.setStatus( TicketStatus.CLOSED);
 
-        ticket.setResolution(
-                resolution
-        );
+        ticket.setResolution( resolution);
 
-        ticket.setResolvedAt(
-                LocalDateTime.now()
-        );
+        ticket.setResolvedAt( LocalDateTime.now());
 
         ticketRepository.save(ticket);
     }
@@ -240,13 +209,10 @@ public class SupportTicketServiceImpl
                 TicketStatus.CLOSED) {
 
             throw new BadRequestException(
-                    "Only closed ticket can be reopened"
-            );
+                    "Only closed ticket can be reopened");
         }
 
-        ticket.setStatus(
-                TicketStatus.OPEN
-        );
+        ticket.setStatus( TicketStatus.OPEN);
 
         ticket.setResolution(null);
 
@@ -282,9 +248,7 @@ public class SupportTicketServiceImpl
     // =========================================================
 
     @Override
-    public void addReply(
-            Long ticketId,
-            SupportReplyDto request) {
+    public void addReply( Long ticketId, SupportReplyDto request) {
 
         SupportTicket ticket =
                 findTicket(ticketId);
@@ -300,8 +264,7 @@ public class SupportTicketServiceImpl
                 TicketStatus.CLOSED) {
 
             throw new BadRequestException(
-                    "Cannot reply to a closed ticket"
-            );
+                    "Cannot reply to a closed ticket");
         }
 
         // -----------------------------------------------------
@@ -318,16 +281,13 @@ public class SupportTicketServiceImpl
         // -----------------------------------------------------
 
         boolean isAdminReply =
-                Boolean.TRUE.equals(
-                        request.getAdminReply()
-                );
+                Boolean.TRUE.equals( request.getAdminReply());
 
         SupportMessage message =
                 SupportMessage.builder()
                         .ticket(ticket)
                         .user(user)
-                        .message(
-                                request.getMessage()
+                        .message( request.getMessage()
                                         .trim()
                         )
                         .adminReply(isAdminReply)
@@ -342,20 +302,17 @@ public class SupportTicketServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public long countByStatus(
-            String status) {
+    public long countByStatus( String status) {
 
         return ticketRepository.countByStatus(
-                parseStatus(status)
-        );
+                parseStatus(status));
     }
 
     // =========================================================
     // FIND TICKET
     // =========================================================
 
-    private SupportTicket findTicket(
-            Long id) {
+    private SupportTicket findTicket( Long id) {
 
         return ticketRepository
                 .findById(id)
@@ -363,16 +320,14 @@ public class SupportTicketServiceImpl
                         new ResourceNotFoundException(
                                 "Support ticket not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     // =========================================================
     // FIND USER
     // =========================================================
 
-    private User findUser(
-            Long id) {
+    private User findUser( Long id) {
 
         return userRepository
                 .findById(id)
@@ -380,29 +335,24 @@ public class SupportTicketServiceImpl
                         new ResourceNotFoundException(
                                 "User not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     // =========================================================
     // PARSE STATUS
     // =========================================================
 
-    private TicketStatus parseStatus(
-            String status) {
+    private TicketStatus parseStatus( String status) {
 
         try {
 
             return TicketStatus.valueOf(
-                    status.trim().toUpperCase()
-            );
+                    status.trim().toUpperCase());
 
-        } catch (IllegalArgumentException |
-                 NullPointerException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
 
             throw new BadRequestException(
-                    "Invalid ticket status: " + status
-            );
+                    "Invalid ticket status: " + status);
         }
     }
 
@@ -410,46 +360,33 @@ public class SupportTicketServiceImpl
     // MAP RESPONSE
     // =========================================================
 
-    private SupportTicketResponseDto mapToResponse(
-            SupportTicket ticket) {
+    private SupportTicketResponseDto mapToResponse( SupportTicket ticket) {
 
         return SupportTicketResponseDto.builder()
                 .id(ticket.getId())
-                .ticketNumber(
-                        ticket.getTicketNumber()
+                .ticketNumber( ticket.getTicketNumber()
                 )
-                .userId(
-                        ticket.getUser().getId()
+                .userId( ticket.getUser().getId()
                 )
-                .subject(
-                        ticket.getSubject()
+                .subject( ticket.getSubject()
                 )
-                .description(
-                        ticket.getDescription()
+                .description( ticket.getDescription()
                 )
-                .status(
-                        ticket.getStatus()
+                .status( ticket.getStatus()
                 )
-                .priority(
-                        ticket.getPriority()
+                .priority( ticket.getPriority()
                 )
-                .category(
-                        ticket.getCategory()
+                .category( ticket.getCategory()
                 )
-                .assignedTo(
-                        ticket.getAssignedTo()
+                .assignedTo( ticket.getAssignedTo()
                 )
-                .resolution(
-                        ticket.getResolution()
+                .resolution( ticket.getResolution()
                 )
-                .resolvedAt(
-                        ticket.getResolvedAt()
+                .resolvedAt( ticket.getResolvedAt()
                 )
-                .createdAt(
-                        ticket.getCreatedAt()
+                .createdAt( ticket.getCreatedAt()
                 )
-                .updatedAt(
-                        ticket.getUpdatedAt()
+                .updatedAt( ticket.getUpdatedAt()
                 )
                 .build();
     }

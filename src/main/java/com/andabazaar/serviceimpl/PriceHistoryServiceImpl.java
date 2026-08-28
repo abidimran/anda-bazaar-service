@@ -24,51 +24,42 @@ public class PriceHistoryServiceImpl
             priceHistoryRepository;
 
     @Override
-    public PriceHistory createPriceHistory(
-            PriceHistory priceHistory) {
+    public PriceHistory createPriceHistory( PriceHistory priceHistory) {
 
         if (priceHistory == null) {
             throw new BadRequestException(
-                    "Price history cannot be null"
-            );
+                    "Price history cannot be null");
         }
 
         if (priceHistory.getMarket() == null
                 || priceHistory.getMarket().getId() == null) {
 
             throw new BadRequestException(
-                    "Market is required"
-            );
+                    "Market is required");
         }
 
         if (priceHistory.getPriceDate() == null) {
 
             throw new BadRequestException(
-                    "Price date is required"
-            );
+                    "Price date is required");
         }
 
         if (priceHistory.getPricePerEgg() == null) {
 
             throw new BadRequestException(
-                    "Price per egg is required"
-            );
+                    "Price per egg is required");
         }
 
         if (priceHistoryRepository
-                .existsByMarketIdAndPriceDate(
-                        priceHistory.getMarket().getId(),
-                        priceHistory.getPriceDate()
+                .existsByMarketIdAndPriceDate( priceHistory.getMarket().getId(), priceHistory.getPriceDate()
                 )) {
 
             throw new BadRequestException(
-                    "Price history already exists for this market and date"
-            );
+                    "Price history already exists for this market and date");
         }
 
         return priceHistoryRepository.save(
-                priceHistory
-        );
+                priceHistory);
     }
 
     @Override
@@ -80,67 +71,50 @@ public class PriceHistoryServiceImpl
                         new ResourceNotFoundException(
                                 "Price history not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceHistory> getByMarket(
-            Long marketId) {
+    public List<PriceHistory> getByMarket( Long marketId) {
 
         return priceHistoryRepository
-                .findByMarketIdOrderByPriceDateDesc(
-                        marketId
-                );
+                .findByMarketIdOrderByPriceDateDesc( marketId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<PriceHistory>
-    getByMarketAndDateRange(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate) {
+    getByMarketAndDateRange( Long marketId, LocalDate startDate, LocalDate endDate) {
 
         if (startDate == null || endDate == null) {
 
             throw new BadRequestException(
-                    "Start date and end date are required"
-            );
+                    "Start date and end date are required");
         }
 
         if (startDate.isAfter(endDate)) {
 
             throw new BadRequestException(
-                    "Start date cannot be after end date"
-            );
+                    "Start date cannot be after end date");
         }
 
         return priceHistoryRepository
-                .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-                        marketId,
-                        startDate,
-                        endDate
-                );
+                .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( marketId, startDate, endDate);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceHistory> getByDate(
-            LocalDate date) {
+    public List<PriceHistory> getByDate( LocalDate date) {
 
         if (date == null) {
 
             throw new BadRequestException(
-                    "Date is required"
-            );
+                    "Date is required");
         }
 
         return priceHistoryRepository
-                .findByPriceDateOrderByPriceDateDesc(
-                        date
-                );
+                .findByPriceDateOrderByPriceDateDesc( date);
     }
 
     @Override
@@ -148,8 +122,6 @@ public class PriceHistoryServiceImpl
 
         PriceHistory priceHistory = getById(id);
 
-        priceHistoryRepository.delete(
-                priceHistory
-        );
+        priceHistoryRepository.delete( priceHistory);
     }
 }

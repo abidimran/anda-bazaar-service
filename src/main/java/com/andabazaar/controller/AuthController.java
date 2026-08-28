@@ -28,12 +28,9 @@ public class AuthController {
     // =====================================================
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(
-            @Valid @RequestBody RegisterRequestDto request) {
+    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(authService.register(request));
+ return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
     }
 
     // =====================================================
@@ -41,11 +38,9 @@ public class AuthController {
     // =====================================================
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(
-            @Valid @RequestBody LoginRequestDto request) {
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
 
-        return ResponseEntity.ok(
-                authService.login(request));
+ return ResponseEntity.ok(authService.login(request));
     }
 
     // =====================================================
@@ -53,12 +48,10 @@ public class AuthController {
     // =====================================================
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDto> getCurrentUser(
-            Authentication authentication) {
+    public ResponseEntity<UserResponseDto> getCurrentUser( Authentication authentication) {
 
         String email = authentication.getName();
 
-        return ResponseEntity.ok(
-                authService.getCurrentUser(email));
+ return ResponseEntity.ok(authService.getCurrentUser(email));
     }
 }

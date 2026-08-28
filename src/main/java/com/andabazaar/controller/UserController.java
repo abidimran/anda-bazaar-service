@@ -28,12 +28,9 @@ public class UserController {
     // =========================================================
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(
-            @Valid @RequestBody UserRequestDto request) {
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userService.createUser(request));
+ return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
 
     // =========================================================
@@ -41,11 +38,9 @@ public class UserController {
     // =========================================================
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(
-            @PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                userService.getUserById(id));
+ return ResponseEntity.ok(userService.getUserById(id));
     }
 
     // =========================================================
@@ -55,8 +50,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
 
-        return ResponseEntity.ok(
-                userService.getAllUsers());
+ return ResponseEntity.ok(userService.getAllUsers());
     }
 
     // =========================================================
@@ -64,12 +58,9 @@ public class UserController {
     // =========================================================
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(
-            @PathVariable Long id,
-            @Valid @RequestBody UserRequestDto request) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto request) {
 
-        return ResponseEntity.ok(
-                userService.updateUser(id, request));
+ return ResponseEntity.ok(userService.updateUser(id, request));
     }
 
     // =========================================================
@@ -77,12 +68,11 @@ public class UserController {
     // =========================================================
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 
         userService.deleteUser(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 
     // =========================================================
@@ -90,11 +80,9 @@ public class UserController {
     // =========================================================
 
     @GetMapping("/{id}/profile")
-    public ResponseEntity<UserProfileDto> getProfile(
-            @PathVariable Long id) {
+    public ResponseEntity<UserProfileDto> getProfile(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                userService.getProfile(id));
+ return ResponseEntity.ok(userService.getProfile(id));
     }
 
     // =========================================================
@@ -102,11 +90,8 @@ public class UserController {
     // =========================================================
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<UserResponseDto> changeStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
+    public ResponseEntity<UserResponseDto> changeStatus(@PathVariable Long id, @RequestParam String status) {
 
-        return ResponseEntity.ok(
-                userService.changeUserStatus(id, status));
+ return ResponseEntity.ok(userService.changeUserStatus(id, status));
     }
 }

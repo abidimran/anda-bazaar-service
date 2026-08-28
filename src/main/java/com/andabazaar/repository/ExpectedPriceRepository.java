@@ -16,28 +16,20 @@ public interface ExpectedPriceRepository
     // =========================
 
     List<ExpectedPrice>
-    findByMarketIdOrderByExpectedDateDesc(
-            Long marketId
-    );
+    findByMarketIdOrderByExpectedDateDesc( Long marketId);
 
     // =========================
     // FIND BY MARKET + DATE
     // =========================
 
     Optional<ExpectedPrice>
-    findByMarketIdAndExpectedDate(
-            Long marketId,
-            LocalDate expectedDate
-    );
+    findByMarketIdAndExpectedDate( Long marketId, LocalDate expectedDate);
 
     // =========================
     // CHECK DUPLICATE
     // =========================
 
-    boolean existsByMarketIdAndExpectedDate(
-            Long marketId,
-            LocalDate expectedDate
-    );
+    boolean existsByMarketIdAndExpectedDate( Long marketId, LocalDate expectedDate);
 
     // =========================
     // ACTIVE EXPECTED PRICES
@@ -51,42 +43,29 @@ public interface ExpectedPriceRepository
     // =========================
 
     List<ExpectedPrice>
-    findByMarketIdAndActiveTrueOrderByExpectedDateDesc(
-            Long marketId
-    );
+    findByMarketIdAndActiveTrueOrderByExpectedDateDesc( Long marketId);
 
     // =========================
     // DATE RANGE
     // =========================
 
     List<ExpectedPrice>
-    findByExpectedDateBetweenOrderByExpectedDateDesc(
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    findByExpectedDateBetweenOrderByExpectedDateDesc( LocalDate startDate, LocalDate endDate);
 
     // =========================
     // MARKET + DATE RANGE
     // =========================
 
     List<ExpectedPrice>
-    findByMarketIdAndExpectedDateBetweenOrderByExpectedDateDesc(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    findByMarketIdAndExpectedDateBetweenOrderByExpectedDateDesc( Long marketId, LocalDate startDate, LocalDate endDate);
 
     // =========================
     // COUNT
     // =========================
 
-    long countByMarketId(
-            Long marketId
-    );
+    long countByMarketId( Long marketId);
 
     long countByActiveTrue();
 
-    long countByExpectedDate(
-            LocalDate expectedDate
-    );
+    long countByExpectedDate( LocalDate expectedDate);
 }

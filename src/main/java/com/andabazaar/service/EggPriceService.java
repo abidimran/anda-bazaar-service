@@ -12,35 +12,25 @@ public interface EggPriceService {
     // ADMIN - CREATE PRICE
     // =====================================================
 
-    EggPriceResponseDto createPrice(
-            EggPriceRequestDto request
-    );
+    EggPriceResponseDto createPrice( EggPriceRequestDto request);
 
     // =====================================================
     // ADMIN - UPDATE PRICE
     // =====================================================
 
-    EggPriceResponseDto updatePrice(
-            Long id,
-            EggPriceRequestDto request
-    );
+    EggPriceResponseDto updatePrice( Long id, EggPriceRequestDto request);
 
     // =====================================================
     // GET PRICE BY ID
     // =====================================================
 
-    EggPriceResponseDto getPriceById(
-            Long id
-    );
+    EggPriceResponseDto getPriceById( Long id);
 
     // =====================================================
     // GET MARKET PRICE BY DATE
     // =====================================================
 
-    EggPriceResponseDto getMarketPrice(
-            Long marketId,
-            LocalDate date
-    );
+    EggPriceResponseDto getMarketPrice( Long marketId, LocalDate date);
 
     // =====================================================
     // GET TODAY PRICES
@@ -58,11 +48,7 @@ public interface EggPriceService {
     // GET PUBLIC/ADMIN PRICE HISTORY
     // =====================================================
 
-    List<EggPriceResponseDto> getPriceHistory(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    List<EggPriceResponseDto> getPriceHistory( Long marketId, LocalDate startDate, LocalDate endDate);
 
     // =====================================================
     // USER - GET PRICES
@@ -74,26 +60,17 @@ public interface EggPriceService {
     // 2 DAYS OLD + OLDER
     // =====================================================
 
-    List<EggPriceResponseDto> getUserPrices(
-            Long userId
-    );
+    List<EggPriceResponseDto> getUserPrices( Long userId);
 
     // =====================================================
     // USER - GET PRICE HISTORY
     // =====================================================
 
-    List<EggPriceResponseDto> getUserPriceHistory(
-            Long userId,
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    List<EggPriceResponseDto> getUserPriceHistory( Long userId, Long marketId, LocalDate startDate, LocalDate endDate);
 
     // =====================================================
     // ADMIN - DELETE PRICE
     // =====================================================
 
-    void deletePrice(
-            Long id
-    );
+    void deletePrice( Long id);
 }

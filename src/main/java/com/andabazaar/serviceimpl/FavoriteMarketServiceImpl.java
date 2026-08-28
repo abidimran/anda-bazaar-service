@@ -27,30 +27,25 @@ public class FavoriteMarketServiceImpl
     private final MarketRepository marketRepository;
 
     @Override
-    public FavoriteMarket addFavorite(
-            Long userId,
-            Long marketId) {
+    public FavoriteMarket addFavorite( Long userId, Long marketId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "User not found with id: " + userId
-                        )
-                );
+                        ));
 
         Market market = marketRepository.findById(marketId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Market not found with id: " + marketId
-                        )
-                );
+                        ));
 
         if (favoriteMarketRepository
                 .existsByUserIdAndMarketId(userId, marketId)) {
 
             throw new RuntimeException(
-                    "Market is already in favorites"
-            );
+                    "Market is already in favorites");
         }
 
         FavoriteMarket favorite =
@@ -63,37 +58,26 @@ public class FavoriteMarketServiceImpl
     }
 
     @Override
-    public void removeFavorite(
-            Long userId,
-            Long marketId) {
+    public void removeFavorite( Long userId, Long marketId) {
 
         if (!favoriteMarketRepository
-                .existsByUserIdAndMarketId(
-                        userId,
-                        marketId
-                )) {
+                .existsByUserIdAndMarketId( userId, marketId )) {
 
             throw new ResourceNotFoundException(
-                    "Favorite market not found"
-            );
+                    "Favorite market not found");
         }
 
         favoriteMarketRepository
-                .deleteByUserIdAndMarketId(
-                        userId,
-                        marketId
-                );
+                .deleteByUserIdAndMarketId( userId, marketId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FavoriteMarket> getUserFavorites(
-            Long userId) {
+    public List<FavoriteMarket> getUserFavorites( Long userId) {
 
         if (!userRepository.existsById(userId)) {
             throw new ResourceNotFoundException(
-                    "User not found with id: " + userId
-            );
+                    "User not found with id: " + userId);
         }
 
         return favoriteMarketRepository
@@ -102,21 +86,15 @@ public class FavoriteMarketServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public boolean isFavorite(
-            Long userId,
-            Long marketId) {
+    public boolean isFavorite( Long userId, Long marketId) {
 
         return favoriteMarketRepository
-                .existsByUserIdAndMarketId(
-                        userId,
-                        marketId
-                );
+                .existsByUserIdAndMarketId( userId, marketId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public long countUserFavorites(
-            Long userId) {
+    public long countUserFavorites( Long userId) {
 
         return favoriteMarketRepository
                 .countByUserId(userId);

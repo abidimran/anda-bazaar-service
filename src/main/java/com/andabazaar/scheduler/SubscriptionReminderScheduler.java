@@ -42,35 +42,24 @@ public class SubscriptionReminderScheduler {
         // whose end date is today or in the future
         List<UserSubscription> subscriptions =
                 subscriptionRepository
-                        .findByStatusAndEndDateGreaterThanEqual(
-                                SubscriptionStatus.ACTIVE,
-                                today
-                        );
+                        .findByStatusAndEndDateGreaterThanEqual( SubscriptionStatus.ACTIVE, today);
 
         for (UserSubscription subscription : subscriptions) {
 
             long daysRemaining =
-                    ChronoUnit.DAYS.between(
-                            today,
-                            subscription.getEndDate()
-                    );
+                    ChronoUnit.DAYS.between( today, subscription.getEndDate());
 
             // Reminder at 3, 2 and 1 day before expiry
             if (daysRemaining == 3
                     || daysRemaining == 2
                     || daysRemaining == 1) {
 
-                sendExpiryNotification(
-                        subscription,
-                        daysRemaining
-                );
+                sendExpiryNotification( subscription, daysRemaining);
             }
         }
     }
 
-    private void sendExpiryNotification(
-            UserSubscription subscription,
-            long daysRemaining) {
+    private void sendExpiryNotification( UserSubscription subscription, long daysRemaining) {
 
         Long userId =
                 subscription.getUser().getId();
@@ -80,17 +69,12 @@ public class SubscriptionReminderScheduler {
 
         String message =
                 notificationTemplateService
-                        .subscriptionExpiring(
-                                daysRemaining
-                        );
+                        .subscriptionExpiring( daysRemaining);
 
         NotificationRequestDto request =
                 NotificationRequestDto.builder()
                         .userId(userId)
-                        .type(
-                                NotificationType
-                                        .SUBSCRIPTION_EXPIRING
-                        )
+                        .type( NotificationType .SUBSCRIPTION_EXPIRING )
                         .title(title)
                         .message(message)
                         .build();
@@ -99,10 +83,6 @@ public class SubscriptionReminderScheduler {
                 .createNotification(request);
 
         pushNotificationService
-                .sendNotification(
-                        userId,
-                        title,
-                        message
-                );
+                .sendNotification( userId, title, message);
     }
 }

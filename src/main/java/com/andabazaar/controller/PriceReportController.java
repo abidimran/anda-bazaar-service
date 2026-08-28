@@ -30,24 +30,16 @@ public class PriceReportController {
 
     // Create price report
     @PostMapping
-    public ResponseEntity<PriceReportResponseDto> createReport(
-            @Valid @RequestBody PriceReportRequestDto request) {
+    public ResponseEntity<PriceReportResponseDto> createReport(@Valid @RequestBody PriceReportRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        priceReportService.createReport(request)
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(priceReportService.createReport(request));
     }
 
     // Get report by ID
     @GetMapping("/{id}")
-    public ResponseEntity<PriceReportResponseDto> getReportById(
-            @PathVariable Long id) {
+    public ResponseEntity<PriceReportResponseDto> getReportById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                priceReportService.getReportById(id)
-        );
+ return ResponseEntity.ok(priceReportService.getReportById(id));
     }
 
     // Get all reports
@@ -55,42 +47,31 @@ public class PriceReportController {
     public ResponseEntity<List<PriceReportResponseDto>>
             getAllReports() {
 
-        return ResponseEntity.ok(
-                priceReportService.getAllReports()
-        );
+ return ResponseEntity.ok(priceReportService.getAllReports());
     }
 
     // Get reports by user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PriceReportResponseDto>>
-            getUserReports(
-                    @PathVariable Long userId) {
+            getUserReports(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                priceReportService.getUserReports(userId)
-        );
+ return ResponseEntity.ok(priceReportService.getUserReports(userId));
     }
 
     // Get reports by market
     @GetMapping("/market/{marketId}")
     public ResponseEntity<List<PriceReportResponseDto>>
-            getMarketReports(
-                    @PathVariable Long marketId) {
+            getMarketReports(@PathVariable Long marketId) {
 
-        return ResponseEntity.ok(
-                priceReportService.getMarketReports(marketId)
-        );
+ return ResponseEntity.ok(priceReportService.getMarketReports(marketId));
     }
 
     // Get reports by status
     @GetMapping("/status/{status}")
     public ResponseEntity<List<PriceReportResponseDto>>
-            getReportsByStatus(
-                    @PathVariable String status) {
+            getReportsByStatus(@PathVariable String status) {
 
-        return ResponseEntity.ok(
-                priceReportService.getReportsByStatus(status)
-        );
+ return ResponseEntity.ok(priceReportService.getReportsByStatus(status));
     }
 
     // Get pending reports
@@ -98,44 +79,31 @@ public class PriceReportController {
     public ResponseEntity<List<PriceReportResponseDto>>
             getPendingReports() {
 
-        return ResponseEntity.ok(
-                priceReportService.getPendingReports()
-        );
+ return ResponseEntity.ok(priceReportService.getPendingReports());
     }
 
     // Review report
     @PutMapping("/{id}/review")
-    public ResponseEntity<PriceReportResponseDto> reviewReport(
-            @PathVariable Long id,
+    public ResponseEntity<PriceReportResponseDto> reviewReport(@PathVariable Long id,
             @RequestParam String status,
             @RequestParam(required = false) String adminRemarks) {
 
-        return ResponseEntity.ok(
-                priceReportService.reviewReport(
-                        id,
-                        status,
-                        adminRemarks
-                )
-        );
+ return ResponseEntity.ok(priceReportService.reviewReport(id, status, adminRemarks));
     }
 
     // Count reports by status
     @GetMapping("/count/{status}")
-    public ResponseEntity<Long> countByStatus(
-            @PathVariable String status) {
+    public ResponseEntity<Long> countByStatus(@PathVariable String status) {
 
-        return ResponseEntity.ok(
-                priceReportService.countByStatus(status)
-        );
+ return ResponseEntity.ok(priceReportService.countByStatus(status));
     }
 
     // Delete report
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReport(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
 
         priceReportService.deleteReport(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

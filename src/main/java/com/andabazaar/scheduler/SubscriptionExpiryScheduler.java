@@ -43,17 +43,11 @@ public class SubscriptionExpiryScheduler {
 
         List<UserSubscription> subscriptions =
                 subscriptionRepository
-                    .findByStatusAndEndDateLessThan(
-                        SubscriptionStatus.ACTIVE,
-                        today
-                    );
+                    .findByStatusAndEndDateLessThan( SubscriptionStatus.ACTIVE, today);
 
-        for (UserSubscription subscription :
-                subscriptions) {
+        for (UserSubscription subscription : subscriptions) {
 
-            subscription.setStatus(
-                    SubscriptionStatus.EXPIRED
-            );
+            subscription.setStatus( SubscriptionStatus.EXPIRED);
 
             Long userId =
                     subscription.getUser().getId();
@@ -68,10 +62,7 @@ public class SubscriptionExpiryScheduler {
             NotificationRequestDto request =
                     NotificationRequestDto.builder()
                             .userId(userId)
-                            .type(
-                                NotificationType
-                                    .SUBSCRIPTION_EXPIRED
-                            )
+                            .type( NotificationType .SUBSCRIPTION_EXPIRED )
                             .title(title)
                             .message(message)
                             .build();
@@ -80,15 +71,9 @@ public class SubscriptionExpiryScheduler {
                     .createNotification(request);
 
             pushNotificationService
-                    .sendNotification(
-                            userId,
-                            title,
-                            message
-                    );
+                    .sendNotification( userId, title, message);
         }
 
-        subscriptionRepository.saveAll(
-                subscriptions
-        );
+        subscriptionRepository.saveAll( subscriptions);
     }
 }

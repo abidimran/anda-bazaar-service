@@ -22,57 +22,35 @@ public class PriceHistoryController {
     public ResponseEntity<PriceHistory>
     create(@RequestBody PriceHistory priceHistory) {
 
-        return ResponseEntity.ok(
-                priceHistoryService
-                        .createPriceHistory(priceHistory)
-        );
+ return ResponseEntity.ok(priceHistoryService.createPriceHistory(priceHistory));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PriceHistory>
     getById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                priceHistoryService.getById(id)
-        );
+ return ResponseEntity.ok(priceHistoryService.getById(id));
     }
 
     @GetMapping("/market/{marketId}")
     public ResponseEntity<List<PriceHistory>>
-    getByMarket(
-            @PathVariable Long marketId) {
+    getByMarket(@PathVariable Long marketId) {
 
-        return ResponseEntity.ok(
-                priceHistoryService
-                        .getByMarket(marketId)
-        );
+ return ResponseEntity.ok(priceHistoryService.getByMarket(marketId));
     }
 
     @GetMapping("/market/{marketId}/range")
     public ResponseEntity<List<PriceHistory>>
-    getByDateRange(
-            @PathVariable Long marketId,
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate) {
+    getByDateRange(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                priceHistoryService
-                        .getByMarketAndDateRange(
-                                marketId,
-                                startDate,
-                                endDate
-                        )
-        );
+ return ResponseEntity.ok(priceHistoryService.getByMarketAndDateRange(marketId, startDate, endDate));
     }
 
     @GetMapping("/date/{date}")
     public ResponseEntity<List<PriceHistory>>
-    getByDate(
-            @PathVariable LocalDate date) {
+    getByDate(@PathVariable LocalDate date) {
 
-        return ResponseEntity.ok(
-                priceHistoryService.getByDate(date)
-        );
+ return ResponseEntity.ok(priceHistoryService.getByDate(date));
     }
 
     @DeleteMapping("/{id}")
@@ -81,6 +59,6 @@ public class PriceHistoryController {
 
         priceHistoryService.delete(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

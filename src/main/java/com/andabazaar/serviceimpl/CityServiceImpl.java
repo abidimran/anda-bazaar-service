@@ -27,15 +27,12 @@ public class CityServiceImpl implements CityService {
     private final StateRepository stateRepository;
 
     @Override
-    public CityResponseDto createCity(
-            CityRequestDto request) {
+    public CityResponseDto createCity( CityRequestDto request) {
 
         State state = findState(request.getStateId());
 
         if (cityRepository
-                .existsByNameIgnoreCaseAndStateId(
-                        request.getName(),
-                        request.getStateId())) {
+                .existsByNameIgnoreCaseAndStateId( request.getName(), request.getStateId())) {
 
             throw new BadRequestException(
                     "City already exists in this state");
@@ -70,28 +67,23 @@ public class CityServiceImpl implements CityService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CityResponseDto> getCitiesByState(
-            Long stateId) {
+    public List<CityResponseDto> getCitiesByState( Long stateId) {
 
         findState(stateId);
 
         return cityRepository
-                .findByStateIdAndActiveTrueOrderByNameAsc(
-                        stateId)
+                .findByStateIdAndActiveTrueOrderByNameAsc( stateId)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
     }
 
     @Override
-    public CityResponseDto updateCity(
-            Long id,
-            CityRequestDto request) {
+    public CityResponseDto updateCity( Long id, CityRequestDto request) {
 
         City city = findCity(id);
 
-        State state = findState(
-                request.getStateId());
+        State state = findState( request.getStateId());
 
         boolean changed =
                 !city.getName()
@@ -101,9 +93,7 @@ public class CityServiceImpl implements CityService {
 
         if (changed &&
                 cityRepository
-                    .existsByNameIgnoreCaseAndStateId(
-                        request.getName(),
-                        request.getStateId())) {
+                    .existsByNameIgnoreCaseAndStateId( request.getName(), request.getStateId())) {
 
             throw new BadRequestException(
                     "City already exists in this state");
@@ -142,8 +132,7 @@ public class CityServiceImpl implements CityService {
                                 "State not found with id: " + id));
     }
 
-    private CityResponseDto mapToResponse(
-            City city) {
+    private CityResponseDto mapToResponse( City city) {
 
         return CityResponseDto.builder()
                 .id(city.getId())

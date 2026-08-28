@@ -9,21 +9,11 @@ import com.andabazaar.dto.analytics.PriceTrendResponseDto;
 
 public interface PriceAnalyticsService {
 
-    PriceAnalyticsResponseDto getMarketAnalytics(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    PriceAnalyticsResponseDto getMarketAnalytics( Long marketId, LocalDate startDate, LocalDate endDate);
 
-    MarketStatisticsDto getMarketStatistics(
-            Long marketId
-    );
+    MarketStatisticsDto getMarketStatistics( Long marketId);
 
-    List<PriceTrendResponseDto> getPriceTrend(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    List<PriceTrendResponseDto> getPriceTrend( Long marketId, LocalDate startDate, LocalDate endDate);
 
     List<MarketStatisticsDto> getAllMarketStatistics();
 }

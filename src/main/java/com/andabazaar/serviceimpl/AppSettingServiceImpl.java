@@ -24,8 +24,7 @@ public class AppSettingServiceImpl
     private final AppSettingRepository appSettingRepository;
 
     @Override
-    public AppSettingResponseDto createSetting(
-            AppSettingRequestDto request) {
+    public AppSettingResponseDto createSetting( AppSettingRequestDto request) {
 
         String key = request.getSettingKey()
                 .trim()
@@ -35,30 +34,23 @@ public class AppSettingServiceImpl
                 .existsBySettingKey(key)) {
 
             throw new BadRequestException(
-                    "Setting key already exists"
-            );
+                    "Setting key already exists");
         }
 
         AppSetting setting = AppSetting.builder()
                 .settingKey(key)
                 .settingValue(request.getSettingValue())
                 .description(request.getDescription())
-                .active(
-                        request.getActive() == null
-                                ? true
-                                : request.getActive()
+                .active( request.getActive() == null ? true : request.getActive()
                 )
                 .build();
 
         return mapToResponse(
-                appSettingRepository.save(setting)
-        );
+                appSettingRepository.save(setting));
     }
 
     @Override
-    public AppSettingResponseDto updateSetting(
-            Long id,
-            AppSettingRequestDto request) {
+    public AppSettingResponseDto updateSetting( Long id, AppSettingRequestDto request) {
 
         AppSetting setting = findSetting(id);
 
@@ -72,55 +64,42 @@ public class AppSettingServiceImpl
                         .existsBySettingKey(key)) {
 
             throw new BadRequestException(
-                    "Setting key already exists"
-            );
+                    "Setting key already exists");
         }
 
         setting.setSettingKey(key);
-        setting.setSettingValue(
-                request.getSettingValue()
-        );
-        setting.setDescription(
-                request.getDescription()
-        );
+        setting.setSettingValue( request.getSettingValue());
+        setting.setDescription( request.getDescription());
 
         if (request.getActive() != null) {
-            setting.setActive(
-                    request.getActive()
-            );
+            setting.setActive( request.getActive());
         }
 
         return mapToResponse(
-                appSettingRepository.save(setting)
-        );
+                appSettingRepository.save(setting));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AppSettingResponseDto getSettingById(
-            Long id) {
+    public AppSettingResponseDto getSettingById( Long id) {
 
         return mapToResponse(
-                findSetting(id)
-        );
+                findSetting(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AppSettingResponseDto getSettingByKey(
-            String key) {
+    public AppSettingResponseDto getSettingByKey( String key) {
 
         AppSetting setting =
                 appSettingRepository
-                        .findBySettingKey(
-                                key.trim().toUpperCase()
+                        .findBySettingKey( key.trim().toUpperCase()
                         )
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Setting not found with key: "
                                                 + key
-                                )
-                        );
+                                ));
 
         return mapToResponse(setting);
     }
@@ -175,32 +154,24 @@ public class AppSettingServiceImpl
                         new ResourceNotFoundException(
                                 "Setting not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
-    private AppSettingResponseDto mapToResponse(
-            AppSetting setting) {
+    private AppSettingResponseDto mapToResponse( AppSetting setting) {
 
         return AppSettingResponseDto.builder()
                 .id(setting.getId())
-                .settingKey(
-                        setting.getSettingKey()
+                .settingKey( setting.getSettingKey()
                 )
-                .settingValue(
-                        setting.getSettingValue()
+                .settingValue( setting.getSettingValue()
                 )
-                .description(
-                        setting.getDescription()
+                .description( setting.getDescription()
                 )
-                .active(
-                        setting.getActive()
+                .active( setting.getActive()
                 )
-                .createdAt(
-                        setting.getCreatedAt()
+                .createdAt( setting.getCreatedAt()
                 )
-                .updatedAt(
-                        setting.getUpdatedAt()
+                .updatedAt( setting.getUpdatedAt()
                 )
                 .build();
     }

@@ -7,18 +7,13 @@ import com.andabazaar.dto.coupon.CouponResponseDto;
 
 public interface CouponService {
 
-    CouponResponseDto createCoupon(
-            CouponRequestDto request);
+    CouponResponseDto createCoupon( CouponRequestDto request);
 
-    CouponResponseDto updateCoupon(
-            Long id,
-            CouponRequestDto request);
+    CouponResponseDto updateCoupon( Long id, CouponRequestDto request);
 
-    CouponResponseDto getCouponById(
-            Long id);
+    CouponResponseDto getCouponById( Long id);
 
-    CouponResponseDto getCouponByCode(
-            String code);
+    CouponResponseDto getCouponByCode( String code);
 
     List<CouponResponseDto> getActiveCoupons();
 
@@ -28,9 +23,7 @@ public interface CouponService {
 
     void deleteCoupon(Long id);
 
-    CouponResponseDto applyCoupon(
-            String code,
-            java.math.BigDecimal orderAmount);
+    CouponResponseDto applyCoupon( String code, java.math.BigDecimal orderAmount);
 
     void expireCoupons();
     

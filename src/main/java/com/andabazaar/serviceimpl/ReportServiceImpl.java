@@ -36,40 +36,34 @@ public class ReportServiceImpl implements ReportService {
     // =========================================================
 
     @Override
-    public PriceReportResponseDto createReport(
-            PriceReportRequestDto request) {
+    public PriceReportResponseDto createReport( PriceReportRequestDto request) {
 
         if (request == null) {
             throw new IllegalArgumentException(
-                    "Report request cannot be null"
-            );
+                    "Report request cannot be null");
         }
 
         // -----------------------------------------------------
         // FIND USER
         // -----------------------------------------------------
 
-        User user = userRepository.findById(
-                request.getUserId()
+        User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "User not found with id: "
                                 + request.getUserId()
-                )
-        );
+                ));
 
         // -----------------------------------------------------
         // FIND MARKET
         // -----------------------------------------------------
 
-        Market market = marketRepository.findById(
-                request.getMarketId()
+        Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "Market not found with id: "
                                 + request.getMarketId()
-                )
-        );
+                ));
 
         // -----------------------------------------------------
         // CREATE ENTITY
@@ -78,16 +72,11 @@ public class ReportServiceImpl implements ReportService {
         PriceReport report = PriceReport.builder()
                 .user(user)
                 .market(market)
-                .reportedPrice(
-                        request.getReportedPrice()
+                .reportedPrice( request.getReportedPrice()
                 )
-                .reason(
-                        request.getReason().trim()
+                .reason( request.getReason().trim()
                 )
-                .description(
-                        request.getDescription() == null
-                                ? null
-                                : request.getDescription().trim()
+                .description( request.getDescription() == null ? null : request.getDescription().trim()
                 )
                 .status("PENDING")
                 .reviewed(false)
@@ -106,8 +95,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public PriceReportResponseDto getReportById(
-            Long id) {
+    public PriceReportResponseDto getReportById( Long id) {
 
         PriceReport report =
                 priceReportRepository.findById(id)
@@ -115,8 +103,7 @@ public class ReportServiceImpl implements ReportService {
                                 new ResourceNotFoundException(
                                         "Price report not found with id: "
                                                 + id
-                                )
-                        );
+                                ));
 
         return convertToResponse(report);
     }
@@ -142,8 +129,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceReportResponseDto> getUserReports(
-            Long userId) {
+    public List<PriceReportResponseDto> getUserReports( Long userId) {
 
         return priceReportRepository
                 .findByUserIdOrderByCreatedAtDesc(userId)
@@ -158,8 +144,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceReportResponseDto> getMarketReports(
-            Long marketId) {
+    public List<PriceReportResponseDto> getMarketReports( Long marketId) {
 
         return priceReportRepository
                 .findByMarketIdOrderByCreatedAtDesc(marketId)
@@ -174,18 +159,15 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceReportResponseDto> getReportsByStatus(
-            String status) {
+    public List<PriceReportResponseDto> getReportsByStatus( String status) {
 
         if (status == null || status.trim().isEmpty()) {
             throw new IllegalArgumentException(
-                    "Report status is required"
-            );
+                    "Report status is required");
         }
 
         return priceReportRepository
-                .findByStatusOrderByCreatedAtDesc(
-                        status.trim().toUpperCase()
+                .findByStatusOrderByCreatedAtDesc( status.trim().toUpperCase()
                 )
                 .stream()
                 .map(this::convertToResponse)
@@ -198,13 +180,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceReportResponseDto> getReviewedReports(
-            Boolean reviewed) {
+    public List<PriceReportResponseDto> getReviewedReports( Boolean reviewed) {
 
         return priceReportRepository
-                .findByReviewedOrderByCreatedAtDesc(
-                        reviewed
-                )
+                .findByReviewedOrderByCreatedAtDesc( reviewed )
                 .stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
@@ -215,14 +194,11 @@ public class ReportServiceImpl implements ReportService {
     // =========================================================
 
     @Override
-    public PriceReportResponseDto reviewReport(
-            Long id,
-            PriceReportReviewRequestDto request) {
+    public PriceReportResponseDto reviewReport( Long id, PriceReportReviewRequestDto request) {
 
         if (request == null) {
             throw new IllegalArgumentException(
-                    "Review request cannot be null"
-            );
+                    "Review request cannot be null");
         }
 
         PriceReport report =
@@ -231,15 +207,13 @@ public class ReportServiceImpl implements ReportService {
                                 new ResourceNotFoundException(
                                         "Price report not found with id: "
                                                 + id
-                                )
-                        );
+                                ));
 
         if (request.getStatus() == null
                 || request.getStatus().trim().isEmpty()) {
 
             throw new IllegalArgumentException(
-                    "Status is required"
-            );
+                    "Status is required");
         }
 
         String status =
@@ -255,8 +229,7 @@ public class ReportServiceImpl implements ReportService {
                 && !status.equals("REJECTED")) {
 
             throw new IllegalArgumentException(
-                    "Status must be CONFIRMED or REJECTED"
-            );
+                    "Status must be CONFIRMED or REJECTED");
         }
 
         // -----------------------------------------------------
@@ -267,11 +240,7 @@ public class ReportServiceImpl implements ReportService {
 
         report.setReviewed(true);
 
-        report.setAdminRemarks(
-                request.getAdminRemarks() == null
-                        ? null
-                        : request.getAdminRemarks().trim()
-        );
+        report.setAdminRemarks( request.getAdminRemarks() == null ? null : request.getAdminRemarks().trim());
 
         PriceReport updated =
                 priceReportRepository.save(report);
@@ -292,8 +261,7 @@ public class ReportServiceImpl implements ReportService {
                                 new ResourceNotFoundException(
                                         "Price report not found with id: "
                                                 + id
-                                )
-                        );
+                                ));
 
         priceReportRepository.delete(report);
     }
@@ -307,16 +275,14 @@ public class ReportServiceImpl implements ReportService {
     public long countPendingReports() {
 
         return priceReportRepository.countByStatus(
-                "PENDING"
-        );
+                "PENDING");
     }
 
     // =========================================================
     // ENTITY -> DTO
     // =========================================================
 
-    private PriceReportResponseDto convertToResponse(
-            PriceReport report) {
+    private PriceReportResponseDto convertToResponse( PriceReport report) {
 
         // -----------------------------------------------------
         // USER NAME
@@ -326,9 +292,7 @@ public class ReportServiceImpl implements ReportService {
 
         if (report.getUser() != null) {
 
-            userName = buildUserName(
-                    report.getUser()
-            );
+            userName = buildUserName( report.getUser());
         }
 
         // -----------------------------------------------------
@@ -363,17 +327,13 @@ public class ReportServiceImpl implements ReportService {
 
                 .id(report.getId())
 
-                .userId(
-                        report.getUser() != null
-                                ? report.getUser().getId()
+                .userId( report.getUser() != null ? report.getUser().getId()
                                 : null
                 )
 
                 .userName(userName)
 
-                .marketId(
-                        report.getMarket() != null
-                                ? report.getMarket().getId()
+                .marketId( report.getMarket() != null ? report.getMarket().getId()
                                 : null
                 )
 
@@ -381,36 +341,28 @@ public class ReportServiceImpl implements ReportService {
 
                 .cityName(cityName)
 
-                .reportedPrice(
-                        report.getReportedPrice()
+                .reportedPrice( report.getReportedPrice()
                 )
 
-                .reason(
-                        report.getReason()
+                .reason( report.getReason()
                 )
 
-                .description(
-                        report.getDescription()
+                .description( report.getDescription()
                 )
 
-                .status(
-                        report.getStatus()
+                .status( report.getStatus()
                 )
 
-                .reviewed(
-                        report.getReviewed()
+                .reviewed( report.getReviewed()
                 )
 
-                .adminRemarks(
-                        report.getAdminRemarks()
+                .adminRemarks( report.getAdminRemarks()
                 )
 
-                .createdAt(
-                        report.getCreatedAt()
+                .createdAt( report.getCreatedAt()
                 )
 
-                .updatedAt(
-                        report.getUpdatedAt()
+                .updatedAt( report.getUpdatedAt()
                 )
 
                 .build();

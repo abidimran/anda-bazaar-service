@@ -35,10 +35,7 @@ public class PriceAnalyticsServiceImpl
     // =========================================================
 
     @Override
-    public PriceAnalyticsResponseDto getMarketAnalytics(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate) {
+    public PriceAnalyticsResponseDto getMarketAnalytics( Long marketId, LocalDate startDate, LocalDate endDate) {
 
         validateDates(startDate, endDate);
 
@@ -46,11 +43,7 @@ public class PriceAnalyticsServiceImpl
 
         List<EggPrice> prices =
                 eggPriceRepository
-                        .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-                                marketId,
-                                startDate,
-                                endDate
-                        )
+                        .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( marketId, startDate, endDate )
                         .stream()
                         .filter(EggPrice::getActive)
                         .toList();
@@ -91,10 +84,7 @@ public class PriceAnalyticsServiceImpl
                 currentPrice.subtract(oldestPrice);
 
         BigDecimal percentage =
-                calculatePercentageChange(
-                        oldestPrice,
-                        currentPrice
-                );
+                calculatePercentageChange( oldestPrice, currentPrice);
 
         return PriceAnalyticsResponseDto.builder()
                 .marketId(market.getId())
@@ -115,16 +105,13 @@ public class PriceAnalyticsServiceImpl
     // =========================================================
 
     @Override
-    public MarketStatisticsDto getMarketStatistics(
-            Long marketId) {
+    public MarketStatisticsDto getMarketStatistics( Long marketId) {
 
         Market market = findMarket(marketId);
 
         List<EggPrice> prices =
                 eggPriceRepository
-                        .findByMarketIdOrderByPriceDateDesc(
-                                marketId
-                        )
+                        .findByMarketIdOrderByPriceDateDesc( marketId )
                         .stream()
                         .filter(EggPrice::getActive)
                         .toList();
@@ -150,8 +137,7 @@ public class PriceAnalyticsServiceImpl
                 .highestPrice(highest)
                 .averagePrice(average)
                 .currentPrice(current)
-                .totalPriceRecords(
-                        (long) prices.size()
+                .totalPriceRecords( (long) prices.size()
                 )
                 .build();
     }
@@ -161,10 +147,7 @@ public class PriceAnalyticsServiceImpl
     // =========================================================
 
     @Override
-    public List<PriceTrendResponseDto> getPriceTrend(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate) {
+    public List<PriceTrendResponseDto> getPriceTrend( Long marketId, LocalDate startDate, LocalDate endDate) {
 
         validateDates(startDate, endDate);
 
@@ -172,11 +155,7 @@ public class PriceAnalyticsServiceImpl
 
         List<EggPrice> prices =
                 eggPriceRepository
-                        .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-                                marketId,
-                                startDate,
-                                endDate
-                        )
+                        .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( marketId, startDate, endDate )
                         .stream()
                         .filter(EggPrice::getActive)
                         .toList();
@@ -198,9 +177,7 @@ public class PriceAnalyticsServiceImpl
                 .stream()
                 .filter(Market::getActive)
                 .map(market ->
-                        getMarketStatistics(
-                                market.getId()
-                        )
+                        getMarketStatistics( market.getId() )
                 )
                 .toList();
     }
@@ -209,8 +186,7 @@ public class PriceAnalyticsServiceImpl
     // MAP TREND
     // =========================================================
 
-    private PriceTrendResponseDto mapTrend(
-            EggPrice price) {
+    private PriceTrendResponseDto mapTrend( EggPrice price) {
 
         BigDecimal change =
                 price.getPriceChangeAmount();
@@ -226,17 +202,10 @@ public class PriceAnalyticsServiceImpl
                 price.getPreviousPrice();
 
         if (previous != null
-                && previous.compareTo(
-                        BigDecimal.ZERO) != 0) {
+                && previous.compareTo( BigDecimal.ZERO) != 0) {
 
             percentage =
-                    change.multiply(
-                            BigDecimal.valueOf(100)
-                    ).divide(
-                            previous,
-                            2,
-                            RoundingMode.HALF_UP
-                    );
+                    change.multiply( BigDecimal.valueOf(100) ).divide( previous, 2, RoundingMode.HALF_UP);
         }
 
         return PriceTrendResponseDto.builder()
@@ -251,8 +220,7 @@ public class PriceAnalyticsServiceImpl
     // LOWEST
     // =========================================================
 
-    private BigDecimal getLowestPrice(
-            List<EggPrice> prices) {
+    private BigDecimal getLowestPrice( List<EggPrice> prices) {
 
         return prices.stream()
                 .map(EggPrice::getPricePerEgg)
@@ -265,8 +233,7 @@ public class PriceAnalyticsServiceImpl
     // HIGHEST
     // =========================================================
 
-    private BigDecimal getHighestPrice(
-            List<EggPrice> prices) {
+    private BigDecimal getHighestPrice( List<EggPrice> prices) {
 
         return prices.stream()
                 .map(EggPrice::getPricePerEgg)
@@ -279,8 +246,7 @@ public class PriceAnalyticsServiceImpl
     // AVERAGE
     // =========================================================
 
-    private BigDecimal getAveragePrice(
-            List<EggPrice> prices) {
+    private BigDecimal getAveragePrice( List<EggPrice> prices) {
 
         List<BigDecimal> validPrices =
                 prices.stream()
@@ -294,32 +260,24 @@ public class PriceAnalyticsServiceImpl
 
         BigDecimal total =
                 validPrices.stream()
-                        .reduce(
-                                BigDecimal.ZERO,
-                                BigDecimal::add
-                        );
+                        .reduce( BigDecimal.ZERO, BigDecimal::add);
 
         return total.divide(
-                BigDecimal.valueOf(
-                        validPrices.size()
+                BigDecimal.valueOf( validPrices.size()
                 ),
                 2,
-                RoundingMode.HALF_UP
-        );
+                RoundingMode.HALF_UP);
     }
 
     // =========================================================
     // PERCENTAGE
     // =========================================================
 
-    private BigDecimal calculatePercentageChange(
-            BigDecimal oldPrice,
-            BigDecimal newPrice) {
+    private BigDecimal calculatePercentageChange( BigDecimal oldPrice, BigDecimal newPrice) {
 
         if (oldPrice == null
                 || newPrice == null
-                || oldPrice.compareTo(
-                        BigDecimal.ZERO) == 0) {
+                || oldPrice.compareTo( BigDecimal.ZERO) == 0) {
 
             return BigDecimal.ZERO;
         }
@@ -327,11 +285,7 @@ public class PriceAnalyticsServiceImpl
         return newPrice
                 .subtract(oldPrice)
                 .multiply(BigDecimal.valueOf(100))
-                .divide(
-                        oldPrice,
-                        2,
-                        RoundingMode.HALF_UP
-                );
+                .divide( oldPrice, 2, RoundingMode.HALF_UP);
     }
 
     // =========================================================
@@ -345,31 +299,26 @@ public class PriceAnalyticsServiceImpl
                         new ResourceNotFoundException(
                                 "Market not found with id: "
                                         + marketId
-                        )
-                );
+                        ));
     }
 
     // =========================================================
     // VALIDATE DATES
     // =========================================================
 
-    private void validateDates(
-            LocalDate startDate,
-            LocalDate endDate) {
+    private void validateDates( LocalDate startDate, LocalDate endDate) {
 
         if (startDate == null
                 || endDate == null) {
 
             throw new BadRequestException(
-                    "Start date and end date are required"
-            );
+                    "Start date and end date are required");
         }
 
         if (startDate.isAfter(endDate)) {
 
             throw new BadRequestException(
-                    "Start date cannot be after end date"
-            );
+                    "Start date cannot be after end date");
         }
     }
 }

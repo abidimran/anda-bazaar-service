@@ -37,9 +37,7 @@ public class SecurityConfig {
     // =====================================================
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration)
-            throws Exception {
+    public AuthenticationManager authenticationManager( AuthenticationConfiguration configuration) throws Exception {
 
         return configuration.getAuthenticationManager();
     }
@@ -49,8 +47,7 @@ public class SecurityConfig {
     // =====================================================
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain( HttpSecurity http) throws Exception {
 
         http
 
@@ -66,9 +63,7 @@ public class SecurityConfig {
             // =================================================
 
             .sessionManagement(session ->
-                session.sessionCreationPolicy(
-                    SessionCreationPolicy.STATELESS
-                )
+                session.sessionCreationPolicy( SessionCreationPolicy.STATELESS )
             )
 
             // =================================================
@@ -81,11 +76,7 @@ public class SecurityConfig {
                 // PUBLIC ENDPOINTS
                 // =================================================
 
-                .requestMatchers(
-                    "/api/auth/register",
-                    "/api/auth/login",
-                    "/actuator/health"
-                ).permitAll()
+                .requestMatchers( "/api/auth/register", "/api/auth/login", "/actuator/health" ).permitAll()
 
                 // =================================================
                 // EGG PRICE - ADMIN WRITE OPERATIONS
@@ -96,20 +87,11 @@ public class SecurityConfig {
                 // DELETE /api/egg-prices/{id}
                 // =================================================
 
-                .requestMatchers(
-                    org.springframework.http.HttpMethod.POST,
-                    "/api/egg-prices"
-                ).hasRole("ADMIN")
+                .requestMatchers( org.springframework.http.HttpMethod.POST, "/api/egg-prices" ).hasRole("ADMIN")
 
-                .requestMatchers(
-                    org.springframework.http.HttpMethod.PUT,
-                    "/api/egg-prices/**"
-                ).hasRole("ADMIN")
+                .requestMatchers( org.springframework.http.HttpMethod.PUT, "/api/egg-prices/**" ).hasRole("ADMIN")
 
-                .requestMatchers(
-                    org.springframework.http.HttpMethod.DELETE,
-                    "/api/egg-prices/**"
-                ).hasRole("ADMIN")
+                .requestMatchers( org.springframework.http.HttpMethod.DELETE, "/api/egg-prices/**" ).hasRole("ADMIN")
 
                 // =================================================
                 // EGG PRICE - READ OPERATIONS
@@ -119,34 +101,31 @@ public class SecurityConfig {
                 // inside service/security business logic.
                 // =================================================
 
-                .requestMatchers(
-                    org.springframework.http.HttpMethod.GET,
-                    "/api/egg-prices/**"
-                ).authenticated()
+                .requestMatchers( org.springframework.http.HttpMethod.GET, "/api/egg-prices/**" ).authenticated()
+
+                // =================================================
+                // EXTERNAL EGG RATES API
+                // =================================================
+
+                .requestMatchers( "/api/egg-rates-external/**" ).authenticated()
 
                 // =================================================
                 // AUTH
                 // =================================================
 
-                .requestMatchers(
-                    "/api/auth/me"
-                ).authenticated()
+                .requestMatchers( "/api/auth/me" ).authenticated()
 
                 // =================================================
                 // USERS
                 // =================================================
 
-                .requestMatchers(
-                    "/api/users/**"
-                ).authenticated()
+                .requestMatchers( "/api/users/**" ).authenticated()
 
                 // =================================================
                 // STATES
                 // =================================================
 
-                .requestMatchers(
-                    "/api/states/**"
-                ).authenticated()
+                .requestMatchers( "/api/states/**" ).authenticated()
 
                 // =================================================
                 // EVERYTHING ELSE
@@ -159,10 +138,7 @@ public class SecurityConfig {
             // JWT FILTER
             // =================================================
 
-            .addFilterBefore(
-                jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );
+            .addFilterBefore( jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

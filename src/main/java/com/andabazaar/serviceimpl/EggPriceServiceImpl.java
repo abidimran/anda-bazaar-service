@@ -37,8 +37,7 @@ public class EggPriceServiceImpl implements EggPriceService {
     // =========================================================
 
     @Override
-    public EggPriceResponseDto createPrice(
-            EggPriceRequestDto request) {
+    public EggPriceResponseDto createPrice( EggPriceRequestDto request) {
 
         Market market = findMarket(request.getMarketId());
 
@@ -50,18 +49,12 @@ public class EggPriceServiceImpl implements EggPriceService {
                     "Price already exists for this market and date");
         }
 
-        BigDecimal previousPrice = getPreviousPrice(
-                request.getMarketId(),
-                request.getPriceDate());
+        BigDecimal previousPrice = getPreviousPrice( request.getMarketId(), request.getPriceDate());
 
-        String priceChangeType = calculateChangeType(
-                previousPrice,
-                request.getPricePerEgg());
+        String priceChangeType = calculateChangeType( previousPrice, request.getPricePerEgg());
 
         BigDecimal priceChangeAmount =
-                calculateChangeAmount(
-                        previousPrice,
-                        request.getPricePerEgg());
+                calculateChangeAmount( previousPrice, request.getPricePerEgg());
 
         EggPrice eggPrice = EggPrice.builder()
                 .market(market)
@@ -84,14 +77,11 @@ public class EggPriceServiceImpl implements EggPriceService {
     // =========================================================
 
     @Override
-    public EggPriceResponseDto updatePrice(
-            Long id,
-            EggPriceRequestDto request) {
+    public EggPriceResponseDto updatePrice( Long id, EggPriceRequestDto request) {
 
         EggPrice eggPrice = findPrice(id);
 
-        Market market = findMarket(
-                request.getMarketId());
+        Market market = findMarket( request.getMarketId());
 
         if (!eggPrice.getMarket().getId()
                 .equals(request.getMarketId())
@@ -99,27 +89,19 @@ public class EggPriceServiceImpl implements EggPriceService {
                         .equals(request.getPriceDate())) {
 
             if (eggPriceRepository
-                    .existsByMarketIdAndPriceDate(
-                            request.getMarketId(),
-                            request.getPriceDate())) {
+                    .existsByMarketIdAndPriceDate( request.getMarketId(), request.getPriceDate())) {
 
                 throw new BadRequestException(
                         "Price already exists for this market and date");
             }
         }
 
-        BigDecimal previousPrice = getPreviousPrice(
-                request.getMarketId(),
-                request.getPriceDate());
+        BigDecimal previousPrice = getPreviousPrice( request.getMarketId(), request.getPriceDate());
 
-        String priceChangeType = calculateChangeType(
-                previousPrice,
-                request.getPricePerEgg());
+        String priceChangeType = calculateChangeType( previousPrice, request.getPricePerEgg());
 
         BigDecimal priceChangeAmount =
-                calculateChangeAmount(
-                        previousPrice,
-                        request.getPricePerEgg());
+                calculateChangeAmount( previousPrice, request.getPricePerEgg());
 
         eggPrice.setMarket(market);
         eggPrice.setPriceDate(request.getPriceDate());
@@ -151,14 +133,10 @@ public class EggPriceServiceImpl implements EggPriceService {
 
     @Override
     @Transactional(readOnly = true)
-    public EggPriceResponseDto getMarketPrice(
-            Long marketId,
-            LocalDate date) {
+    public EggPriceResponseDto getMarketPrice( Long marketId, LocalDate date) {
 
         EggPrice price = eggPriceRepository
-                .findByMarketIdAndPriceDate(
-                        marketId,
-                        date)
+                .findByMarketIdAndPriceDate( marketId, date)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Egg price not found for market and date"));
@@ -215,10 +193,7 @@ public class EggPriceServiceImpl implements EggPriceService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EggPriceResponseDto> getPriceHistory(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate) {
+    public List<EggPriceResponseDto> getPriceHistory( Long marketId, LocalDate startDate, LocalDate endDate) {
 
         if (startDate.isAfter(endDate)) {
 
@@ -227,10 +202,7 @@ public class EggPriceServiceImpl implements EggPriceService {
         }
 
         return eggPriceRepository
-                .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-                        marketId,
-                        startDate,
-                        endDate)
+                .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( marketId, startDate, endDate)
                 .stream()
                 .filter(EggPrice::getActive)
                 .map(this::mapToResponse)
@@ -249,8 +221,7 @@ public class EggPriceServiceImpl implements EggPriceService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EggPriceResponseDto> getUserPrices(
-            Long userId) {
+    public List<EggPriceResponseDto> getUserPrices( Long userId) {
 
         boolean subscribed =
                 subscriptionService.hasActiveSubscription(userId);
@@ -289,11 +260,7 @@ public class EggPriceServiceImpl implements EggPriceService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EggPriceResponseDto> getUserPriceHistory(
-            Long userId,
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate) {
+    public List<EggPriceResponseDto> getUserPriceHistory( Long userId, Long marketId, LocalDate startDate, LocalDate endDate) {
 
         if (startDate.isAfter(endDate)) {
 
@@ -334,10 +301,7 @@ public class EggPriceServiceImpl implements EggPriceService {
         }
 
         return eggPriceRepository
-                .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-                        marketId,
-                        startDate,
-                        endDate)
+                .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( marketId, startDate, endDate)
                 .stream()
                 .filter(EggPrice::getActive)
                 .map(this::mapToResponse)
@@ -386,14 +350,11 @@ public class EggPriceServiceImpl implements EggPriceService {
     // PREVIOUS PRICE
     // =========================================================
 
-    private BigDecimal getPreviousPrice(
-            Long marketId,
-            LocalDate date) {
+    private BigDecimal getPreviousPrice( Long marketId, LocalDate date) {
 
         List<EggPrice> prices =
                 eggPriceRepository
-                        .findByMarketIdOrderByPriceDateDesc(
-                                marketId);
+                        .findByMarketIdOrderByPriceDateDesc( marketId);
 
         return prices.stream()
                 .filter(price ->
@@ -408,9 +369,7 @@ public class EggPriceServiceImpl implements EggPriceService {
     // PRICE CHANGE TYPE
     // =========================================================
 
-    private String calculateChangeType(
-            BigDecimal previousPrice,
-            BigDecimal currentPrice) {
+    private String calculateChangeType( BigDecimal previousPrice, BigDecimal currentPrice) {
 
         if (previousPrice == null) {
             return "NO_CHANGE";
@@ -434,9 +393,7 @@ public class EggPriceServiceImpl implements EggPriceService {
     // PRICE CHANGE AMOUNT
     // =========================================================
 
-    private BigDecimal calculateChangeAmount(
-            BigDecimal previousPrice,
-            BigDecimal currentPrice) {
+    private BigDecimal calculateChangeAmount( BigDecimal previousPrice, BigDecimal currentPrice) {
 
         if (previousPrice == null) {
             return BigDecimal.ZERO;
@@ -449,8 +406,7 @@ public class EggPriceServiceImpl implements EggPriceService {
     // MAP ENTITY TO RESPONSE DTO
     // =========================================================
 
-    private EggPriceResponseDto mapToResponse(
-            EggPrice price) {
+    private EggPriceResponseDto mapToResponse( EggPrice price) {
 
         Market market = price.getMarket();
 
@@ -468,10 +424,8 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .pricePerEgg(price.getPricePerEgg())
                 .pricePerTray(price.getPricePerTray())
                 .previousPrice(price.getPreviousPrice())
-                .priceChangeType(
-                        price.getPriceChangeType())
-                .priceChangeAmount(
-                        price.getPriceChangeAmount())
+                .priceChangeType( price.getPriceChangeType())
+                .priceChangeAmount( price.getPriceChangeAmount())
                 .remarks(price.getRemarks())
                 .active(price.getActive())
                 .build();

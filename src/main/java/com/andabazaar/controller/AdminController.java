@@ -31,8 +31,7 @@ public class AdminController {
     public ResponseEntity<AdminDashboardDto>
             getAdminDashboard() {
 
-        return ResponseEntity.ok(
-                dashboardService.getAdminDashboard());
+ return ResponseEntity.ok(dashboardService.getAdminDashboard());
     }
 
     // =========================================================
@@ -40,12 +39,9 @@ public class AdminController {
     // =========================================================
 
     @PostMapping("/create-admin")
-    public ResponseEntity<UserResponseDto> createAdmin(
-            @Valid @RequestBody UserRequestDto request) {
+    public ResponseEntity<UserResponseDto> createAdmin(@Valid @RequestBody UserRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(adminService.createAdmin(request));
+ return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createAdmin(request));
     }
 
     // =========================================================
@@ -56,8 +52,7 @@ public class AdminController {
     public ResponseEntity<List<UserResponseDto>>
             getAllUsers() {
 
-        return ResponseEntity.ok(
-                adminService.getAllUsers());
+ return ResponseEntity.ok(adminService.getAllUsers());
     }
 
     // =========================================================
@@ -68,8 +63,7 @@ public class AdminController {
     public ResponseEntity<UserResponseDto>
             getUser(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                adminService.getUser(id));
+ return ResponseEntity.ok(adminService.getUser(id));
     }
 
     // =========================================================
@@ -78,14 +72,9 @@ public class AdminController {
 
     @PatchMapping("/users/{id}/status")
     public ResponseEntity<UserResponseDto>
-            changeUserStatus(
-                    @PathVariable Long id,
-                    @RequestParam String status) {
+            changeUserStatus(@PathVariable Long id, @RequestParam String status) {
 
-        return ResponseEntity.ok(
-                adminService.changeUserStatus(
-                        id,
-                        status));
+ return ResponseEntity.ok(adminService.changeUserStatus(id, status));
     }
 
     // =========================================================
@@ -98,6 +87,6 @@ public class AdminController {
 
         adminService.deleteUser(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

@@ -26,135 +26,89 @@ public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
 
     @Override
-    public CouponResponseDto createCoupon(
-            CouponRequestDto request) {
+    public CouponResponseDto createCoupon( CouponRequestDto request) {
 
-        validateDates(
-                request.getStartDate(),
-                request.getEndDate()
-        );
+        validateDates( request.getStartDate(), request.getEndDate());
 
         if (couponRepository.existsByCodeIgnoreCase(
                 request.getCode())) {
 
             throw new BadRequestException(
-                    "Coupon code already exists"
-            );
+                    "Coupon code already exists");
         }
 
         validateDiscount(request);
 
         Coupon coupon = Coupon.builder()
-                .code(
-                        request.getCode()
+                .code( request.getCode()
                                 .trim()
                                 .toUpperCase()
                 )
-                .description(
-                        request.getDescription()
+                .description( request.getDescription()
                 )
-                .discountAmount(
-                        request.getDiscountAmount()
+                .discountAmount( request.getDiscountAmount()
                 )
-                .percentage(
-                        request.getPercentage()
+                .percentage( request.getPercentage()
                 )
-                .minimumOrderAmount(
-                        request.getMinimumOrderAmount()
+                .minimumOrderAmount( request.getMinimumOrderAmount()
                 )
-                .usageLimit(
-                        request.getUsageLimit()
+                .usageLimit( request.getUsageLimit()
                 )
                 .usedCount(0)
-                .startDate(
-                        request.getStartDate()
+                .startDate( request.getStartDate()
                 )
-                .endDate(
-                        request.getEndDate()
+                .endDate( request.getEndDate()
                 )
-                .status(
-                        CouponStatus.ACTIVE
-                )
+                .status( CouponStatus.ACTIVE )
                 .active(true)
                 .build();
 
         return mapToResponse(
-                couponRepository.save(coupon)
-        );
+                couponRepository.save(coupon));
     }
 
     @Override
-    public CouponResponseDto updateCoupon(
-            Long id,
-            CouponRequestDto request) {
+    public CouponResponseDto updateCoupon( Long id, CouponRequestDto request) {
 
         Coupon coupon = findCoupon(id);
 
-        validateDates(
-                request.getStartDate(),
-                request.getEndDate()
-        );
+        validateDates( request.getStartDate(), request.getEndDate());
 
-        checkDuplicateCode(
-                coupon,
-                request.getCode()
-        );
+        checkDuplicateCode( coupon, request.getCode());
 
         validateDiscount(request);
 
-        coupon.setCode(
-                request.getCode()
-                        .trim()
-                        .toUpperCase()
-        );
+        coupon.setCode( request.getCode() .trim() .toUpperCase());
 
-        coupon.setDescription(
-                request.getDescription()
-        );
+        coupon.setDescription( request.getDescription());
 
-        coupon.setDiscountAmount(
-                request.getDiscountAmount()
-        );
+        coupon.setDiscountAmount( request.getDiscountAmount());
 
-        coupon.setPercentage(
-                request.getPercentage()
-        );
+        coupon.setPercentage( request.getPercentage());
 
-        coupon.setMinimumOrderAmount(
-                request.getMinimumOrderAmount()
-        );
+        coupon.setMinimumOrderAmount( request.getMinimumOrderAmount());
 
-        coupon.setUsageLimit(
-                request.getUsageLimit()
-        );
+        coupon.setUsageLimit( request.getUsageLimit());
 
-        coupon.setStartDate(
-                request.getStartDate()
-        );
+        coupon.setStartDate( request.getStartDate());
 
-        coupon.setEndDate(
-                request.getEndDate()
-        );
+        coupon.setEndDate( request.getEndDate());
 
         return mapToResponse(
-                couponRepository.save(coupon)
-        );
+                couponRepository.save(coupon));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CouponResponseDto getCouponById(
-            Long id) {
+    public CouponResponseDto getCouponById( Long id) {
 
         return mapToResponse(
-                findCoupon(id)
-        );
+                findCoupon(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CouponResponseDto getCouponByCode(
-            String code) {
+    public CouponResponseDto getCouponByCode( String code) {
 
         Coupon coupon = couponRepository
                 .findByCodeIgnoreCase(code)
@@ -162,8 +116,7 @@ public class CouponServiceImpl implements CouponService {
                         new ResourceNotFoundException(
                                 "Coupon not found with code: "
                                         + code
-                        )
-                );
+                        ));
 
         return mapToResponse(coupon);
     }
@@ -209,9 +162,7 @@ public class CouponServiceImpl implements CouponService {
 
         coupon.setActive(false);
 
-        coupon.setStatus(
-                CouponStatus.INACTIVE
-        );
+        coupon.setStatus( CouponStatus.INACTIVE);
 
         couponRepository.save(coupon);
     }
@@ -225,17 +176,14 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public CouponResponseDto applyCoupon(
-            String code,
-            BigDecimal orderAmount) {
+    public CouponResponseDto applyCoupon( String code, BigDecimal orderAmount) {
 
         Coupon coupon = couponRepository
                 .findByCodeIgnoreCase(code)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Coupon not found"
-                        )
-                );
+                        ));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -243,40 +191,35 @@ public class CouponServiceImpl implements CouponService {
                 coupon.getActive())) {
 
             throw new BadRequestException(
-                    "Coupon is inactive"
-            );
+                    "Coupon is inactive");
         }
 
         if (coupon.getStatus()
                 != CouponStatus.ACTIVE) {
 
             throw new BadRequestException(
-                    "Coupon is not active"
-            );
+                    "Coupon is not active");
         }
 
         if (now.isBefore(
                 coupon.getStartDate())) {
 
             throw new BadRequestException(
-                    "Coupon is not active yet"
-            );
+                    "Coupon is not active yet");
         }
 
         if (now.isAfter(
                 coupon.getEndDate())) {
 
             throw new BadRequestException(
-                    "Coupon has expired"
-            );
+                    "Coupon has expired");
         }
 
         if (coupon.getUsedCount()
                 >= coupon.getUsageLimit()) {
 
             throw new BadRequestException(
-                    "Coupon usage limit reached"
-            );
+                    "Coupon usage limit reached");
         }
 
         if (orderAmount.compareTo(
@@ -284,8 +227,7 @@ public class CouponServiceImpl implements CouponService {
 
             throw new BadRequestException(
                     "Minimum order amount is "
-                            + coupon.getMinimumOrderAmount()
-            );
+                            + coupon.getMinimumOrderAmount());
         }
 
         return mapToResponse(coupon);
@@ -298,16 +240,11 @@ public class CouponServiceImpl implements CouponService {
 
         List<Coupon> coupons =
                 couponRepository
-                        .findByStatusAndEndDateBefore(
-                                CouponStatus.ACTIVE,
-                                now
-                        );
+                        .findByStatusAndEndDateBefore( CouponStatus.ACTIVE, now);
 
         for (Coupon coupon : coupons) {
 
-            coupon.setStatus(
-                    CouponStatus.EXPIRED
-            );
+            coupon.setStatus( CouponStatus.EXPIRED);
 
             coupon.setActive(false);
         }
@@ -323,63 +260,49 @@ public class CouponServiceImpl implements CouponService {
                         new ResourceNotFoundException(
                                 "Coupon not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
-    private void validateDates(
-            LocalDateTime startDate,
-            LocalDateTime endDate) {
+    private void validateDates( LocalDateTime startDate, LocalDateTime endDate) {
 
         if (endDate.isBefore(startDate)) {
 
             throw new BadRequestException(
-                    "End date cannot be before start date"
-            );
+                    "End date cannot be before start date");
         }
     }
 
-    private void validateDiscount(
-            CouponRequestDto request) {
+    private void validateDiscount( CouponRequestDto request) {
 
         if (Boolean.TRUE.equals(
                 request.getPercentage())) {
 
             if (request.getDiscountAmount()
-                    .compareTo(
-                            BigDecimal.valueOf(100)
+                    .compareTo( BigDecimal.valueOf(100)
                     ) > 0) {
 
                 throw new BadRequestException(
-                        "Percentage discount cannot exceed 100"
-                );
+                        "Percentage discount cannot exceed 100");
             }
         }
     }
 
-    private void checkDuplicateCode(
-            Coupon coupon,
-            String newCode) {
+    private void checkDuplicateCode( Coupon coupon, String newCode) {
 
         if (!coupon.getCode()
-                .equalsIgnoreCase(
-                        newCode.trim()
+                .equalsIgnoreCase( newCode.trim()
                 )) {
 
             if (couponRepository
-                    .existsByCodeIgnoreCase(
-                            newCode
-                    )) {
+                    .existsByCodeIgnoreCase( newCode )) {
 
                 throw new BadRequestException(
-                        "Coupon code already exists"
-                );
+                        "Coupon code already exists");
             }
         }
     }
 
-    private CouponResponseDto mapToResponse(
-            Coupon coupon) {
+    private CouponResponseDto mapToResponse( Coupon coupon) {
 
         LocalDateTime now =
                 LocalDateTime.now();
@@ -389,14 +312,10 @@ public class CouponServiceImpl implements CouponService {
                         .isBefore(now);
 
         boolean usable =
-                Boolean.TRUE.equals(
-                        coupon.getActive()
-                )
+                Boolean.TRUE.equals( coupon.getActive() )
                 && coupon.getStatus()
                         == CouponStatus.ACTIVE
-                && !now.isBefore(
-                        coupon.getStartDate()
-                )
+                && !now.isBefore( coupon.getStartDate() )
                 && !expired
                 && coupon.getUsedCount()
                         < coupon.getUsageLimit();
@@ -404,43 +323,31 @@ public class CouponServiceImpl implements CouponService {
         return CouponResponseDto.builder()
                 .id(coupon.getId())
                 .code(coupon.getCode())
-                .description(
-                        coupon.getDescription()
+                .description( coupon.getDescription()
                 )
-                .discountAmount(
-                        coupon.getDiscountAmount()
+                .discountAmount( coupon.getDiscountAmount()
                 )
-                .percentage(
-                        coupon.getPercentage()
+                .percentage( coupon.getPercentage()
                 )
-                .minimumOrderAmount(
-                        coupon.getMinimumOrderAmount()
+                .minimumOrderAmount( coupon.getMinimumOrderAmount()
                 )
-                .usageLimit(
-                        coupon.getUsageLimit()
+                .usageLimit( coupon.getUsageLimit()
                 )
-                .usedCount(
-                        coupon.getUsedCount()
+                .usedCount( coupon.getUsedCount()
                 )
-                .startDate(
-                        coupon.getStartDate()
+                .startDate( coupon.getStartDate()
                 )
-                .endDate(
-                        coupon.getEndDate()
+                .endDate( coupon.getEndDate()
                 )
-                .status(
-                        coupon.getStatus()
+                .status( coupon.getStatus()
                 )
-                .active(
-                        coupon.getActive()
+                .active( coupon.getActive()
                 )
                 .expired(expired)
                 .usable(usable)
-                .createdAt(
-                        coupon.getCreatedAt()
+                .createdAt( coupon.getCreatedAt()
                 )
-                .updatedAt(
-                        coupon.getUpdatedAt()
+                .updatedAt( coupon.getUpdatedAt()
                 )
                 .build();
     }

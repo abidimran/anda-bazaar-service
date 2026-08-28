@@ -33,19 +33,15 @@ public class ExpectedPriceServiceImpl
     // =========================================================
 
     @Override
-    public ExpectedPriceResponseDto createExpectedPrice(
-            ExpectedPriceRequestDto request) {
+    public ExpectedPriceResponseDto createExpectedPrice( ExpectedPriceRequestDto request) {
 
         Market market = findMarket(request.getMarketId());
 
         if (expectedPriceRepository
-                .existsByMarketIdAndExpectedDate(
-                        request.getMarketId(),
-                        request.getExpectedDate())) {
+                .existsByMarketIdAndExpectedDate( request.getMarketId(), request.getExpectedDate())) {
 
             throw new BadRequestException(
-                    "Expected price already exists for this market and date"
-            );
+                    "Expected price already exists for this market and date");
         }
 
         ExpectedPrice expectedPrice = ExpectedPrice.builder()
@@ -57,8 +53,7 @@ public class ExpectedPriceServiceImpl
                 .build();
 
         return mapToResponse(
-                expectedPriceRepository.save(expectedPrice)
-        );
+                expectedPriceRepository.save(expectedPrice));
     }
 
     // =========================================================
@@ -66,9 +61,7 @@ public class ExpectedPriceServiceImpl
     // =========================================================
 
     @Override
-    public ExpectedPriceResponseDto updateExpectedPrice(
-            Long id,
-            ExpectedPriceRequestDto request) {
+    public ExpectedPriceResponseDto updateExpectedPrice( Long id, ExpectedPriceRequestDto request) {
 
         ExpectedPrice expectedPrice =
                 findExpectedPrice(id);
@@ -87,30 +80,20 @@ public class ExpectedPriceServiceImpl
         if (marketChanged || dateChanged) {
 
             if (expectedPriceRepository
-                    .existsByMarketIdAndExpectedDate(
-                            request.getMarketId(),
-                            request.getExpectedDate())) {
+                    .existsByMarketIdAndExpectedDate( request.getMarketId(), request.getExpectedDate())) {
 
                 throw new BadRequestException(
-                        "Expected price already exists for this market and date"
-                );
+                        "Expected price already exists for this market and date");
             }
         }
 
         expectedPrice.setMarket(market);
-        expectedPrice.setExpectedDate(
-                request.getExpectedDate()
-        );
-        expectedPrice.setExpectedPrice(
-                request.getExpectedPrice()
-        );
-        expectedPrice.setReason(
-                request.getReason()
-        );
+        expectedPrice.setExpectedDate( request.getExpectedDate());
+        expectedPrice.setExpectedPrice( request.getExpectedPrice());
+        expectedPrice.setReason( request.getReason());
 
         return mapToResponse(
-                expectedPriceRepository.save(expectedPrice)
-        );
+                expectedPriceRepository.save(expectedPrice));
     }
 
     // =========================================================
@@ -119,12 +102,10 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public ExpectedPriceResponseDto getExpectedPriceById(
-            Long id) {
+    public ExpectedPriceResponseDto getExpectedPriceById( Long id) {
 
         return mapToResponse(
-                findExpectedPrice(id)
-        );
+                findExpectedPrice(id));
     }
 
     // =========================================================
@@ -133,20 +114,16 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<ExpectedPriceResponseDto> getByMarket(
-            Long marketId) {
+    public List<ExpectedPriceResponseDto> getByMarket( Long marketId) {
 
         if (!marketRepository.existsById(marketId)) {
 
             throw new ResourceNotFoundException(
-                    "Market not found with id: " + marketId
-            );
+                    "Market not found with id: " + marketId);
         }
 
         return expectedPriceRepository
-                .findByMarketIdOrderByExpectedDateDesc(
-                        marketId
-                )
+                .findByMarketIdOrderByExpectedDateDesc( marketId )
                 .stream()
                 .filter(ExpectedPrice::getActive)
                 .map(this::mapToResponse)
@@ -159,28 +136,21 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public ExpectedPriceResponseDto getByMarketAndDate(
-            Long marketId,
-            LocalDate expectedDate) {
+    public ExpectedPriceResponseDto getByMarketAndDate( Long marketId, LocalDate expectedDate) {
 
         ExpectedPrice expectedPrice =
                 expectedPriceRepository
-                        .findByMarketIdAndExpectedDate(
-                                marketId,
-                                expectedDate
-                        )
+                        .findByMarketIdAndExpectedDate( marketId, expectedDate )
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Expected price not found for market and date"
-                                )
-                        );
+                                ));
 
         if (!Boolean.TRUE.equals(
                 expectedPrice.getActive())) {
 
             throw new ResourceNotFoundException(
-                    "Expected price is not active"
-            );
+                    "Expected price is not active");
         }
 
         return mapToResponse(expectedPrice);
@@ -208,17 +178,12 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<ExpectedPriceResponseDto> getByDateRange(
-            LocalDate startDate,
-            LocalDate endDate) {
+    public List<ExpectedPriceResponseDto> getByDateRange( LocalDate startDate, LocalDate endDate) {
 
         validateDateRange(startDate, endDate);
 
         return expectedPriceRepository
-                .findByExpectedDateBetweenOrderByExpectedDateDesc(
-                        startDate,
-                        endDate
-                )
+                .findByExpectedDateBetweenOrderByExpectedDateDesc( startDate, endDate )
                 .stream()
                 .filter(ExpectedPrice::getActive)
                 .map(this::mapToResponse)
@@ -232,26 +197,18 @@ public class ExpectedPriceServiceImpl
     @Override
     @Transactional(readOnly = true)
     public List<ExpectedPriceResponseDto>
-            getMarketDateRange(
-                    Long marketId,
-                    LocalDate startDate,
-                    LocalDate endDate) {
+            getMarketDateRange( Long marketId, LocalDate startDate, LocalDate endDate) {
 
         validateDateRange(startDate, endDate);
 
         if (!marketRepository.existsById(marketId)) {
 
             throw new ResourceNotFoundException(
-                    "Market not found with id: " + marketId
-            );
+                    "Market not found with id: " + marketId);
         }
 
         return expectedPriceRepository
-                .findByMarketIdAndExpectedDateBetweenOrderByExpectedDateDesc(
-                        marketId,
-                        startDate,
-                        endDate
-                )
+                .findByMarketIdAndExpectedDateBetweenOrderByExpectedDateDesc( marketId, startDate, endDate )
                 .stream()
                 .filter(ExpectedPrice::getActive)
                 .map(this::mapToResponse)
@@ -289,8 +246,7 @@ public class ExpectedPriceServiceImpl
     // FIND EXPECTED PRICE
     // =========================================================
 
-    private ExpectedPrice findExpectedPrice(
-            Long id) {
+    private ExpectedPrice findExpectedPrice( Long id) {
 
         return expectedPriceRepository
                 .findById(id)
@@ -298,8 +254,7 @@ public class ExpectedPriceServiceImpl
                         new ResourceNotFoundException(
                                 "Expected price not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     // =========================================================
@@ -314,30 +269,25 @@ public class ExpectedPriceServiceImpl
                         new ResourceNotFoundException(
                                 "Market not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     // =========================================================
     // VALIDATE DATE RANGE
     // =========================================================
 
-    private void validateDateRange(
-            LocalDate startDate,
-            LocalDate endDate) {
+    private void validateDateRange( LocalDate startDate, LocalDate endDate) {
 
         if (startDate == null || endDate == null) {
 
             throw new BadRequestException(
-                    "Start date and end date are required"
-            );
+                    "Start date and end date are required");
         }
 
         if (startDate.isAfter(endDate)) {
 
             throw new BadRequestException(
-                    "Start date cannot be after end date"
-            );
+                    "Start date cannot be after end date");
         }
     }
 
@@ -345,8 +295,7 @@ public class ExpectedPriceServiceImpl
     // MAP ENTITY TO RESPONSE DTO
     // =========================================================
 
-    private ExpectedPriceResponseDto mapToResponse(
-            ExpectedPrice expectedPrice) {
+    private ExpectedPriceResponseDto mapToResponse( ExpectedPrice expectedPrice) {
 
         Market market =
                 expectedPrice.getMarket();
@@ -360,34 +309,26 @@ public class ExpectedPriceServiceImpl
                 .marketId(market.getId())
                 .marketName(market.getName())
 
-                .cityName(
-                        city != null
-                                ? city.getName()
+                .cityName( city != null ? city.getName()
                                 : null
                 )
 
-                .expectedPrice(
-                        expectedPrice.getExpectedPrice()
+                .expectedPrice( expectedPrice.getExpectedPrice()
                 )
 
-                .expectedDate(
-                        expectedPrice.getExpectedDate()
+                .expectedDate( expectedPrice.getExpectedDate()
                 )
 
-                .reason(
-                        expectedPrice.getReason()
+                .reason( expectedPrice.getReason()
                 )
 
-                .active(
-                        expectedPrice.getActive()
+                .active( expectedPrice.getActive()
                 )
 
-                .createdAt(
-                        expectedPrice.getCreatedAt()
+                .createdAt( expectedPrice.getCreatedAt()
                 )
 
-                .updatedAt(
-                        expectedPrice.getUpdatedAt()
+                .updatedAt( expectedPrice.getUpdatedAt()
                 )
 
                 .build();

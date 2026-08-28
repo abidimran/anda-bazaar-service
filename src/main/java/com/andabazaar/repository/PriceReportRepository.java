@@ -21,58 +21,44 @@ public interface PriceReportRepository
     // =========================================================
 
     List<PriceReport>
-    findByUserIdOrderByCreatedAtDesc(
-            Long userId
-    );
+    findByUserIdOrderByCreatedAtDesc( Long userId);
 
     // =========================================================
     // MARKET REPORTS
     // =========================================================
 
     List<PriceReport>
-    findByMarketIdOrderByCreatedAtDesc(
-            Long marketId
-    );
+    findByMarketIdOrderByCreatedAtDesc( Long marketId);
 
     // =========================================================
     // STATUS
     // =========================================================
 
     List<PriceReport>
-    findByStatusOrderByCreatedAtDesc(
-            String status
-    );
+    findByStatusOrderByCreatedAtDesc( String status);
 
     // =========================================================
     // REVIEWED
     // =========================================================
 
     List<PriceReport>
-    findByReviewedOrderByCreatedAtDesc(
-            Boolean reviewed
-    );
+    findByReviewedOrderByCreatedAtDesc( Boolean reviewed);
 
     // =========================================================
     // PENDING COUNT
     // =========================================================
 
-    long countByStatus(
-            String status
-    );
+    long countByStatus( String status);
 
     // =========================================================
     // MARKET COUNT
     // =========================================================
 
-    long countByMarketId(
-            Long marketId
-    );
+    long countByMarketId( Long marketId);
 
     // =========================================================
     // USER COUNT
     // =========================================================
 
-    long countByUserId(
-            Long userId
-    );
+    long countByUserId( Long userId);
 }

@@ -10,11 +10,9 @@ import com.andabazaar.entity.SubscriptionPlan;
 public interface SubscriptionPlanRepository
         extends JpaRepository<SubscriptionPlan, Long> {
 
-    Optional<SubscriptionPlan> findByNameIgnoreCase(
-            String name);
+    Optional<SubscriptionPlan> findByNameIgnoreCase( String name);
 
-    boolean existsByNameIgnoreCase(
-            String name);
+    boolean existsByNameIgnoreCase( String name);
 
     List<SubscriptionPlan> findByActiveTrueOrderByPriceAsc();
 }

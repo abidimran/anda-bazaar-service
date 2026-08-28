@@ -13,21 +13,13 @@ public class FirebaseNotificationService
 	//Firebase credentials add karne ke baad actual mobile notification jayega.
 	
     @Override
-    public void sendNotification(
-            Long userId,
-            String title,
-            String message) {
+    public void sendNotification( Long userId, String title, String message) {
 
         /*
          * Firebase Cloud Messaging integration
          * will be added here.
          */
 
-        log.info(
-                "Push notification for user {}: {} - {}",
-                userId,
-                title,
-                message
-        );
+        log.info( "Push notification for user {}: {} - {}", userId, title, message);
     }
 }

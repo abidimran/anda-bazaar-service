@@ -29,89 +29,57 @@ public class AuditLogController {
     private final AuditLogService auditLogService;
 
     @PostMapping
-    public ResponseEntity<AuditLogResponseDto> createLog(
-            @Valid @RequestBody
-            AuditLogRequestDto request) {
+    public ResponseEntity<AuditLogResponseDto> createLog(@Valid @RequestBody AuditLogRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        auditLogService.createLog(request)
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(auditLogService.createLog(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuditLogResponseDto> getLog(
-            @PathVariable Long id) {
+    public ResponseEntity<AuditLogResponseDto> getLog(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                auditLogService.getLogById(id)
-        );
+ return ResponseEntity.ok(auditLogService.getLogById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<AuditLogResponseDto>>
             getAllLogs() {
 
-        return ResponseEntity.ok(
-                auditLogService.getAllLogs()
-        );
+ return ResponseEntity.ok(auditLogService.getAllLogs());
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<AuditLogResponseDto>>
-            getUserLogs(
-                    @PathVariable Long userId) {
+            getUserLogs(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                auditLogService.getUserLogs(userId)
-        );
+ return ResponseEntity.ok(auditLogService.getUserLogs(userId));
     }
 
     @GetMapping("/action/{action}")
     public ResponseEntity<List<AuditLogResponseDto>>
-            getLogsByAction(
-                    @PathVariable String action) {
+            getLogsByAction(@PathVariable String action) {
 
-        return ResponseEntity.ok(
-                auditLogService.getLogsByAction(action)
-        );
+ return ResponseEntity.ok(auditLogService.getLogsByAction(action));
     }
 
     @GetMapping("/entity")
     public ResponseEntity<List<AuditLogResponseDto>>
-            getEntityLogs(
-                    @RequestParam String entityType,
-                    @RequestParam String entityId) {
+            getEntityLogs(@RequestParam String entityType, @RequestParam String entityId) {
 
-        return ResponseEntity.ok(
-                auditLogService.getEntityLogs(
-                        entityType,
-                        entityId
-                )
-        );
+ return ResponseEntity.ok(auditLogService.getEntityLogs(entityType, entityId));
     }
 
     @GetMapping("/between")
     public ResponseEntity<List<AuditLogResponseDto>>
-            getLogsBetween(
-                    @RequestParam LocalDateTime startDate,
-                    @RequestParam LocalDateTime endDate) {
+            getLogsBetween(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
 
-        return ResponseEntity.ok(
-                auditLogService.getLogsBetween(
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(auditLogService.getLogsBetween(startDate, endDate));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLog(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteLog(@PathVariable Long id) {
 
         auditLogService.deleteLog(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

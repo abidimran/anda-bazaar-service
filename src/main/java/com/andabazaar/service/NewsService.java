@@ -7,15 +7,11 @@ import com.andabazaar.dto.news.NewsResponseDto;
 
 public interface NewsService {
 
-    NewsResponseDto createNews(
-            NewsRequestDto request);
+    NewsResponseDto createNews( NewsRequestDto request);
 
-    NewsResponseDto updateNews(
-            Long id,
-            NewsRequestDto request);
+    NewsResponseDto updateNews( Long id, NewsRequestDto request);
 
-    NewsResponseDto getNewsById(
-            Long id);
+    NewsResponseDto getNewsById( Long id);
 
     List<NewsResponseDto> getAllNews();
 

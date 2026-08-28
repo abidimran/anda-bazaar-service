@@ -23,12 +23,9 @@ public class PriceAlertController {
     // =========================================================
 
     @PostMapping
-    public ResponseEntity<PriceAlertResponseDto> createAlert(
-            @RequestBody PriceAlertRequestDto request) {
+    public ResponseEntity<PriceAlertResponseDto> createAlert(@RequestBody PriceAlertRequestDto request) {
 
-        return ResponseEntity.ok(
-                priceAlertService.createAlert(request)
-        );
+ return ResponseEntity.ok(priceAlertService.createAlert(request));
     }
 
     // =========================================================
@@ -36,12 +33,9 @@ public class PriceAlertController {
     // =========================================================
 
     @GetMapping("/{id}")
-    public ResponseEntity<PriceAlertResponseDto> getAlertById(
-            @PathVariable Long id) {
+    public ResponseEntity<PriceAlertResponseDto> getAlertById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                priceAlertService.getAlertById(id)
-        );
+ return ResponseEntity.ok(priceAlertService.getAlertById(id));
     }
 
     // =========================================================
@@ -49,12 +43,9 @@ public class PriceAlertController {
     // =========================================================
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PriceAlertResponseDto>> getUserAlerts(
-            @PathVariable Long userId) {
+    public ResponseEntity<List<PriceAlertResponseDto>> getUserAlerts(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                priceAlertService.getUserAlerts(userId)
-        );
+ return ResponseEntity.ok(priceAlertService.getUserAlerts(userId));
     }
 
     // =========================================================
@@ -62,13 +53,9 @@ public class PriceAlertController {
     // =========================================================
 
     @PutMapping("/{id}")
-    public ResponseEntity<PriceAlertResponseDto> updateAlert(
-            @PathVariable Long id,
-            @RequestBody PriceAlertRequestDto request) {
+    public ResponseEntity<PriceAlertResponseDto> updateAlert(@PathVariable Long id, @RequestBody PriceAlertRequestDto request) {
 
-        return ResponseEntity.ok(
-                priceAlertService.updateAlert(id, request)
-        );
+ return ResponseEntity.ok(priceAlertService.updateAlert(id, request));
     }
 
     // =========================================================
@@ -76,12 +63,11 @@ public class PriceAlertController {
     // =========================================================
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAlert(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteAlert(@PathVariable Long id) {
 
         priceAlertService.deleteAlert(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 
     // =========================================================
@@ -89,11 +75,8 @@ public class PriceAlertController {
     // =========================================================
 
     @PatchMapping("/{id}/toggle")
-    public ResponseEntity<PriceAlertResponseDto> toggleAlert(
-            @PathVariable Long id) {
+    public ResponseEntity<PriceAlertResponseDto> toggleAlert(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                priceAlertService.toggleAlert(id)
-        );
+ return ResponseEntity.ok(priceAlertService.toggleAlert(id));
     }
 }

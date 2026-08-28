@@ -54,9 +54,7 @@ public class PaymentServiceImpl implements PaymentService {
     // =========================================================
 
     @Override
-    public PaymentResponseDto createPayment(
-            Long userId,
-            Long planId) {
+    public PaymentResponseDto createPayment( Long userId, Long planId) {
 
         User user = findUser(userId);
 
@@ -64,8 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (!Boolean.TRUE.equals(plan.getActive())) {
             throw new BadRequestException(
-                    "Subscription plan is not active"
-            );
+                    "Subscription plan is not active");
         }
 
         BigDecimal amount = plan.getPrice();
@@ -74,8 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
                 amount.compareTo(BigDecimal.ZERO) <= 0) {
 
             throw new BadRequestException(
-                    "Invalid subscription plan price"
-            );
+                    "Invalid subscription plan price");
         }
 
         String receipt =
@@ -87,11 +83,7 @@ public class PaymentServiceImpl implements PaymentService {
         try {
 
             Order order =
-                    razorpayService.createOrder(
-                            amount,
-                            "INR",
-                            receipt
-                    );
+                    razorpayService.createOrder( amount, "INR", receipt);
 
             String razorpayOrderId =
                     order.get("id");
@@ -100,8 +92,7 @@ public class PaymentServiceImpl implements PaymentService {
                     razorpayOrderId.isBlank()) {
 
                 throw new BadRequestException(
-                        "Razorpay order ID was not generated"
-                );
+                        "Razorpay order ID was not generated");
             }
 
             Payment payment =
@@ -110,29 +101,21 @@ public class PaymentServiceImpl implements PaymentService {
                             .subscriptionPlan(plan)
                             .amount(amount)
                             .currency("INR")
-                            .razorpayOrderId(
-                                    razorpayOrderId
-                            )
-                            .orderId(
-                                    razorpayOrderId
-                            )
-                            .status(
-                                    PaymentStatus.PENDING
-                            )
+                            .razorpayOrderId( razorpayOrderId )
+                            .orderId( razorpayOrderId )
+                            .status( PaymentStatus.PENDING )
                             .build();
 
             Payment savedPayment =
                     paymentRepository.save(payment);
 
             return paymentMapper.toDto(
-                    savedPayment
-            );
+                    savedPayment);
 
         } catch (RazorpayException e) {
 
             throw new BadRequestException(
-                    "Unable to create Razorpay order"
-            );
+                    "Unable to create Razorpay order");
         }
     }
 
@@ -141,52 +124,44 @@ public class PaymentServiceImpl implements PaymentService {
     // =========================================================
 
     @Override
-    public PaymentResponseDto verifyPayment(
-            Long userId,
-            PaymentVerificationDto request) {
+    public PaymentResponseDto verifyPayment( Long userId, PaymentVerificationDto request) {
 
         User user = findUser(userId);
 
         if (request == null) {
             throw new BadRequestException(
-                    "Payment verification data is required"
-            );
+                    "Payment verification data is required");
         }
 
         if (request.getRazorpayOrderId() == null ||
                 request.getRazorpayOrderId().isBlank()) {
 
             throw new BadRequestException(
-                    "Razorpay order ID is required"
-            );
+                    "Razorpay order ID is required");
         }
 
         if (request.getRazorpayPaymentId() == null ||
                 request.getRazorpayPaymentId().isBlank()) {
 
             throw new BadRequestException(
-                    "Razorpay payment ID is required"
-            );
+                    "Razorpay payment ID is required");
         }
 
         if (request.getRazorpaySignature() == null ||
                 request.getRazorpaySignature().isBlank()) {
 
             throw new BadRequestException(
-                    "Razorpay signature is required"
-            );
+                    "Razorpay signature is required");
         }
 
         Payment payment =
                 paymentRepository
-                        .findByRazorpayOrderId(
-                                request.getRazorpayOrderId()
+                        .findByRazorpayOrderId( request.getRazorpayOrderId()
                         )
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Payment order not found"
-                                )
-                        );
+                                ));
 
         if (payment.getUser() == null ||
                 payment.getUser().getId() == null ||
@@ -195,8 +170,7 @@ public class PaymentServiceImpl implements PaymentService {
                         .equals(user.getId())) {
 
             throw new BadRequestException(
-                    "Payment does not belong to this user"
-            );
+                    "Payment does not belong to this user");
         }
 
         if (payment.getStatus() ==
@@ -210,16 +184,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (plan == null) {
             throw new BadRequestException(
-                    "Subscription plan not found for payment"
-            );
+                    "Subscription plan not found for payment");
         }
 
         if (!Boolean.TRUE.equals(
                 plan.getActive())) {
 
             throw new BadRequestException(
-                    "Subscription plan is not active"
-            );
+                    "Subscription plan is not active");
         }
 
         // -----------------------------------------------------
@@ -232,66 +204,45 @@ public class PaymentServiceImpl implements PaymentService {
                     razorpayService.verifySignature(
                             payment.getRazorpayOrderId(),
                             request.getRazorpayPaymentId(),
-                            request.getRazorpaySignature()
-                    );
+                            request.getRazorpaySignature());
 
             if (!verified) {
 
-                payment.setStatus(
-                        PaymentStatus.FAILED
-                );
+                payment.setStatus( PaymentStatus.FAILED);
 
-                payment.setFailureReason(
-                        "Invalid Razorpay payment signature"
-                );
+                payment.setFailureReason( "Invalid Razorpay payment signature");
 
                 paymentRepository.save(payment);
 
                 throw new BadRequestException(
-                        "Payment verification failed"
-                );
+                        "Payment verification failed");
             }
 
         } catch (RazorpayException e) {
 
-            payment.setStatus(
-                    PaymentStatus.FAILED
-            );
+            payment.setStatus( PaymentStatus.FAILED);
 
-            payment.setFailureReason(
-                    "Razorpay signature verification error"
-            );
+            payment.setFailureReason( "Razorpay signature verification error");
 
             paymentRepository.save(payment);
 
             throw new BadRequestException(
-                    "Payment verification failed"
-            );
+                    "Payment verification failed");
         }
 
         // -----------------------------------------------------
         // UPDATE PAYMENT
         // -----------------------------------------------------
 
-        payment.setRazorpayPaymentId(
-                request.getRazorpayPaymentId()
-        );
+        payment.setRazorpayPaymentId( request.getRazorpayPaymentId());
 
-        payment.setRazorpaySignature(
-                request.getRazorpaySignature()
-        );
+        payment.setRazorpaySignature( request.getRazorpaySignature());
 
-        payment.setTransactionId(
-                request.getRazorpayPaymentId()
-        );
+        payment.setTransactionId( request.getRazorpayPaymentId());
 
-        payment.setStatus(
-                PaymentStatus.SUCCESS
-        );
+        payment.setStatus( PaymentStatus.SUCCESS);
 
-        payment.setPaidAt(
-                LocalDateTime.now()
-        );
+        payment.setPaidAt( LocalDateTime.now());
 
         payment.setFailureReason(null);
 
@@ -302,14 +253,10 @@ public class PaymentServiceImpl implements PaymentService {
         // ACTIVATE SUBSCRIPTION
         // -----------------------------------------------------
 
-        activateSubscriptionIfRequired(
-                user,
-                plan
-        );
+        activateSubscriptionIfRequired( user, plan);
 
         return paymentMapper.toDto(
-                savedPayment
-        );
+                savedPayment);
     }
 
     // =========================================================
@@ -317,8 +264,7 @@ public class PaymentServiceImpl implements PaymentService {
     // =========================================================
 
     @Override
-    public void processRazorpayWebhook(
-            String payload) {
+    public void processRazorpayWebhook( String payload) {
 
         if (payload == null ||
                 payload.isBlank()) {
@@ -342,9 +288,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             JSONObject paymentObject =
-                    payloadObject.optJSONObject(
-                            "payment"
-                    );
+                    payloadObject.optJSONObject( "payment");
 
             if (paymentObject == null) {
 
@@ -352,9 +296,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             JSONObject entity =
-                    paymentObject.optJSONObject(
-                            "entity"
-                    );
+                    paymentObject.optJSONObject( "entity");
 
             if (entity == null) {
 
@@ -362,16 +304,10 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             String razorpayPaymentId =
-                    entity.optString(
-                            "id",
-                            null
-                    );
+                    entity.optString( "id", null);
 
             String razorpayOrderId =
-                    entity.optString(
-                            "order_id",
-                            null
-                    );
+                    entity.optString( "order_id", null);
 
             if (razorpayOrderId == null ||
                     razorpayOrderId.isBlank()) {
@@ -381,9 +317,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             Payment payment =
                     paymentRepository
-                            .findByRazorpayOrderId(
-                                    razorpayOrderId
-                            )
+                            .findByRazorpayOrderId( razorpayOrderId )
                             .orElse(null);
 
             if (payment == null) {
@@ -406,31 +340,20 @@ public class PaymentServiceImpl implements PaymentService {
                 if (razorpayPaymentId != null &&
                         !razorpayPaymentId.isBlank()) {
 
-                    payment.setRazorpayPaymentId(
-                            razorpayPaymentId
-                    );
+                    payment.setRazorpayPaymentId( razorpayPaymentId);
 
-                    payment.setTransactionId(
-                            razorpayPaymentId
-                    );
+                    payment.setTransactionId( razorpayPaymentId);
                 }
 
-                payment.setStatus(
-                        PaymentStatus.SUCCESS
-                );
+                payment.setStatus( PaymentStatus.SUCCESS);
 
-                payment.setPaidAt(
-                        LocalDateTime.now()
-                );
+                payment.setPaidAt( LocalDateTime.now());
 
                 payment.setFailureReason(null);
 
                 paymentRepository.save(payment);
 
-                activateSubscriptionIfRequired(
-                        payment.getUser(),
-                        payment.getSubscriptionPlan()
-                );
+                activateSubscriptionIfRequired( payment.getUser(), payment.getSubscriptionPlan());
 
                 return;
             }
@@ -448,26 +371,17 @@ public class PaymentServiceImpl implements PaymentService {
                 }
 
                 String errorDescription =
-                        entity.optString(
-                                "error_description",
-                                "Payment failed"
-                        );
+                        entity.optString( "error_description", "Payment failed");
 
                 if (razorpayPaymentId != null &&
                         !razorpayPaymentId.isBlank()) {
 
-                    payment.setRazorpayPaymentId(
-                            razorpayPaymentId
-                    );
+                    payment.setRazorpayPaymentId( razorpayPaymentId);
                 }
 
-                payment.setStatus(
-                        PaymentStatus.FAILED
-                );
+                payment.setStatus( PaymentStatus.FAILED);
 
-                payment.setFailureReason(
-                        errorDescription
-                );
+                payment.setFailureReason( errorDescription);
 
                 paymentRepository.save(payment);
             }
@@ -475,8 +389,7 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (Exception e) {
 
             throw new BadRequestException(
-                    "Unable to process Razorpay webhook"
-            );
+                    "Unable to process Razorpay webhook");
         }
     }
 
@@ -486,8 +399,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentResponseDto getPaymentById(
-            Long id) {
+    public PaymentResponseDto getPaymentById( Long id) {
 
         Payment payment =
                 paymentRepository
@@ -496,8 +408,7 @@ public class PaymentServiceImpl implements PaymentService {
                                 new ResourceNotFoundException(
                                         "Payment not found with id: "
                                                 + id
-                                )
-                        );
+                                ));
 
         return paymentMapper.toDto(payment);
     }
@@ -508,15 +419,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PaymentResponseDto> getUserPayments(
-            Long userId) {
+    public List<PaymentResponseDto> getUserPayments( Long userId) {
 
         findUser(userId);
 
         return paymentRepository
-                .findByUserIdOrderByCreatedAtDesc(
-                        userId
-                )
+                .findByUserIdOrderByCreatedAtDesc( userId )
                 .stream()
                 .map(paymentMapper::toDto)
                 .toList();
@@ -528,27 +436,22 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentResponseDto getPaymentByTransactionId(
-            String transactionId) {
+    public PaymentResponseDto getPaymentByTransactionId( String transactionId) {
 
         if (transactionId == null ||
                 transactionId.isBlank()) {
 
             throw new BadRequestException(
-                    "Transaction ID is required"
-            );
+                    "Transaction ID is required");
         }
 
         Payment payment =
                 paymentRepository
-                        .findByTransactionId(
-                                transactionId
-                        )
+                        .findByTransactionId( transactionId )
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
                                         "Payment not found"
-                                )
-                        );
+                                ));
 
         return paymentMapper.toDto(payment);
     }
@@ -557,24 +460,20 @@ public class PaymentServiceImpl implements PaymentService {
     // ACTIVATE SUBSCRIPTION
     // =========================================================
 
-    private void activateSubscriptionIfRequired(
-            User user,
-            SubscriptionPlan plan) {
+    private void activateSubscriptionIfRequired( User user, SubscriptionPlan plan) {
 
         if (user == null ||
                 user.getId() == null) {
 
             throw new BadRequestException(
-                    "Payment user is invalid"
-            );
+                    "Payment user is invalid");
         }
 
         if (plan == null ||
                 plan.getId() == null) {
 
             throw new BadRequestException(
-                    "Subscription plan is invalid"
-            );
+                    "Subscription plan is invalid");
         }
 
         LocalDate today =
@@ -582,9 +481,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         UserSubscription existingSubscription =
                 subscriptionRepository
-                        .findByUserIdAndPlanId(
-                                user.getId(),
-                                plan.getId()
+                        .findByUserIdAndPlanId( user.getId(), plan.getId()
                         )
                         .orElse(null);
 
@@ -609,8 +506,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (durationDays <= 0) {
 
             throw new BadRequestException(
-                    "Invalid subscription plan duration"
-            );
+                    "Invalid subscription plan duration");
         }
 
         LocalDate endDate =
@@ -622,25 +518,15 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (existingSubscription != null) {
 
-            existingSubscription.setStartDate(
-                    today
-            );
+            existingSubscription.setStartDate( today);
 
-            existingSubscription.setEndDate(
-                    endDate
-            );
+            existingSubscription.setEndDate( endDate);
 
-            existingSubscription.setStatus(
-                    SubscriptionStatus.ACTIVE
-            );
+            existingSubscription.setStatus( SubscriptionStatus.ACTIVE);
 
-            existingSubscription.setActivatedAt(
-                    LocalDateTime.now()
-            );
+            existingSubscription.setActivatedAt( LocalDateTime.now());
 
-            subscriptionRepository.save(
-                    existingSubscription
-            );
+            subscriptionRepository.save( existingSubscription);
 
             return;
         }
@@ -655,17 +541,12 @@ public class PaymentServiceImpl implements PaymentService {
                         .plan(plan)
                         .startDate(today)
                         .endDate(endDate)
-                        .status(
-                                SubscriptionStatus.ACTIVE
-                        )
-                        .activatedAt(
-                                LocalDateTime.now()
+                        .status( SubscriptionStatus.ACTIVE )
+                        .activatedAt( LocalDateTime.now()
                         )
                         .build();
 
-        subscriptionRepository.save(
-                subscription
-        );
+        subscriptionRepository.save( subscription);
     }
 
     // =========================================================
@@ -677,8 +558,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (id == null) {
 
             throw new BadRequestException(
-                    "User ID is required"
-            );
+                    "User ID is required");
         }
 
         return userRepository
@@ -687,22 +567,19 @@ public class PaymentServiceImpl implements PaymentService {
                         new ResourceNotFoundException(
                                 "User not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     // =========================================================
     // FIND PLAN
     // =========================================================
 
-    private SubscriptionPlan findPlan(
-            Long id) {
+    private SubscriptionPlan findPlan( Long id) {
 
         if (id == null) {
 
             throw new BadRequestException(
-                    "Plan ID is required"
-            );
+                    "Plan ID is required");
         }
 
         return planRepository
@@ -711,8 +588,7 @@ public class PaymentServiceImpl implements PaymentService {
                         new ResourceNotFoundException(
                                 "Subscription plan not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 }
 

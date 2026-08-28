@@ -23,8 +23,7 @@ public class StateServiceImpl implements StateService {
     private final StateRepository stateRepository;
 
     @Override
-    public StateResponseDto createState(
-            StateRequestDto request) {
+    public StateResponseDto createState( StateRequestDto request) {
 
         if (stateRepository.existsByNameIgnoreCase(
                 request.getName())) {
@@ -71,16 +70,13 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public StateResponseDto updateState(
-            Long id,
-            StateRequestDto request) {
+    public StateResponseDto updateState( Long id, StateRequestDto request) {
 
         State state = findState(id);
 
         if (!state.getName()
                 .equalsIgnoreCase(request.getName())
-                && stateRepository.existsByNameIgnoreCase(
-                        request.getName())) {
+                && stateRepository.existsByNameIgnoreCase( request.getName())) {
 
             throw new BadRequestException(
                     "State already exists");
@@ -111,8 +107,7 @@ public class StateServiceImpl implements StateService {
                                 "State not found with id: " + id));
     }
 
-    private StateResponseDto mapToResponse(
-            State state) {
+    private StateResponseDto mapToResponse( State state) {
 
         return StateResponseDto.builder()
                 .id(state.getId())

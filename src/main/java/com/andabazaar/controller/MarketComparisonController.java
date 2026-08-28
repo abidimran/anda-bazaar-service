@@ -25,9 +25,7 @@ public class MarketComparisonController {
     public ResponseEntity<List<MarketComparisonResponseDto>>
             compareMarkets() {
 
-        return ResponseEntity.ok(
-                marketComparisonService.compareMarkets()
-        );
+ return ResponseEntity.ok(marketComparisonService.compareMarkets());
     }
 
     // =========================================================
@@ -36,13 +34,8 @@ public class MarketComparisonController {
 
     @GetMapping("/{marketId}")
     public ResponseEntity<MarketComparisonResponseDto>
-            compareMarket(
-                    @PathVariable Long marketId) {
+            compareMarket(@PathVariable Long marketId) {
 
-        return ResponseEntity.ok(
-                marketComparisonService.compareMarket(
-                        marketId
-                )
-        );
+ return ResponseEntity.ok(marketComparisonService.compareMarket(marketId));
     }
 }

@@ -9,9 +9,7 @@ public final class PriceCalculationUtil {
     private PriceCalculationUtil() {
     }
 
-    public static BigDecimal calculateChange(
-            BigDecimal previousPrice,
-            BigDecimal currentPrice) {
+    public static BigDecimal calculateChange( BigDecimal previousPrice, BigDecimal currentPrice) {
 
         if (previousPrice == null
                 || currentPrice == null) {
@@ -22,9 +20,7 @@ public final class PriceCalculationUtil {
         return currentPrice.subtract(previousPrice);
     }
 
-    public static String calculateChangeType(
-            BigDecimal previousPrice,
-            BigDecimal currentPrice) {
+    public static String calculateChangeType( BigDecimal previousPrice, BigDecimal currentPrice) {
 
         if (previousPrice == null
                 || currentPrice == null) {
@@ -46,14 +42,11 @@ public final class PriceCalculationUtil {
         return "NO_CHANGE";
     }
 
-    public static BigDecimal calculatePercentageChange(
-            BigDecimal previousPrice,
-            BigDecimal currentPrice) {
+    public static BigDecimal calculatePercentageChange( BigDecimal previousPrice, BigDecimal currentPrice) {
 
         if (previousPrice == null
                 || currentPrice == null
-                || previousPrice.compareTo(
-                        BigDecimal.ZERO) == 0) {
+                || previousPrice.compareTo( BigDecimal.ZERO) == 0) {
 
             return BigDecimal.ZERO;
         }
@@ -61,15 +54,10 @@ public final class PriceCalculationUtil {
         return currentPrice
                 .subtract(previousPrice)
                 .multiply(BigDecimal.valueOf(100))
-                .divide(
-                        previousPrice,
-                        2,
-                        RoundingMode.HALF_UP
-                );
+                .divide( previousPrice, 2, RoundingMode.HALF_UP);
     }
 
-    public static BigDecimal calculateAverage(
-            List<BigDecimal> prices) {
+    public static BigDecimal calculateAverage( List<BigDecimal> prices) {
 
         if (prices == null || prices.isEmpty()) {
             return BigDecimal.ZERO;
@@ -86,22 +74,16 @@ public final class PriceCalculationUtil {
 
         BigDecimal total =
                 validPrices.stream()
-                        .reduce(
-                                BigDecimal.ZERO,
-                                BigDecimal::add
-                        );
+                        .reduce( BigDecimal.ZERO, BigDecimal::add);
 
         return total.divide(
-                BigDecimal.valueOf(
-                        validPrices.size()
+                BigDecimal.valueOf( validPrices.size()
                 ),
                 2,
-                RoundingMode.HALF_UP
-        );
+                RoundingMode.HALF_UP);
     }
 
-    public static BigDecimal findLowestPrice(
-            List<BigDecimal> prices) {
+    public static BigDecimal findLowestPrice( List<BigDecimal> prices) {
 
         if (prices == null) {
             return BigDecimal.ZERO;
@@ -113,8 +95,7 @@ public final class PriceCalculationUtil {
                 .orElse(BigDecimal.ZERO);
     }
 
-    public static BigDecimal findHighestPrice(
-            List<BigDecimal> prices) {
+    public static BigDecimal findHighestPrice( List<BigDecimal> prices) {
 
         if (prices == null) {
             return BigDecimal.ZERO;

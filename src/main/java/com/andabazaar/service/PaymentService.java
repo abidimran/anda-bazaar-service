@@ -8,30 +8,16 @@ import com.andabazaar.dto.payment.PaymentVerificationDto;
 
 public interface PaymentService {
 
-    PaymentResponseDto createPayment(
-            Long userId,
-            Long planId
-    );
+    PaymentResponseDto createPayment( Long userId, Long planId);
 
-    PaymentResponseDto verifyPayment(
-            Long userId,
-            PaymentVerificationDto request
-    );
+    PaymentResponseDto verifyPayment( Long userId, PaymentVerificationDto request);
 
-    PaymentResponseDto getPaymentById(
-            Long id
-    );
+    PaymentResponseDto getPaymentById( Long id);
 
-    List<PaymentResponseDto> getUserPayments(
-            Long userId
-    );
+    List<PaymentResponseDto> getUserPayments( Long userId);
 
-    PaymentResponseDto getPaymentByTransactionId(
-            String transactionId
-    );
+    PaymentResponseDto getPaymentByTransactionId( String transactionId);
 
-    void processRazorpayWebhook(
-            String payload
-    );
+    void processRazorpayWebhook( String payload);
 }
 

@@ -19,32 +19,22 @@ public class RazorpayWebhookController {
     private final PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<String> handleWebhook(
-            @RequestBody String payload,
+    public ResponseEntity<String> handleWebhook(@RequestBody String payload,
             @RequestHeader(
                     value = "X-Razorpay-Signature",
                     required = false
             ) String signature) {
 
         boolean valid =
-                webhookService.verifyWebhookSignature(
-                        payload,
-                        signature
-                );
+                webhookService.verifyWebhookSignature( payload, signature);
 
         if (!valid) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Invalid webhook signature");
+ return ResponseEntity.badRequest().body("Invalid webhook signature");
         }
 
-        paymentService.processRazorpayWebhook(
-                payload
-        );
+        paymentService.processRazorpayWebhook( payload);
 
-        return ResponseEntity.ok(
-                "Webhook processed"
-        );
+ return ResponseEntity.ok("Webhook processed");
     }
 }
 

@@ -31,8 +31,7 @@ public class AdminServiceImpl implements AdminService {
     // =========================================================
 
     @Override
-    public UserResponseDto createAdmin(
-            UserRequestDto request) {
+    public UserResponseDto createAdmin( UserRequestDto request) {
 
         if (userRepository.existsByEmail(
                 request.getEmail())) {
@@ -55,17 +54,12 @@ public class AdminServiceImpl implements AdminService {
                         .trim()
                         .toLowerCase())
                 .phone(request.getPhone().trim())
-                .password(
-                        passwordEncoder.encode(
-                                request.getPassword()))
+                .password( passwordEncoder.encode( request.getPassword()))
                 .role(RoleType.ADMIN)
                 .status(UserStatus.ACTIVE)
-                .preferredLanguage(
-                        request.getPreferredLanguage())
-                .preferredCity(
-                        request.getPreferredCity())
-                .notificationEnabled(
-                        request.getNotificationEnabled() == null || request.getNotificationEnabled())
+                .preferredLanguage( request.getPreferredLanguage())
+                .preferredCity( request.getPreferredCity())
+                .notificationEnabled( request.getNotificationEnabled() == null || request.getNotificationEnabled())
                 .build();
 
         User savedAdmin =
@@ -106,17 +100,14 @@ public class AdminServiceImpl implements AdminService {
     // =========================================================
 
     @Override
-    public UserResponseDto changeUserStatus(
-            Long id,
-            String status) {
+    public UserResponseDto changeUserStatus( Long id, String status) {
 
         User user = findUser(id);
 
         try {
 
             UserStatus newStatus =
-                    UserStatus.valueOf(
-                            status.toUpperCase());
+                    UserStatus.valueOf( status.toUpperCase());
 
             user.setStatus(newStatus);
 
@@ -159,8 +150,7 @@ public class AdminServiceImpl implements AdminService {
     // MAP RESPONSE
     // =========================================================
 
-    private UserResponseDto mapToResponse(
-            User user) {
+    private UserResponseDto mapToResponse( User user) {
 
         return UserResponseDto.builder()
                 .id(user.getId())
@@ -171,12 +161,9 @@ public class AdminServiceImpl implements AdminService {
                 .role(user.getRole())
                 .status(user.getStatus())
                 .profileImage(user.getProfileImage())
-                .preferredLanguage(
-                        user.getPreferredLanguage())
-                .preferredCity(
-                        user.getPreferredCity())
-                .notificationEnabled(
-                        user.getNotificationEnabled())
+                .preferredLanguage( user.getPreferredLanguage())
+                .preferredCity( user.getPreferredCity())
+                .notificationEnabled( user.getNotificationEnabled())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

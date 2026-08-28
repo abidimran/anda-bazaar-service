@@ -71,12 +71,12 @@
 //                                    userDetails,
 //                                    null,
 //                                    userDetails.getAuthorities()
-//                            );
+//);
 //
 //                    authentication.setDetails(
 //                            new WebAuthenticationDetailsSource()
 //                                    .buildDetails(request)
-//                    );
+//);
 //
 //                    SecurityContextHolder
 //                            .getContext()
@@ -122,10 +122,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
+    protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
@@ -167,33 +164,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
-                                    userDetails.getAuthorities()
-                            );
+                                    userDetails.getAuthorities());
 
-                    authentication.setDetails(
-                            new WebAuthenticationDetailsSource()
-                                    .buildDetails(request)
-                    );
+                    authentication.setDetails( new WebAuthenticationDetailsSource() .buildDetails(request));
 
                     SecurityContextHolder
                             .getContext()
                             .setAuthentication(authentication);
 
-                    System.out.println(
-                            "JWT AUTHENTICATION SUCCESS: " + email
-                    );
+                    System.out.println( "JWT AUTHENTICATION SUCCESS: " + email);
                 }
             }
 
         } catch (Exception ex) {
 
-            System.out.println(
-                    "JWT ERROR: " + ex.getClass().getName()
-            );
+            System.out.println( "JWT ERROR: " + ex.getClass().getName());
 
-            System.out.println(
-                    "JWT ERROR MESSAGE: " + ex.getMessage()
-            );
+            System.out.println( "JWT ERROR MESSAGE: " + ex.getMessage());
         }
 
         filterChain.doFilter(request, response);

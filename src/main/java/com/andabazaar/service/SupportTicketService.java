@@ -8,52 +8,27 @@ import com.andabazaar.dto.support.SupportTicketResponseDto;
 
 public interface SupportTicketService {
 
-    SupportTicketResponseDto createTicket(
-            SupportTicketRequestDto request
-    );
+    SupportTicketResponseDto createTicket( SupportTicketRequestDto request);
 
-    SupportTicketResponseDto getTicketById(
-            Long id
-    );
+    SupportTicketResponseDto getTicketById( Long id);
 
-    SupportTicketResponseDto getTicketByNumber(
-            String ticketNumber
-    );
+    SupportTicketResponseDto getTicketByNumber( String ticketNumber);
 
     List<SupportTicketResponseDto> getAllTickets();
 
-    List<SupportTicketResponseDto> getUserTickets(
-            Long userId
-    );
+    List<SupportTicketResponseDto> getUserTickets( Long userId);
 
-    List<SupportTicketResponseDto> getTicketsByStatus(
-            String status
-    );
+    List<SupportTicketResponseDto> getTicketsByStatus( String status);
 
-    SupportTicketResponseDto updateTicket(
-            Long id,
-            SupportTicketRequestDto request
-    );
+    SupportTicketResponseDto updateTicket( Long id, SupportTicketRequestDto request);
 
-    void closeTicket(
-            Long id,
-            String resolution
-    );
+    void closeTicket( Long id, String resolution);
 
-    void reopenTicket(
-            Long id
-    );
+    void reopenTicket( Long id);
 
-    void deleteTicket(
-            Long id
-    );
+    void deleteTicket( Long id);
 
-    void addReply(
-            Long ticketId,
-            SupportReplyDto request
-    );
+    void addReply( Long ticketId, SupportReplyDto request);
 
-    long countByStatus(
-            String status
-    );
+    long countByStatus( String status);
 }

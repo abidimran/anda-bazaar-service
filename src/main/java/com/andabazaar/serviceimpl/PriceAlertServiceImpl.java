@@ -37,8 +37,7 @@ public class PriceAlertServiceImpl
     // =========================================================
 
     @Override
-    public PriceAlertResponseDto createAlert(
-            PriceAlertRequestDto request) {
+    public PriceAlertResponseDto createAlert( PriceAlertRequestDto request) {
 
         // -----------------------------------------------------
         // VALIDATE REQUEST
@@ -51,28 +50,24 @@ public class PriceAlertServiceImpl
         // FIND USER
         // -----------------------------------------------------
 
-        User user = userRepository.findById(
-                request.getUserId()
+        User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "User not found with id: "
                                 + request.getUserId()
-                )
-        );
+                ));
 
 
         // -----------------------------------------------------
         // FIND MARKET
         // -----------------------------------------------------
 
-        Market market = marketRepository.findById(
-                request.getMarketId()
+        Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "Market not found with id: "
                                 + request.getMarketId()
-                )
-        );
+                ));
 
 
         // -----------------------------------------------------
@@ -89,17 +84,13 @@ public class PriceAlertServiceImpl
 
                 .market(market)
 
-                .targetPrice(
-                        request.getTargetPrice()
+                .targetPrice( request.getTargetPrice()
                 )
 
-                .condition(
-                        request.getCondition()
+                .condition( request.getCondition()
                 )
 
-                .active(
-                        request.getActive() != null
-                                ? request.getActive()
+                .active( request.getActive() != null ? request.getActive()
                                 : true
                 )
 
@@ -128,8 +119,7 @@ public class PriceAlertServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public PriceAlertResponseDto getAlertById(
-            Long id) {
+    public PriceAlertResponseDto getAlertById( Long id) {
 
         PriceAlert alert = findAlert(id);
 
@@ -143,8 +133,7 @@ public class PriceAlertServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<PriceAlertResponseDto> getUserAlerts(
-            Long userId) {
+    public List<PriceAlertResponseDto> getUserAlerts( Long userId) {
 
         // -----------------------------------------------------
         // CHECK USER
@@ -154,8 +143,7 @@ public class PriceAlertServiceImpl
 
             throw new ResourceNotFoundException(
                     "User not found with id: "
-                            + userId
-            );
+                            + userId);
         }
 
 
@@ -179,9 +167,7 @@ public class PriceAlertServiceImpl
     // =========================================================
 
     @Override
-    public PriceAlertResponseDto updateAlert(
-            Long id,
-            PriceAlertRequestDto request) {
+    public PriceAlertResponseDto updateAlert( Long id, PriceAlertRequestDto request) {
 
         // -----------------------------------------------------
         // VALIDATE REQUEST
@@ -201,28 +187,24 @@ public class PriceAlertServiceImpl
         // FIND USER
         // -----------------------------------------------------
 
-        User user = userRepository.findById(
-                request.getUserId()
+        User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "User not found with id: "
                                 + request.getUserId()
-                )
-        );
+                ));
 
 
         // -----------------------------------------------------
         // FIND MARKET
         // -----------------------------------------------------
 
-        Market market = marketRepository.findById(
-                request.getMarketId()
+        Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "Market not found with id: "
                                 + request.getMarketId()
-                )
-        );
+                ));
 
 
         // -----------------------------------------------------
@@ -232,9 +214,7 @@ public class PriceAlertServiceImpl
         boolean active =
                 request.getActive() != null
                         ? request.getActive()
-                        : Boolean.TRUE.equals(
-                                alert.getActive()
-                        );
+                        : Boolean.TRUE.equals( alert.getActive());
 
 
         // -----------------------------------------------------
@@ -245,13 +225,9 @@ public class PriceAlertServiceImpl
 
         alert.setMarket(market);
 
-        alert.setTargetPrice(
-                request.getTargetPrice()
-        );
+        alert.setTargetPrice( request.getTargetPrice());
 
-        alert.setCondition(
-                request.getCondition()
-        );
+        alert.setCondition( request.getCondition());
 
         alert.setActive(active);
 
@@ -277,8 +253,7 @@ public class PriceAlertServiceImpl
     // =========================================================
 
     @Override
-    public void deleteAlert(
-            Long id) {
+    public void deleteAlert( Long id) {
 
         // -----------------------------------------------------
         // FIND ALERT
@@ -300,8 +275,7 @@ public class PriceAlertServiceImpl
     // =========================================================
 
     @Override
-    public PriceAlertResponseDto toggleAlert(
-            Long id) {
+    public PriceAlertResponseDto toggleAlert( Long id) {
 
         // -----------------------------------------------------
         // FIND ALERT
@@ -315,9 +289,7 @@ public class PriceAlertServiceImpl
         // -----------------------------------------------------
 
         boolean newStatus =
-                !Boolean.TRUE.equals(
-                        alert.getActive()
-                );
+                !Boolean.TRUE.equals( alert.getActive());
 
 
         alert.setActive(newStatus);
@@ -343,8 +315,7 @@ public class PriceAlertServiceImpl
     // FIND ALERT
     // =========================================================
 
-    private PriceAlert findAlert(
-            Long id) {
+    private PriceAlert findAlert( Long id) {
 
         return priceAlertRepository
                 .findById(id)
@@ -353,8 +324,7 @@ public class PriceAlertServiceImpl
                         new ResourceNotFoundException(
                                 "Price alert not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
 
@@ -362,8 +332,7 @@ public class PriceAlertServiceImpl
     // VALIDATE REQUEST
     // =========================================================
 
-    private void validateRequest(
-            PriceAlertRequestDto request) {
+    private void validateRequest( PriceAlertRequestDto request) {
 
         // -----------------------------------------------------
         // REQUEST NULL
@@ -372,8 +341,7 @@ public class PriceAlertServiceImpl
         if (request == null) {
 
             throw new BadRequestException(
-                    "Price alert request cannot be null"
-            );
+                    "Price alert request cannot be null");
         }
 
 
@@ -384,8 +352,7 @@ public class PriceAlertServiceImpl
         if (request.getUserId() == null) {
 
             throw new BadRequestException(
-                    "User id is required"
-            );
+                    "User id is required");
         }
 
 
@@ -396,8 +363,7 @@ public class PriceAlertServiceImpl
         if (request.getMarketId() == null) {
 
             throw new BadRequestException(
-                    "Market id is required"
-            );
+                    "Market id is required");
         }
 
 
@@ -408,8 +374,7 @@ public class PriceAlertServiceImpl
         if (request.getTargetPrice() == null) {
 
             throw new BadRequestException(
-                    "Target price is required"
-            );
+                    "Target price is required");
         }
 
 
@@ -420,8 +385,7 @@ public class PriceAlertServiceImpl
         if (request.getTargetPrice().signum() < 0) {
 
             throw new BadRequestException(
-                    "Target price cannot be negative"
-            );
+                    "Target price cannot be negative");
         }
 
 
@@ -433,8 +397,7 @@ public class PriceAlertServiceImpl
                 || request.getCondition().isBlank()) {
 
             throw new BadRequestException(
-                    "Alert condition is required"
-            );
+                    "Alert condition is required");
         }
 
 
@@ -445,8 +408,7 @@ public class PriceAlertServiceImpl
         if (request.getCondition().length() > 20) {
 
             throw new BadRequestException(
-                    "Alert condition cannot exceed 20 characters"
-            );
+                    "Alert condition cannot exceed 20 characters");
         }
     }
 
@@ -455,51 +417,38 @@ public class PriceAlertServiceImpl
     // ENTITY -> RESPONSE DTO
     // =========================================================
 
-    private PriceAlertResponseDto mapToResponse(
-            PriceAlert alert) {
+    private PriceAlertResponseDto mapToResponse( PriceAlert alert) {
 
         return PriceAlertResponseDto.builder()
 
-                .id(
-                        alert.getId()
+                .id( alert.getId()
                 )
 
-                .userId(
-                        alert.getUser() != null
-                                ? alert.getUser().getId()
+                .userId( alert.getUser() != null ? alert.getUser().getId()
                                 : null
                 )
 
-                .marketId(
-                        alert.getMarket() != null
-                                ? alert.getMarket().getId()
+                .marketId( alert.getMarket() != null ? alert.getMarket().getId()
                                 : null
                 )
 
-                .marketName(
-                        alert.getMarket() != null
-                                ? alert.getMarket().getName()
+                .marketName( alert.getMarket() != null ? alert.getMarket().getName()
                                 : null
                 )
 
-                .targetPrice(
-                        alert.getTargetPrice()
+                .targetPrice( alert.getTargetPrice()
                 )
 
-                .condition(
-                        alert.getCondition()
+                .condition( alert.getCondition()
                 )
 
-                .active(
-                        alert.getActive()
+                .active( alert.getActive()
                 )
 
-                .createdAt(
-                        alert.getCreatedAt()
+                .createdAt( alert.getCreatedAt()
                 )
 
-                .updatedAt(
-                        alert.getUpdatedAt()
+                .updatedAt( alert.getUpdatedAt()
                 )
 
                 .build();

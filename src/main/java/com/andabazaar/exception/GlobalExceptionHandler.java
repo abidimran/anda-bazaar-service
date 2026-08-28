@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFound(
-            ResourceNotFoundException ex) {
+    public ResponseEntity<Map<String, Object>> handleNotFound( ResourceNotFoundException ex) {
 
         return buildResponse(
                 HttpStatus.NOT_FOUND,
@@ -23,8 +22,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Map<String, Object>> handleBadRequest(
-            BadRequestException ex) {
+    public ResponseEntity<Map<String, Object>> handleBadRequest( BadRequestException ex) {
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
@@ -32,8 +30,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Map<String, Object>> handleUnauthorized(
-            UnauthorizedException ex) {
+    public ResponseEntity<Map<String, Object>> handleUnauthorized( UnauthorizedException ex) {
 
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
@@ -41,8 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<Map<String, Object>> handleForbidden(
-            ForbiddenException ex) {
+    public ResponseEntity<Map<String, Object>> handleForbidden( ForbiddenException ex) {
 
         return buildResponse(
                 HttpStatus.FORBIDDEN,
@@ -50,8 +46,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PaymentException.class)
-    public ResponseEntity<Map<String, Object>> handlePaymentException(
-            PaymentException ex) {
+    public ResponseEntity<Map<String, Object>> handlePaymentException( PaymentException ex) {
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
@@ -59,8 +54,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(SubscriptionException.class)
-    public ResponseEntity<Map<String, Object>> handleSubscriptionException(
-            SubscriptionException ex) {
+    public ResponseEntity<Map<String, Object>> handleSubscriptionException( SubscriptionException ex) {
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
@@ -68,17 +62,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(
-            MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, Object>> handleValidation( MethodArgumentNotValidException ex) {
 
         Map<String, Object> errors = new HashMap<>();
 
         ex.getBindingResult()
                 .getFieldErrors()
                 .forEach(error ->
-                        errors.put(
-                                error.getField(),
-                                error.getDefaultMessage()));
+                        errors.put( error.getField(), error.getDefaultMessage()));
 
         Map<String, Object> response = new HashMap<>();
 
@@ -93,17 +84,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGeneralException(
-            Exception ex) {
+    public ResponseEntity<Map<String, Object>> handleGeneralException( Exception ex) {
 
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Something went wrong");
     }
 
-    private ResponseEntity<Map<String, Object>> buildResponse(
-            HttpStatus status,
-            String message) {
+    private ResponseEntity<Map<String, Object>> buildResponse( HttpStatus status, String message) {
 
         Map<String, Object> response = new HashMap<>();
 

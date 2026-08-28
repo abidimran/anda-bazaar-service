@@ -10,24 +10,13 @@ import com.andabazaar.entity.FavoriteMarket;
 public interface FavoriteMarketRepository
         extends JpaRepository<FavoriteMarket, Long> {
 
-    List<FavoriteMarket> findByUserIdOrderByCreatedAtDesc(
-            Long userId
-    );
+    List<FavoriteMarket> findByUserIdOrderByCreatedAtDesc( Long userId);
 
-    Optional<FavoriteMarket> findByUserIdAndMarketId(
-            Long userId,
-            Long marketId
-    );
+    Optional<FavoriteMarket> findByUserIdAndMarketId( Long userId, Long marketId);
 
-    boolean existsByUserIdAndMarketId(
-            Long userId,
-            Long marketId
-    );
+    boolean existsByUserIdAndMarketId( Long userId, Long marketId);
 
     long countByUserId(Long userId);
 
-    void deleteByUserIdAndMarketId(
-            Long userId,
-            Long marketId
-    );
+    void deleteByUserIdAndMarketId( Long userId, Long marketId);
 }

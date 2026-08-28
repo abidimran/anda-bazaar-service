@@ -24,8 +24,7 @@ public class RazorpayConfig {
 
         return new RazorpayClient(
                 keyId,
-                keySecret
-        );
+                keySecret);
     }
 
     public String getKeyId() {

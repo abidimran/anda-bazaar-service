@@ -41,10 +41,7 @@ public class NotificationScheduler {
 
         List<UserSubscription> subscriptions =
                 subscriptionRepository
-                        .findByStatusAndEndDateGreaterThanEqual(
-                                SubscriptionStatus.ACTIVE,
-                                today
-                        );
+                        .findByStatusAndEndDateGreaterThanEqual( SubscriptionStatus.ACTIVE, today);
 
         for (UserSubscription subscription : subscriptions) {
 
@@ -67,8 +64,7 @@ public class NotificationScheduler {
                         "Subscription Expiring Today",
                         "Your "
                                 + getPlanName(subscription)
-                                + " subscription expires today."
-                );
+                                + " subscription expires today.");
             }
 
             // =================================================
@@ -83,8 +79,7 @@ public class NotificationScheduler {
                         "Subscription Expiring Tomorrow",
                         "Your "
                                 + getPlanName(subscription)
-                                + " subscription will expire tomorrow."
-                );
+                                + " subscription will expire tomorrow.");
             }
         }
     }
@@ -93,11 +88,7 @@ public class NotificationScheduler {
     // CREATE NOTIFICATION
     // =========================================================
 
-    private void createNotification(
-            User user,
-            NotificationType type,
-            String title,
-            String message) {
+    private void createNotification( User user, NotificationType type, String title, String message) {
 
         Notification notification =
                 Notification.builder()
@@ -116,8 +107,7 @@ public class NotificationScheduler {
     // PLAN NAME
     // =========================================================
 
-    private String getPlanName(
-            UserSubscription subscription) {
+    private String getPlanName( UserSubscription subscription) {
 
         if (subscription.getPlan() == null) {
             return "subscription";

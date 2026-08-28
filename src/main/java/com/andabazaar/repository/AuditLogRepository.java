@@ -12,17 +12,11 @@ public interface AuditLogRepository
 
     List<AuditLog> findAllByOrderByCreatedAtDesc();
 
-    List<AuditLog> findByUserIdOrderByCreatedAtDesc(
-            Long userId);
+    List<AuditLog> findByUserIdOrderByCreatedAtDesc( Long userId);
 
-    List<AuditLog> findByActionOrderByCreatedAtDesc(
-            String action);
+    List<AuditLog> findByActionOrderByCreatedAtDesc( String action);
 
-    List<AuditLog> findByEntityTypeAndEntityIdOrderByCreatedAtDesc(
-            String entityType,
-            String entityId);
+    List<AuditLog> findByEntityTypeAndEntityIdOrderByCreatedAtDesc( String entityType, String entityId);
 
-    List<AuditLog> findByCreatedAtBetweenOrderByCreatedAtDesc(
-            LocalDateTime startDate,
-            LocalDateTime endDate);
+    List<AuditLog> findByCreatedAtBetweenOrderByCreatedAtDesc( LocalDateTime startDate, LocalDateTime endDate);
 }

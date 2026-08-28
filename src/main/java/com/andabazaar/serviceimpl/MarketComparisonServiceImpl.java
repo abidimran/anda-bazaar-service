@@ -45,16 +45,14 @@ public class MarketComparisonServiceImpl
     // =========================================================
 
     @Override
-    public MarketComparisonResponseDto compareMarket(
-            Long marketId) {
+    public MarketComparisonResponseDto compareMarket( Long marketId) {
 
         Market market = marketRepository.findById(marketId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Market not found with id: "
                                         + marketId
-                        )
-                );
+                        ));
 
         return mapMarket(market);
     }
@@ -63,14 +61,11 @@ public class MarketComparisonServiceImpl
     // MAP MARKET
     // =========================================================
 
-    private MarketComparisonResponseDto mapMarket(
-            Market market) {
+    private MarketComparisonResponseDto mapMarket( Market market) {
 
         List<EggPrice> prices =
                 eggPriceRepository
-                        .findByMarketIdOrderByPriceDateDesc(
-                                market.getId()
-                        );
+                        .findByMarketIdOrderByPriceDateDesc( market.getId());
 
         List<BigDecimal> validPrices =
                 prices.stream()
@@ -91,18 +86,14 @@ public class MarketComparisonServiceImpl
                 .max(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
 
-        BigDecimal averagePrice = calculateAverage(
-                validPrices
-        );
+        BigDecimal averagePrice = calculateAverage( validPrices);
 
         City city = market.getCity();
 
         return MarketComparisonResponseDto.builder()
                 .marketId(market.getId())
                 .marketName(market.getName())
-                .cityName(
-                        city != null
-                                ? city.getName()
+                .cityName( city != null ? city.getName()
                                 : null
                 )
                 .currentPrice(currentPrice)
@@ -116,23 +107,18 @@ public class MarketComparisonServiceImpl
     // AVERAGE
     // =========================================================
 
-    private BigDecimal calculateAverage(
-            List<BigDecimal> prices) {
+    private BigDecimal calculateAverage( List<BigDecimal> prices) {
 
         if (prices.isEmpty()) {
             return BigDecimal.ZERO;
         }
 
         BigDecimal total = prices.stream()
-                .reduce(
-                        BigDecimal.ZERO,
-                        BigDecimal::add
-                );
+                .reduce( BigDecimal.ZERO, BigDecimal::add);
 
         return total.divide(
                 BigDecimal.valueOf(prices.size()),
                 2,
-                java.math.RoundingMode.HALF_UP
-        );
+                java.math.RoundingMode.HALF_UP);
     }
 }

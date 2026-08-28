@@ -12,43 +12,31 @@ public interface ExpectedPriceService {
     // CREATE
     // =========================
 
-    ExpectedPriceResponseDto createExpectedPrice(
-            ExpectedPriceRequestDto request
-    );
+    ExpectedPriceResponseDto createExpectedPrice( ExpectedPriceRequestDto request);
 
     // =========================
     // UPDATE
     // =========================
 
-    ExpectedPriceResponseDto updateExpectedPrice(
-            Long id,
-            ExpectedPriceRequestDto request
-    );
+    ExpectedPriceResponseDto updateExpectedPrice( Long id, ExpectedPriceRequestDto request);
 
     // =========================
     // GET BY ID
     // =========================
 
-    ExpectedPriceResponseDto getExpectedPriceById(
-            Long id
-    );
+    ExpectedPriceResponseDto getExpectedPriceById( Long id);
 
     // =========================
     // GET BY MARKET
     // =========================
 
-    List<ExpectedPriceResponseDto> getByMarket(
-            Long marketId
-    );
+    List<ExpectedPriceResponseDto> getByMarket( Long marketId);
 
     // =========================
     // GET BY MARKET + DATE
     // =========================
 
-    ExpectedPriceResponseDto getByMarketAndDate(
-            Long marketId,
-            LocalDate expectedDate
-    );
+    ExpectedPriceResponseDto getByMarketAndDate( Long marketId, LocalDate expectedDate);
 
     // =========================
     // GET ACTIVE
@@ -60,28 +48,19 @@ public interface ExpectedPriceService {
     // DATE RANGE
     // =========================
 
-    List<ExpectedPriceResponseDto> getByDateRange(
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    List<ExpectedPriceResponseDto> getByDateRange( LocalDate startDate, LocalDate endDate);
 
     // =========================
     // MARKET + DATE RANGE
     // =========================
 
-    List<ExpectedPriceResponseDto> getMarketDateRange(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    List<ExpectedPriceResponseDto> getMarketDateRange( Long marketId, LocalDate startDate, LocalDate endDate);
 
     // =========================
     // DELETE / DEACTIVATE
     // =========================
 
-    void deleteExpectedPrice(
-            Long id
-    );
+    void deleteExpectedPrice( Long id);
 
     // =========================
     // COUNT

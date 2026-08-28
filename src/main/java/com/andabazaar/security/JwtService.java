@@ -24,17 +24,14 @@ public class JwtService {
     private SecretKey getSigningKey() {
 
         return Keys.hmacShaKeyFor(
-                jwtConfig.getSecret().getBytes()
-        );
+                jwtConfig.getSecret().getBytes());
     }
 
     public String generateToken(User user) {
 
         Date now = new Date();
 
-        Date expiration = new Date(
-                now.getTime() + jwtConfig.getExpiration()
-        );
+        Date expiration = new Date( now.getTime() + jwtConfig.getExpiration());
 
         return Jwts.builder()
                 .subject(user.getEmail())
@@ -51,9 +48,7 @@ public class JwtService {
         return extractClaims(token).getSubject();
     }
 
-    public boolean isTokenValid(
-            String token,
-            User user) {
+    public boolean isTokenValid( String token, User user) {
 
         try {
 

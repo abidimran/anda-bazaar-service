@@ -26,12 +26,9 @@ public class ExpectedPriceController {
 
     @PostMapping
     public ResponseEntity<ExpectedPriceResponseDto>
-            createExpectedPrice(
-                    @RequestBody ExpectedPriceRequestDto request) {
+            createExpectedPrice(@RequestBody ExpectedPriceRequestDto request) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.createExpectedPrice(request)
-        );
+ return ResponseEntity.ok(expectedPriceService.createExpectedPrice(request));
     }
 
     // =========================================================
@@ -40,16 +37,9 @@ public class ExpectedPriceController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ExpectedPriceResponseDto>
-            updateExpectedPrice(
-                    @PathVariable Long id,
-                    @RequestBody ExpectedPriceRequestDto request) {
+            updateExpectedPrice(@PathVariable Long id, @RequestBody ExpectedPriceRequestDto request) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.updateExpectedPrice(
-                        id,
-                        request
-                )
-        );
+ return ResponseEntity.ok(expectedPriceService.updateExpectedPrice(id, request));
     }
 
     // =========================================================
@@ -58,12 +48,9 @@ public class ExpectedPriceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ExpectedPriceResponseDto>
-            getExpectedPriceById(
-                    @PathVariable Long id) {
+            getExpectedPriceById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.getExpectedPriceById(id)
-        );
+ return ResponseEntity.ok(expectedPriceService.getExpectedPriceById(id));
     }
 
     // =========================================================
@@ -72,12 +59,9 @@ public class ExpectedPriceController {
 
     @GetMapping("/market/{marketId}")
     public ResponseEntity<List<ExpectedPriceResponseDto>>
-            getByMarket(
-                    @PathVariable Long marketId) {
+            getByMarket(@PathVariable Long marketId) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.getByMarket(marketId)
-        );
+ return ResponseEntity.ok(expectedPriceService.getByMarket(marketId));
     }
 
     // =========================================================
@@ -86,20 +70,14 @@ public class ExpectedPriceController {
 
     @GetMapping("/market/{marketId}/date")
     public ResponseEntity<ExpectedPriceResponseDto>
-            getByMarketAndDate(
-                    @PathVariable Long marketId,
+            getByMarketAndDate(@PathVariable Long marketId,
                     @RequestParam
                     @DateTimeFormat(
                             iso = DateTimeFormat.ISO.DATE
                     )
                     LocalDate date) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.getByMarketAndDate(
-                        marketId,
-                        date
-                )
-        );
+ return ResponseEntity.ok(expectedPriceService.getByMarketAndDate(marketId, date));
     }
 
     // =========================================================
@@ -110,10 +88,7 @@ public class ExpectedPriceController {
     public ResponseEntity<List<ExpectedPriceResponseDto>>
             getActiveExpectedPrices() {
 
-        return ResponseEntity.ok(
-                expectedPriceService
-                        .getActiveExpectedPrices()
-        );
+ return ResponseEntity.ok(expectedPriceService.getActiveExpectedPrices());
     }
 
     // =========================================================
@@ -122,11 +97,7 @@ public class ExpectedPriceController {
 
     @GetMapping("/date-range")
     public ResponseEntity<List<ExpectedPriceResponseDto>>
-            getByDateRange(
-                    @RequestParam
-                    @DateTimeFormat(
-                            iso = DateTimeFormat.ISO.DATE
-                    )
+            getByDateRange(@RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
                     LocalDate startDate,
 
                     @RequestParam
@@ -135,12 +106,7 @@ public class ExpectedPriceController {
                     )
                     LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.getByDateRange(
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(expectedPriceService.getByDateRange(startDate, endDate));
     }
 
     // =========================================================
@@ -149,8 +115,7 @@ public class ExpectedPriceController {
 
     @GetMapping("/market/{marketId}/date-range")
     public ResponseEntity<List<ExpectedPriceResponseDto>>
-            getMarketDateRange(
-                    @PathVariable Long marketId,
+            getMarketDateRange(@PathVariable Long marketId,
 
                     @RequestParam
                     @DateTimeFormat(
@@ -164,13 +129,7 @@ public class ExpectedPriceController {
                     )
                     LocalDate endDate) {
 
-        return ResponseEntity.ok(
-                expectedPriceService.getMarketDateRange(
-                        marketId,
-                        startDate,
-                        endDate
-                )
-        );
+ return ResponseEntity.ok(expectedPriceService.getMarketDateRange(marketId, startDate, endDate));
     }
 
     // =========================================================
@@ -179,12 +138,11 @@ public class ExpectedPriceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-            deleteExpectedPrice(
-                    @PathVariable Long id) {
+            deleteExpectedPrice(@PathVariable Long id) {
 
         expectedPriceService.deleteExpectedPrice(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 
     // =========================================================
@@ -195,9 +153,6 @@ public class ExpectedPriceController {
     public ResponseEntity<Long>
             countActiveExpectedPrices() {
 
-        return ResponseEntity.ok(
-                expectedPriceService
-                        .countActiveExpectedPrices()
-        );
+ return ResponseEntity.ok(expectedPriceService.countActiveExpectedPrices());
     }
 }

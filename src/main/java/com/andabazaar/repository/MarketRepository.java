@@ -9,14 +9,11 @@ import com.andabazaar.entity.Market;
 public interface MarketRepository
         extends JpaRepository<Market, Long> {
 
-    List<Market> findByCityIdAndActiveTrueOrderByNameAsc(
-            Long cityId);
+    List<Market> findByCityIdAndActiveTrueOrderByNameAsc( Long cityId);
 
     List<Market> findByActiveTrueOrderByNameAsc();
 
-    boolean existsByNameIgnoreCaseAndCityId(
-            String name,
-            Long cityId);
+    boolean existsByNameIgnoreCaseAndCityId( String name, Long cityId);
     
     // Dashboard
     long countByActiveTrue();

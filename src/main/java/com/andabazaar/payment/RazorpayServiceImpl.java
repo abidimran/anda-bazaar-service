@@ -20,18 +20,13 @@ public class RazorpayServiceImpl implements RazorpayService {
     private final RazorpayConfig razorpayConfig;
 
     @Override
-    public Order createOrder(
-            BigDecimal amount,
-            String currency,
-            String receipt
-    ) throws RazorpayException {
+    public Order createOrder( BigDecimal amount, String currency, String receipt ) throws RazorpayException {
 
         if (amount == null ||
                 amount.compareTo(BigDecimal.ZERO) <= 0) {
 
             throw new IllegalArgumentException(
-                    "Amount must be greater than zero"
-            );
+                    "Amount must be greater than zero");
         }
 
         long amountInPaise =
@@ -42,43 +37,25 @@ public class RazorpayServiceImpl implements RazorpayService {
         RazorpayClient razorpayClient =
                 new RazorpayClient(
                         razorpayConfig.getKeyId(),
-                        razorpayConfig.getKeySecret()
-                );
+                        razorpayConfig.getKeySecret());
 
         JSONObject orderRequest =
                 new JSONObject();
 
-        orderRequest.put(
-                "amount",
-                amountInPaise
-        );
+        orderRequest.put( "amount", amountInPaise);
 
-        orderRequest.put(
-                "currency",
-                currency
-        );
+        orderRequest.put( "currency", currency);
 
-        orderRequest.put(
-                "receipt",
-                receipt
-        );
+        orderRequest.put( "receipt", receipt);
 
-        orderRequest.put(
-                "payment_capture",
-                1
-        );
+        orderRequest.put( "payment_capture", 1);
 
         return razorpayClient.orders.create(
-                orderRequest
-        );
+                orderRequest);
     }
 
     @Override
-    public boolean verifySignature(
-            String orderId,
-            String paymentId,
-            String signature
-    ) throws RazorpayException {
+    public boolean verifySignature( String orderId, String paymentId, String signature ) throws RazorpayException {
 
         if (orderId == null ||
                 paymentId == null ||
@@ -90,24 +67,14 @@ public class RazorpayServiceImpl implements RazorpayService {
         JSONObject attributes =
                 new JSONObject();
 
-        attributes.put(
-                "razorpay_order_id",
-                orderId
-        );
+        attributes.put( "razorpay_order_id", orderId);
 
-        attributes.put(
-                "razorpay_payment_id",
-                paymentId
-        );
+        attributes.put( "razorpay_payment_id", paymentId);
 
-        attributes.put(
-                "razorpay_signature",
-                signature
-        );
+        attributes.put( "razorpay_signature", signature);
 
         return Utils.verifyPaymentSignature(
                 attributes,
-                razorpayConfig.getKeySecret()
-        );
+                razorpayConfig.getKeySecret());
     }
 }

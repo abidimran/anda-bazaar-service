@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationTemplateService {
 
-    public String subscriptionExpiring(
-            long daysRemaining) {
+    public String subscriptionExpiring( long daysRemaining) {
 
         return "Your Anda Bazaar subscription "
                 + "will expire in "

@@ -17,65 +17,46 @@ public interface UserSubscriptionRepository
     // =========================
 
     Optional<UserSubscription>
-    findFirstByUserIdAndStatusOrderByEndDateDesc(
-            Long userId,
-            SubscriptionStatus status
-    );
+    findFirstByUserIdAndStatusOrderByEndDateDesc( Long userId, SubscriptionStatus status);
 
     // =========================
     // USER + PLAN SUBSCRIPTION
     // =========================
 
     Optional<UserSubscription>
-    findByUserIdAndPlanId(
-            Long userId,
-            Long planId
-    );
+    findByUserIdAndPlanId( Long userId, Long planId);
 
     // =========================
     // SUBSCRIPTION HISTORY
     // =========================
 
     List<UserSubscription>
-    findByUserIdOrderByCreatedAtDesc(
-            Long userId
-    );
+    findByUserIdOrderByCreatedAtDesc( Long userId);
 
     // =========================
     // STATUS + EXACT END DATE
     // =========================
 
     List<UserSubscription>
-    findByStatusAndEndDate(
-            SubscriptionStatus status,
-            LocalDate endDate
-    );
+    findByStatusAndEndDate( SubscriptionStatus status, LocalDate endDate);
 
     // =========================
     // EXPIRED SUBSCRIPTIONS
     // =========================
 
     List<UserSubscription>
-    findByStatusAndEndDateLessThan(
-            SubscriptionStatus status,
-            LocalDate date
-    );
+    findByStatusAndEndDateLessThan( SubscriptionStatus status, LocalDate date);
 
     // =========================
     // ACTIVE SUBSCRIPTIONS
     // =========================
 
     List<UserSubscription>
-    findByStatusAndEndDateGreaterThanEqual(
-            SubscriptionStatus status,
-            LocalDate date
-    );
+    findByStatusAndEndDateGreaterThanEqual( SubscriptionStatus status, LocalDate date);
 
     // =========================
     // DASHBOARD - STATUS COUNT
     // =========================
 
-    long countByStatus(
-            SubscriptionStatus status
-    );
+    long countByStatus( SubscriptionStatus status);
 }

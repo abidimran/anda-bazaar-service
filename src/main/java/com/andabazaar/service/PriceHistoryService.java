@@ -7,29 +7,15 @@ import com.andabazaar.entity.PriceHistory;
 
 public interface PriceHistoryService {
 
-    PriceHistory createPriceHistory(
-            PriceHistory priceHistory
-    );
+    PriceHistory createPriceHistory( PriceHistory priceHistory);
 
-    PriceHistory getById(
-            Long id
-    );
+    PriceHistory getById( Long id);
 
-    List<PriceHistory> getByMarket(
-            Long marketId
-    );
+    List<PriceHistory> getByMarket( Long marketId);
 
-    List<PriceHistory> getByMarketAndDateRange(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    List<PriceHistory> getByMarketAndDateRange( Long marketId, LocalDate startDate, LocalDate endDate);
 
-    List<PriceHistory> getByDate(
-            LocalDate date
-    );
+    List<PriceHistory> getByDate( LocalDate date);
 
-    void delete(
-            Long id
-    );
+    void delete( Long id);
 }

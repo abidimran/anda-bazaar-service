@@ -45,8 +45,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(email)) {
 
             throw new BadRequestException(
-                    "Email already registered"
-            );
+                    "Email already registered");
         }
 
         // -----------------------------------------------------
@@ -58,8 +57,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByPhone(phone)) {
 
             throw new BadRequestException(
-                    "Phone number already registered"
-            );
+                    "Phone number already registered");
         }
 
         // -----------------------------------------------------
@@ -75,21 +73,17 @@ public class UserServiceImpl implements UserService {
 
         User user = User.builder()
 
-                .firstName(
-                        request.getFirstName().trim()
+                .firstName( request.getFirstName().trim()
                 )
 
-                .lastName(
-                        request.getLastName().trim()
+                .lastName( request.getLastName().trim()
                 )
 
                 .email(email)
 
                 .phone(phone)
 
-                .password(
-                        passwordEncoder.encode(
-                                request.getPassword()
+                .password( passwordEncoder.encode( request.getPassword()
                         )
                 )
 
@@ -97,18 +91,13 @@ public class UserServiceImpl implements UserService {
 
                 .status(UserStatus.ACTIVE)
 
-                .preferredLanguage(
-                        request.getPreferredLanguage()
+                .preferredLanguage( request.getPreferredLanguage()
                 )
 
-                .preferredCity(
-                        request.getPreferredCity()
+                .preferredCity( request.getPreferredCity()
                 )
 
-                .notificationEnabled(
-                        request.getNotificationEnabled() == null
-                                ? true
-                                : request.getNotificationEnabled()
+                .notificationEnabled( request.getNotificationEnabled() == null ? true : request.getNotificationEnabled()
                 )
 
                 .build();
@@ -159,9 +148,7 @@ public class UserServiceImpl implements UserService {
     // =========================================================
 
     @Override
-    public UserResponseDto updateUser(
-            Long id,
-            UserRequestDto request) {
+    public UserResponseDto updateUser( Long id, UserRequestDto request) {
 
         User user = findUser(id);
 
@@ -181,8 +168,7 @@ public class UserServiceImpl implements UserService {
                 && userRepository.existsByEmail(email)) {
 
             throw new BadRequestException(
-                    "Email already registered"
-            );
+                    "Email already registered");
         }
 
         // -----------------------------------------------------
@@ -199,21 +185,16 @@ public class UserServiceImpl implements UserService {
                 && userRepository.existsByPhone(phone)) {
 
             throw new BadRequestException(
-                    "Phone number already registered"
-            );
+                    "Phone number already registered");
         }
 
         // -----------------------------------------------------
         // UPDATE BASIC INFORMATION
         // -----------------------------------------------------
 
-        user.setFirstName(
-                request.getFirstName().trim()
-        );
+        user.setFirstName( request.getFirstName().trim());
 
-        user.setLastName(
-                request.getLastName().trim()
-        );
+        user.setLastName( request.getLastName().trim());
 
         user.setEmail(email);
 
@@ -226,11 +207,7 @@ public class UserServiceImpl implements UserService {
         if (request.getPassword() != null
                 && !request.getPassword().isBlank()) {
 
-            user.setPassword(
-                    passwordEncoder.encode(
-                            request.getPassword()
-                    )
-            );
+            user.setPassword( passwordEncoder.encode( request.getPassword() ));
         }
 
         // -----------------------------------------------------
@@ -252,17 +229,13 @@ public class UserServiceImpl implements UserService {
         // PREFERRED LANGUAGE
         // -----------------------------------------------------
 
-        user.setPreferredLanguage(
-                request.getPreferredLanguage()
-        );
+        user.setPreferredLanguage( request.getPreferredLanguage());
 
         // -----------------------------------------------------
         // PREFERRED CITY
         // -----------------------------------------------------
 
-        user.setPreferredCity(
-                request.getPreferredCity()
-        );
+        user.setPreferredCity( request.getPreferredCity());
 
         // -----------------------------------------------------
         // NOTIFICATIONS
@@ -270,9 +243,7 @@ public class UserServiceImpl implements UserService {
 
         if (request.getNotificationEnabled() != null) {
 
-            user.setNotificationEnabled(
-                    request.getNotificationEnabled()
-            );
+            user.setNotificationEnabled( request.getNotificationEnabled());
         }
 
         // -----------------------------------------------------
@@ -311,44 +282,34 @@ public class UserServiceImpl implements UserService {
 
                 .id(user.getId())
 
-                .firstName(
-                        user.getFirstName()
+                .firstName( user.getFirstName()
                 )
 
-                .lastName(
-                        user.getLastName()
+                .lastName( user.getLastName()
                 )
 
-                .email(
-                        user.getEmail()
+                .email( user.getEmail()
                 )
 
-                .phone(
-                        user.getPhone()
+                .phone( user.getPhone()
                 )
 
-                .role(
-                        user.getRole()
+                .role( user.getRole()
                 )
 
-                .status(
-                        user.getStatus()
+                .status( user.getStatus()
                 )
 
-                .profileImage(
-                        user.getProfileImage()
+                .profileImage( user.getProfileImage()
                 )
 
-                .preferredLanguage(
-                        user.getPreferredLanguage()
+                .preferredLanguage( user.getPreferredLanguage()
                 )
 
-                .preferredCity(
-                        user.getPreferredCity()
+                .preferredCity( user.getPreferredCity()
                 )
 
-                .notificationEnabled(
-                        user.getNotificationEnabled()
+                .notificationEnabled( user.getNotificationEnabled()
                 )
 
                 .build();
@@ -359,33 +320,27 @@ public class UserServiceImpl implements UserService {
     // =========================================================
 
     @Override
-    public UserResponseDto changeUserStatus(
-            Long id,
-            String status) {
+    public UserResponseDto changeUserStatus( Long id, String status) {
 
         User user = findUser(id);
 
         if (status == null || status.isBlank()) {
 
             throw new BadRequestException(
-                    "User status is required"
-            );
+                    "User status is required");
         }
 
         try {
 
             UserStatus newStatus =
-                    UserStatus.valueOf(
-                            status.trim().toUpperCase()
-                    );
+                    UserStatus.valueOf( status.trim().toUpperCase());
 
             user.setStatus(newStatus);
 
         } catch (IllegalArgumentException ex) {
 
             throw new BadRequestException(
-                    "Invalid user status: " + status
-            );
+                    "Invalid user status: " + status);
         }
 
         User updatedUser =
@@ -403,8 +358,7 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
 
             throw new BadRequestException(
-                    "User ID is required"
-            );
+                    "User ID is required");
         }
 
         return userRepository.findById(id)
@@ -413,69 +367,54 @@ public class UserServiceImpl implements UserService {
                         new ResourceNotFoundException(
                                 "User not found with id: "
                                         + id
-                        )
-                );
+                        ));
     }
 
     // =========================================================
     // MAP USER -> RESPONSE DTO
     // =========================================================
 
-    private UserResponseDto mapToResponse(
-            User user) {
+    private UserResponseDto mapToResponse( User user) {
 
         return UserResponseDto.builder()
 
-                .id(
-                        user.getId()
+                .id( user.getId()
                 )
 
-                .firstName(
-                        user.getFirstName()
+                .firstName( user.getFirstName()
                 )
 
-                .lastName(
-                        user.getLastName()
+                .lastName( user.getLastName()
                 )
 
-                .email(
-                        user.getEmail()
+                .email( user.getEmail()
                 )
 
-                .phone(
-                        user.getPhone()
+                .phone( user.getPhone()
                 )
 
-                .role(
-                        user.getRole()
+                .role( user.getRole()
                 )
 
-                .status(
-                        user.getStatus()
+                .status( user.getStatus()
                 )
 
-                .profileImage(
-                        user.getProfileImage()
+                .profileImage( user.getProfileImage()
                 )
 
-                .preferredLanguage(
-                        user.getPreferredLanguage()
+                .preferredLanguage( user.getPreferredLanguage()
                 )
 
-                .preferredCity(
-                        user.getPreferredCity()
+                .preferredCity( user.getPreferredCity()
                 )
 
-                .notificationEnabled(
-                        user.getNotificationEnabled()
+                .notificationEnabled( user.getNotificationEnabled()
                 )
 
-                .createdAt(
-                        user.getCreatedAt()
+                .createdAt( user.getCreatedAt()
                 )
 
-                .updatedAt(
-                        user.getUpdatedAt()
+                .updatedAt( user.getUpdatedAt()
                 )
 
                 .build();

@@ -38,8 +38,7 @@ public class SubscriptionServiceImpl
     private final UserRepository userRepository;
 
     @Override
-    public SubscriptionPlanResponseDto createPlan(
-            SubscriptionPlanRequestDto request) {
+    public SubscriptionPlanResponseDto createPlan( SubscriptionPlanRequestDto request) {
 
         if (planRepository.existsByNameIgnoreCase(
                 request.getName())) {
@@ -58,14 +57,11 @@ public class SubscriptionServiceImpl
                         .build();
 
         return mapPlan(
-                planRepository.save(plan)
-        );
+                planRepository.save(plan));
     }
 
     @Override
-    public SubscriptionPlanResponseDto updatePlan(
-            Long id,
-            SubscriptionPlanRequestDto request) {
+    public SubscriptionPlanResponseDto updatePlan( Long id, SubscriptionPlanRequestDto request) {
 
         SubscriptionPlan plan =
                 findPlan(id);
@@ -76,14 +72,12 @@ public class SubscriptionServiceImpl
         plan.setPrice(request.getPrice());
 
         return mapPlan(
-                planRepository.save(plan)
-        );
+                planRepository.save(plan));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public SubscriptionPlanResponseDto getPlanById(
-            Long id) {
+    public SubscriptionPlanResponseDto getPlanById( Long id) {
 
         return mapPlan(findPlan(id));
     }
@@ -111,9 +105,7 @@ public class SubscriptionServiceImpl
     }
 
     @Override
-    public SubscriptionResponseDto subscribe(
-            Long userId,
-            SubscribeRequestDto request) {
+    public SubscriptionResponseDto subscribe( Long userId, SubscribeRequestDto request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
@@ -135,9 +127,7 @@ public class SubscriptionServiceImpl
         LocalDate startDate = today;
 
         LocalDate endDate =
-                startDate.plusDays(
-                        plan.getDurationDays()
-                );
+                startDate.plusDays( plan.getDurationDays());
 
         UserSubscription subscription =
                 UserSubscription.builder()
@@ -145,17 +135,13 @@ public class SubscriptionServiceImpl
                         .plan(plan)
                         .startDate(startDate)
                         .endDate(endDate)
-                        .status(
-                            SubscriptionStatus.ACTIVE
-                        )
-                        .activatedAt(
-                            java.time.LocalDateTime.now()
+                        .status( SubscriptionStatus.ACTIVE )
+                        .activatedAt( java.time.LocalDateTime.now()
                         )
                         .build();
 
         return mapSubscription(
-                subscriptionRepository.save(subscription)
-        );
+                subscriptionRepository.save(subscription));
     }
 
     @Override
@@ -165,15 +151,11 @@ public class SubscriptionServiceImpl
 
         UserSubscription subscription =
                 subscriptionRepository
-                    .findFirstByUserIdAndStatusOrderByEndDateDesc(
-                            userId,
-                            SubscriptionStatus.ACTIVE
-                    )
+                    .findFirstByUserIdAndStatusOrderByEndDateDesc( userId, SubscriptionStatus.ACTIVE )
                     .orElseThrow(() ->
                             new ResourceNotFoundException(
                                 "No active subscription found"
-                            )
-                    );
+                            ));
 
         if (subscription.getEndDate()
                 .isBefore(LocalDate.now())) {
@@ -199,14 +181,10 @@ public class SubscriptionServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public boolean hasActiveSubscription(
-            Long userId) {
+    public boolean hasActiveSubscription( Long userId) {
 
         return subscriptionRepository
-                .findFirstByUserIdAndStatusOrderByEndDateDesc(
-                        userId,
-                        SubscriptionStatus.ACTIVE
-                )
+                .findFirstByUserIdAndStatusOrderByEndDateDesc( userId, SubscriptionStatus.ACTIVE )
                 .map(subscription ->
                         !subscription.getEndDate()
                                 .isBefore(LocalDate.now()))
@@ -220,22 +198,14 @@ public class SubscriptionServiceImpl
 
         List<UserSubscription> subscriptions =
                 subscriptionRepository
-                    .findByStatusAndEndDateLessThan(
-                        SubscriptionStatus.ACTIVE,
-                        today
-                    );
+                    .findByStatusAndEndDateLessThan( SubscriptionStatus.ACTIVE, today);
 
-        for (UserSubscription subscription :
-                subscriptions) {
+        for (UserSubscription subscription : subscriptions) {
 
-            subscription.setStatus(
-                    SubscriptionStatus.EXPIRED
-            );
+            subscription.setStatus( SubscriptionStatus.EXPIRED);
         }
 
-        subscriptionRepository.saveAll(
-                subscriptions
-        );
+        subscriptionRepository.saveAll( subscriptions);
     }
 
     private SubscriptionPlan findPlan(Long id) {
@@ -248,8 +218,7 @@ public class SubscriptionServiceImpl
     }
 
     private SubscriptionResponseDto
-            mapSubscription(
-                    UserSubscription subscription) {
+            mapSubscription( UserSubscription subscription) {
 
         LocalDate today = LocalDate.now();
 
@@ -259,39 +228,28 @@ public class SubscriptionServiceImpl
                 .isBefore(today)) {
 
             daysRemaining =
-                    ChronoUnit.DAYS.between(
-                            today,
-                            subscription.getEndDate()
-                    );
+                    ChronoUnit.DAYS.between( today, subscription.getEndDate());
         }
 
         return SubscriptionResponseDto.builder()
                 .id(subscription.getId())
-                .userId(
-                        subscription.getUser().getId()
+                .userId( subscription.getUser().getId()
                 )
-                .planId(
-                        subscription.getPlan().getId()
+                .planId( subscription.getPlan().getId()
                 )
-                .planName(
-                        subscription.getPlan().getName()
+                .planName( subscription.getPlan().getName()
                 )
-                .durationDays(
-                        subscription.getPlan()
+                .durationDays( subscription.getPlan()
                                 .getDurationDays()
                 )
-                .startDate(
-                        subscription.getStartDate()
+                .startDate( subscription.getStartDate()
                 )
-                .endDate(
-                        subscription.getEndDate()
+                .endDate( subscription.getEndDate()
                 )
-                .status(
-                        subscription.getStatus()
+                .status( subscription.getStatus()
                 )
                 .daysRemaining(daysRemaining)
-                .active(
-                        subscription.getStatus()
+                .active( subscription.getStatus()
                                 == SubscriptionStatus.ACTIVE
                         && !subscription.getEndDate()
                                 .isBefore(today)

@@ -35,3 +35,13 @@ razorpay:
     secret: YOUR_RAZORPAY_KEY_SECRET
   webhook:
     secret: YOUR_RAZORPAY_WEBHOOK_SECRET
+
+# =====================================================
+# RAPIDAPI - EGG RATES EXTERNAL API
+# =====================================================
+
+rapidapi:
+  egg-rates:
+    base-url: https://egg-rates-api.p.rapidapi.com
+    host: egg-rates-api.p.rapidapi.com
+    key: a9362e5eefmsh9d4a2f102aba74fp10c2e6jsn647e9f3f26ed

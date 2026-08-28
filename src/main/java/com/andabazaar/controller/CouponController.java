@@ -22,91 +22,60 @@ public class CouponController {
     private final CouponService couponService;
 
     @PostMapping
-    public ResponseEntity<CouponResponseDto> createCoupon(
-            @Valid @RequestBody CouponRequestDto request) {
+    public ResponseEntity<CouponResponseDto> createCoupon(@Valid @RequestBody CouponRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        couponService.createCoupon(request)
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(couponService.createCoupon(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CouponResponseDto> updateCoupon(
-            @PathVariable Long id,
-            @Valid @RequestBody CouponRequestDto request) {
+    public ResponseEntity<CouponResponseDto> updateCoupon(@PathVariable Long id, @Valid @RequestBody CouponRequestDto request) {
 
-        return ResponseEntity.ok(
-                couponService.updateCoupon(
-                        id,
-                        request
-                )
-        );
+ return ResponseEntity.ok(couponService.updateCoupon(id, request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CouponResponseDto> getCouponById(
-            @PathVariable Long id) {
+    public ResponseEntity<CouponResponseDto> getCouponById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                couponService.getCouponById(id)
-        );
+ return ResponseEntity.ok(couponService.getCouponById(id));
     }
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<CouponResponseDto> getCouponByCode(
-            @PathVariable String code) {
+    public ResponseEntity<CouponResponseDto> getCouponByCode(@PathVariable String code) {
 
-        return ResponseEntity.ok(
-                couponService.getCouponByCode(code)
-        );
+ return ResponseEntity.ok(couponService.getCouponByCode(code));
     }
 
     @GetMapping
     public ResponseEntity<List<CouponResponseDto>> getAllCoupons() {
 
-        return ResponseEntity.ok(
-                couponService.getAllCoupons()
-        );
+ return ResponseEntity.ok(couponService.getAllCoupons());
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<CouponResponseDto>> getActiveCoupons() {
 
-        return ResponseEntity.ok(
-                couponService.getActiveCoupons()
-        );
+ return ResponseEntity.ok(couponService.getActiveCoupons());
     }
 
     @GetMapping("/apply")
-    public ResponseEntity<CouponResponseDto> applyCoupon(
-            @RequestParam String code,
-            @RequestParam BigDecimal orderAmount) {
+    public ResponseEntity<CouponResponseDto> applyCoupon(@RequestParam String code, @RequestParam BigDecimal orderAmount) {
 
-        return ResponseEntity.ok(
-                couponService.applyCoupon(
-                        code,
-                        orderAmount
-                )
-        );
+ return ResponseEntity.ok(couponService.applyCoupon(code, orderAmount));
     }
 
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateCoupon(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deactivateCoupon(@PathVariable Long id) {
 
         couponService.deactivateCoupon(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCoupon(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteCoupon(@PathVariable Long id) {
 
         couponService.deleteCoupon(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

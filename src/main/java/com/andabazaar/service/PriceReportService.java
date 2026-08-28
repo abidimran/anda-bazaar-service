@@ -7,41 +7,23 @@ import com.andabazaar.dto.report.PriceReportResponseDto;
 
 public interface PriceReportService {
 
-    PriceReportResponseDto createReport(
-            PriceReportRequestDto request
-    );
+    PriceReportResponseDto createReport( PriceReportRequestDto request);
 
-    PriceReportResponseDto getReportById(
-            Long id
-    );
+    PriceReportResponseDto getReportById( Long id);
 
     List<PriceReportResponseDto> getAllReports();
 
-    List<PriceReportResponseDto> getUserReports(
-            Long userId
-    );
+    List<PriceReportResponseDto> getUserReports( Long userId);
 
-    List<PriceReportResponseDto> getMarketReports(
-            Long marketId
-    );
+    List<PriceReportResponseDto> getMarketReports( Long marketId);
 
-    List<PriceReportResponseDto> getReportsByStatus(
-            String status
-    );
+    List<PriceReportResponseDto> getReportsByStatus( String status);
 
     List<PriceReportResponseDto> getPendingReports();
 
-    PriceReportResponseDto reviewReport(
-            Long id,
-            String status,
-            String adminRemarks
-    );
+    PriceReportResponseDto reviewReport( Long id, String status, String adminRemarks);
 
-    void deleteReport(
-            Long id
-    );
+    void deleteReport( Long id);
 
-    long countByStatus(
-            String status
-    );
+    long countByStatus( String status);
 }

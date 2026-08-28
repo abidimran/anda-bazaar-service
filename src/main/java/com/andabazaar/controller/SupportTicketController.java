@@ -23,138 +23,94 @@ public class SupportTicketController {
 
     // Create ticket
     @PostMapping
-    public ResponseEntity<SupportTicketResponseDto> createTicket(
-            @Valid @RequestBody SupportTicketRequestDto request) {
+    public ResponseEntity<SupportTicketResponseDto> createTicket(@Valid @RequestBody SupportTicketRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        supportTicketService.createTicket(request)
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(supportTicketService.createTicket(request));
     }
 
     // Get ticket by ID
     @GetMapping("/{id}")
-    public ResponseEntity<SupportTicketResponseDto> getTicketById(
-            @PathVariable Long id) {
+    public ResponseEntity<SupportTicketResponseDto> getTicketById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                supportTicketService.getTicketById(id)
-        );
+ return ResponseEntity.ok(supportTicketService.getTicketById(id));
     }
 
     // Get ticket by ticket number
     @GetMapping("/number/{ticketNumber}")
-    public ResponseEntity<SupportTicketResponseDto> getTicketByNumber(
-            @PathVariable String ticketNumber) {
+    public ResponseEntity<SupportTicketResponseDto> getTicketByNumber(@PathVariable String ticketNumber) {
 
-        return ResponseEntity.ok(
-                supportTicketService.getTicketByNumber(
-                        ticketNumber
-                )
-        );
+ return ResponseEntity.ok(supportTicketService.getTicketByNumber(ticketNumber));
     }
 
     // Get all tickets
     @GetMapping
     public ResponseEntity<List<SupportTicketResponseDto>> getAllTickets() {
 
-        return ResponseEntity.ok(
-                supportTicketService.getAllTickets()
-        );
+ return ResponseEntity.ok(supportTicketService.getAllTickets());
     }
 
     // Get user's tickets
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<SupportTicketResponseDto>> getUserTickets(
-            @PathVariable Long userId) {
+    public ResponseEntity<List<SupportTicketResponseDto>> getUserTickets(@PathVariable Long userId) {
 
-        return ResponseEntity.ok(
-                supportTicketService.getUserTickets(userId)
-        );
+ return ResponseEntity.ok(supportTicketService.getUserTickets(userId));
     }
 
     // Get tickets by status
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<SupportTicketResponseDto>> getTicketsByStatus(
-            @PathVariable String status) {
+    public ResponseEntity<List<SupportTicketResponseDto>> getTicketsByStatus(@PathVariable String status) {
 
-        return ResponseEntity.ok(
-                supportTicketService.getTicketsByStatus(status)
-        );
+ return ResponseEntity.ok(supportTicketService.getTicketsByStatus(status));
     }
 
     // Update ticket
     @PutMapping("/{id}")
-    public ResponseEntity<SupportTicketResponseDto> updateTicket(
-            @PathVariable Long id,
+    public ResponseEntity<SupportTicketResponseDto> updateTicket(@PathVariable Long id,
             @Valid @RequestBody SupportTicketRequestDto request) {
 
-        return ResponseEntity.ok(
-                supportTicketService.updateTicket(
-                        id,
-                        request
-                )
-        );
+ return ResponseEntity.ok(supportTicketService.updateTicket(id, request));
     }
 
     // Close ticket
     @PutMapping("/{id}/close")
-    public ResponseEntity<Void> closeTicket(
-            @PathVariable Long id,
-            @RequestParam String resolution) {
+    public ResponseEntity<Void> closeTicket(@PathVariable Long id, @RequestParam String resolution) {
 
-        supportTicketService.closeTicket(
-                id,
-                resolution
-        );
+        supportTicketService.closeTicket( id, resolution);
 
-        return ResponseEntity.ok().build();
+ return ResponseEntity.ok().build();
     }
 
     // Reopen ticket
     @PutMapping("/{id}/reopen")
-    public ResponseEntity<Void> reopenTicket(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> reopenTicket(@PathVariable Long id) {
 
         supportTicketService.reopenTicket(id);
 
-        return ResponseEntity.ok().build();
+ return ResponseEntity.ok().build();
     }
 
     // Add reply
     @PostMapping("/{ticketId}/replies")
-    public ResponseEntity<Void> addReply(
-            @PathVariable Long ticketId,
-            @Valid @RequestBody SupportReplyDto request) {
+    public ResponseEntity<Void> addReply(@PathVariable Long ticketId, @Valid @RequestBody SupportReplyDto request) {
 
-        supportTicketService.addReply(
-                ticketId,
-                request
-        );
+        supportTicketService.addReply( ticketId, request);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+ return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // Count tickets by status
     @GetMapping("/count/status/{status}")
-    public ResponseEntity<Long> countByStatus(
-            @PathVariable String status) {
+    public ResponseEntity<Long> countByStatus(@PathVariable String status) {
 
-        return ResponseEntity.ok(
-                supportTicketService.countByStatus(status)
-        );
+ return ResponseEntity.ok(supportTicketService.countByStatus(status));
     }
 
     // Delete ticket
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTicket(
-            @PathVariable Long id) {
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
 
         supportTicketService.deleteTicket(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }

@@ -11,28 +11,15 @@ public interface PriceHistoryRepository
         extends JpaRepository<PriceHistory, Long> {
 
     List<PriceHistory>
-    findByMarketIdOrderByPriceDateDesc(
-            Long marketId
-    );
+    findByMarketIdOrderByPriceDateDesc( Long marketId);
 
     List<PriceHistory>
-    findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-            Long marketId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
+    findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( Long marketId, LocalDate startDate, LocalDate endDate);
 
     List<PriceHistory>
-    findByPriceDateOrderByPriceDateDesc(
-            LocalDate priceDate
-    );
+    findByPriceDateOrderByPriceDateDesc( LocalDate priceDate);
 
-    boolean existsByMarketIdAndPriceDate(
-            Long marketId,
-            LocalDate priceDate
-    );
+    boolean existsByMarketIdAndPriceDate( Long marketId, LocalDate priceDate);
 
-    long countByMarketId(
-            Long marketId
-    );
+    long countByMarketId( Long marketId);
 }

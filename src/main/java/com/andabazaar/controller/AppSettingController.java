@@ -29,88 +29,61 @@ public class AppSettingController {
 
     @PostMapping
     public ResponseEntity<AppSettingResponseDto>
-            createSetting(
-                    @Valid @RequestBody
-                    AppSettingRequestDto request) {
+            createSetting(@Valid @RequestBody AppSettingRequestDto request) {
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(
-                        appSettingService
-                                .createSetting(request)
-                );
+ return ResponseEntity.status(HttpStatus.CREATED).body(appSettingService.createSetting(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AppSettingResponseDto>
-            updateSetting(
-                    @PathVariable Long id,
-                    @Valid @RequestBody
-                    AppSettingRequestDto request) {
+            updateSetting(@PathVariable Long id, @Valid @RequestBody AppSettingRequestDto request) {
 
-        return ResponseEntity.ok(
-                appSettingService.updateSetting(
-                        id,
-                        request
-                )
-        );
+ return ResponseEntity.ok(appSettingService.updateSetting(id, request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AppSettingResponseDto>
-            getSettingById(
-                    @PathVariable Long id) {
+            getSettingById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                appSettingService.getSettingById(id)
-        );
+ return ResponseEntity.ok(appSettingService.getSettingById(id));
     }
 
     @GetMapping("/key/{key}")
     public ResponseEntity<AppSettingResponseDto>
-            getSettingByKey(
-                    @PathVariable String key) {
+            getSettingByKey(@PathVariable String key) {
 
-        return ResponseEntity.ok(
-                appSettingService.getSettingByKey(key)
-        );
+ return ResponseEntity.ok(appSettingService.getSettingByKey(key));
     }
 
     @GetMapping
     public ResponseEntity<List<AppSettingResponseDto>>
             getAllSettings() {
 
-        return ResponseEntity.ok(
-                appSettingService.getAllSettings()
-        );
+ return ResponseEntity.ok(appSettingService.getAllSettings());
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<AppSettingResponseDto>>
             getActiveSettings() {
 
-        return ResponseEntity.ok(
-                appSettingService.getActiveSettings()
-        );
+ return ResponseEntity.ok(appSettingService.getActiveSettings());
     }
 
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Void>
-            deactivateSetting(
-                    @PathVariable Long id) {
+            deactivateSetting(@PathVariable Long id) {
 
         appSettingService.deactivateSetting(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-            deleteSetting(
-                    @PathVariable Long id) {
+            deleteSetting(@PathVariable Long id) {
 
         appSettingService.deleteSetting(id);
 
-        return ResponseEntity.noContent().build();
+ return ResponseEntity.noContent().build();
     }
 }
