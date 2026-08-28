@@ -1,32 +1,14 @@
 package com.andabazaar.mapper;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.andabazaar.dto.notification.NotificationResponseDto;
 import com.andabazaar.entity.Notification;
 
-@Component
-public class NotificationMapper {
+@Mapper(componentModel = "spring")
+public interface NotificationMapper {
 
-    public NotificationResponseDto toDto(
-            Notification notification) {
-
-        if (notification == null) {
-            return null;
-        }
-
-        return NotificationResponseDto.builder()
-                .id(notification.getId())
-                .userId(
-                        notification.getUser() != null
-                                ? notification.getUser().getId()
-                                : null
-                )
-                .title(notification.getTitle())
-                .message(notification.getMessage())
-                .type(notification.getType())
-                .read(notification.getRead())
-                .createdAt(notification.getCreatedAt())
-                .build();
-    }
+    @Mapping(source = "user.id", target = "userId")
+    NotificationResponseDto toDto(Notification notification);
 }

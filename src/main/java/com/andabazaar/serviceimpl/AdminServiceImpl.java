@@ -65,9 +65,7 @@ public class AdminServiceImpl implements AdminService {
                 .preferredCity(
                         request.getPreferredCity())
                 .notificationEnabled(
-                        request.getNotificationEnabled() == null
-                                ? true
-                                : request.getNotificationEnabled())
+                        request.getNotificationEnabled() == null || request.getNotificationEnabled())
                 .build();
 
         User savedAdmin =
