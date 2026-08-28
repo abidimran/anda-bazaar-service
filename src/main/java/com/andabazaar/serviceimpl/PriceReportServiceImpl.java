@@ -35,15 +35,13 @@ public class PriceReportServiceImpl
 
         User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "User not found with id: "
+                new ResourceNotFoundException("User not found with id: "
                                 + request.getUserId()
                 ));
 
         Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "Market not found with id: "
+                new ResourceNotFoundException("Market not found with id: "
                                 + request.getMarketId()
                 ));
 
@@ -51,8 +49,7 @@ public class PriceReportServiceImpl
                 || request.getReportedPrice()
                         .signum() < 0) {
 
-            throw new BadRequestException(
-                    "Reported price cannot be negative");
+            throw new BadRequestException("Reported price cannot be negative");
         }
 
         PriceReport report = PriceReport.builder()
@@ -100,8 +97,7 @@ public class PriceReportServiceImpl
 
         if (!userRepository.existsById(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "User not found with id: "
+            throw new ResourceNotFoundException("User not found with id: "
                             + userId);
         }
 
@@ -119,8 +115,7 @@ public class PriceReportServiceImpl
 
         if (!marketRepository.existsById(marketId)) {
 
-            throw new ResourceNotFoundException(
-                    "Market not found with id: "
+            throw new ResourceNotFoundException("Market not found with id: "
                             + marketId);
         }
 
@@ -152,7 +147,7 @@ public class PriceReportServiceImpl
             getPendingReports() {
 
         return priceReportRepository
-                .findByStatusOrderByCreatedAtDesc( "PENDING" )
+                .findByStatusOrderByCreatedAtDesc("PENDING")
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -170,8 +165,7 @@ public class PriceReportServiceImpl
                 && !normalizedStatus.equals("REJECTED")
                 && !normalizedStatus.equals("PENDING")) {
 
-            throw new BadRequestException(
-                    "Status must be PENDING, APPROVED or REJECTED");
+            throw new BadRequestException("Status must be PENDING, APPROVED or REJECTED");
         }
 
         report.setStatus(normalizedStatus);
@@ -202,8 +196,7 @@ public class PriceReportServiceImpl
 
         return priceReportRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Price report not found with id: "
+                        new ResourceNotFoundException("Price report not found with id: "
                                         + id
                         ));
     }
@@ -213,8 +206,7 @@ public class PriceReportServiceImpl
         if (status == null
                 || status.trim().isEmpty()) {
 
-            throw new BadRequestException(
-                    "Status is required");
+            throw new BadRequestException("Status is required");
         }
 
         return status.trim().toUpperCase();

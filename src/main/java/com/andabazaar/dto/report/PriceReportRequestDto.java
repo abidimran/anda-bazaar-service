@@ -29,20 +29,17 @@ public class PriceReportRequestDto {
     @NotNull(message = "Egg price is required")
     @DecimalMin(
         value = "0.01",
-        message = "Reported price must be greater than 0"
-    )
+        message = "Reported price must be greater than 0")
     private BigDecimal reportedPrice;
 
     @NotBlank(message = "Report reason is required")
     @Size(
         max = 500,
-        message = "Reason cannot exceed 500 characters"
-    )
+        message = "Reason cannot exceed 500 characters")
     private String reason;
 
     @Size(
         max = 1000,
-        message = "Description cannot exceed 1000 characters"
-    )
+        message = "Description cannot exceed 1000 characters")
     private String description;
 }

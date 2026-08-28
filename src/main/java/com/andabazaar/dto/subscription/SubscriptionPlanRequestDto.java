@@ -27,7 +27,6 @@ public class SubscriptionPlanRequestDto {
     @NotNull(message = "Price is required")
     @DecimalMin(
         value = "0.00",
-        message = "Price cannot be negative"
-    )
+        message = "Price cannot be negative")
     private BigDecimal price;
 }

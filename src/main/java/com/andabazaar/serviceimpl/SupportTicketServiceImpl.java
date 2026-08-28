@@ -34,10 +34,6 @@ public class SupportTicketServiceImpl
 
     private final UserRepository userRepository;
 
-    // =========================================================
-    // CREATE TICKET
-    // =========================================================
-
     @Override
     public SupportTicketResponseDto createTicket( SupportTicketRequestDto request) {
 
@@ -56,10 +52,6 @@ public class SupportTicketServiceImpl
                 ticketRepository.save(ticket));
     }
 
-    // =========================================================
-    // GET TICKET BY ID
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public SupportTicketResponseDto getTicketById( Long id) {
@@ -67,10 +59,6 @@ public class SupportTicketServiceImpl
         return mapToResponse(
                 findTicket(id));
     }
-
-    // =========================================================
-    // GET TICKET BY NUMBER
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -80,17 +68,12 @@ public class SupportTicketServiceImpl
                 ticketRepository.findByTicketNumber(
                         ticketNumber
                 ).orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Support ticket not found with number: "
+                        new ResourceNotFoundException("Support ticket not found with number: "
                                         + ticketNumber
                         ));
 
         return mapToResponse(ticket);
     }
-
-    // =========================================================
-    // GET ALL TICKETS
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -103,18 +86,13 @@ public class SupportTicketServiceImpl
                 .toList();
     }
 
-    // =========================================================
-    // GET USER TICKETS
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<SupportTicketResponseDto> getUserTickets( Long userId) {
 
         if (!userRepository.existsById(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return ticketRepository
@@ -123,10 +101,6 @@ public class SupportTicketServiceImpl
                 .map(this::mapToResponse)
                 .toList();
     }
-
-    // =========================================================
-    // GET TICKETS BY STATUS
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -141,10 +115,6 @@ public class SupportTicketServiceImpl
                 .map(this::mapToResponse)
                 .toList();
     }
-
-    // =========================================================
-    // UPDATE TICKET
-    // =========================================================
 
     @Override
     public SupportTicketResponseDto updateTicket( Long id, SupportTicketRequestDto request) {
@@ -169,10 +139,6 @@ public class SupportTicketServiceImpl
                 ticketRepository.save(ticket));
     }
 
-    // =========================================================
-    // CLOSE TICKET
-    // =========================================================
-
     @Override
     public void closeTicket( Long id, String resolution) {
 
@@ -182,8 +148,7 @@ public class SupportTicketServiceImpl
         if (ticket.getStatus() ==
                 TicketStatus.CLOSED) {
 
-            throw new BadRequestException(
-                    "Ticket is already closed");
+            throw new BadRequestException("Ticket is already closed");
         }
 
         ticket.setStatus( TicketStatus.CLOSED);
@@ -195,10 +160,6 @@ public class SupportTicketServiceImpl
         ticketRepository.save(ticket);
     }
 
-    // =========================================================
-    // REOPEN TICKET
-    // =========================================================
-
     @Override
     public void reopenTicket(Long id) {
 
@@ -208,8 +169,7 @@ public class SupportTicketServiceImpl
         if (ticket.getStatus() !=
                 TicketStatus.CLOSED) {
 
-            throw new BadRequestException(
-                    "Only closed ticket can be reopened");
+            throw new BadRequestException("Only closed ticket can be reopened");
         }
 
         ticket.setStatus( TicketStatus.OPEN);
@@ -220,10 +180,6 @@ public class SupportTicketServiceImpl
 
         ticketRepository.save(ticket);
     }
-
-    // =========================================================
-    // DELETE TICKET
-    // =========================================================
 
     @Override
     public void deleteTicket(Long id) {
@@ -243,10 +199,6 @@ public class SupportTicketServiceImpl
         ticketRepository.delete(ticket);
     }
 
-    // =========================================================
-    // ADD REPLY
-    // =========================================================
-
     @Override
     public void addReply( Long ticketId, SupportReplyDto request) {
 
@@ -263,8 +215,7 @@ public class SupportTicketServiceImpl
         if (ticket.getStatus() ==
                 TicketStatus.CLOSED) {
 
-            throw new BadRequestException(
-                    "Cannot reply to a closed ticket");
+            throw new BadRequestException("Cannot reply to a closed ticket");
         }
 
         // -----------------------------------------------------
@@ -296,10 +247,6 @@ public class SupportTicketServiceImpl
         messageRepository.save(message);
     }
 
-    // =========================================================
-    // COUNT BY STATUS
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public long countByStatus( String status) {
@@ -308,39 +255,25 @@ public class SupportTicketServiceImpl
                 parseStatus(status));
     }
 
-    // =========================================================
-    // FIND TICKET
-    // =========================================================
-
     private SupportTicket findTicket( Long id) {
 
         return ticketRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Support ticket not found with id: "
+                        new ResourceNotFoundException("Support ticket not found with id: "
                                         + id
                         ));
     }
-
-    // =========================================================
-    // FIND USER
-    // =========================================================
 
     private User findUser( Long id) {
 
         return userRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: "
+                        new ResourceNotFoundException("User not found with id: "
                                         + id
                         ));
     }
-
-    // =========================================================
-    // PARSE STATUS
-    // =========================================================
 
     private TicketStatus parseStatus( String status) {
 
@@ -351,14 +284,9 @@ public class SupportTicketServiceImpl
 
         } catch (IllegalArgumentException | NullPointerException e) {
 
-            throw new BadRequestException(
-                    "Invalid ticket status: " + status);
+            throw new BadRequestException("Invalid ticket status: " + status);
         }
     }
-
-    // =========================================================
-    // MAP RESPONSE
-    // =========================================================
 
     private SupportTicketResponseDto mapToResponse( SupportTicket ticket) {
 

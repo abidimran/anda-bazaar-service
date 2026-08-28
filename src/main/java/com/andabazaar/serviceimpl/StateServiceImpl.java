@@ -28,8 +28,7 @@ public class StateServiceImpl implements StateService {
         if (stateRepository.existsByNameIgnoreCase(
                 request.getName())) {
 
-            throw new BadRequestException(
-                    "State already exists");
+            throw new BadRequestException("State already exists");
         }
 
         State state = State.builder()
@@ -78,8 +77,7 @@ public class StateServiceImpl implements StateService {
                 .equalsIgnoreCase(request.getName())
                 && stateRepository.existsByNameIgnoreCase( request.getName())) {
 
-            throw new BadRequestException(
-                    "State already exists");
+            throw new BadRequestException("State already exists");
         }
 
         state.setName(request.getName().trim());
@@ -103,8 +101,7 @@ public class StateServiceImpl implements StateService {
 
         return stateRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "State not found with id: " + id));
+                        new ResourceNotFoundException("State not found with id: " + id));
     }
 
     private StateResponseDto mapToResponse( State state) {

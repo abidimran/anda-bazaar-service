@@ -21,10 +21,7 @@ public class EggPriceController {
 
     private final EggPriceService eggPriceService;
 
-    // =====================================================
     // ADMIN - CREATE PRICE
-    // POST /api/egg-prices
-    // =====================================================
 
     @PostMapping
     public ResponseEntity<EggPriceResponseDto> createPrice(@Valid @RequestBody EggPriceRequestDto request) {
@@ -32,10 +29,7 @@ public class EggPriceController {
  return ResponseEntity.status(HttpStatus.CREATED).body(eggPriceService.createPrice(request));
     }
 
-    // =====================================================
     // ADMIN - UPDATE PRICE
-    // PUT /api/egg-prices/{id}
-    // =====================================================
 
     @PutMapping("/{id}")
     public ResponseEntity<EggPriceResponseDto> updatePrice(@PathVariable Long id,
@@ -44,10 +38,7 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.updatePrice(id, request));
     }
 
-    // =====================================================
     // GET PRICE BY ID
-    // GET /api/egg-prices/{id}
-    // =====================================================
 
     @GetMapping("/{id}")
     public ResponseEntity<EggPriceResponseDto> getPrice(@PathVariable Long id) {
@@ -55,10 +46,7 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getPriceById(id));
     }
 
-    // =====================================================
     // GET MARKET PRICE BY DATE
-    // GET /api/egg-prices/market/{marketId}?date=YYYY-MM-DD
-    // =====================================================
 
     @GetMapping("/market/{marketId}")
     public ResponseEntity<EggPriceResponseDto> getMarketPrice(@PathVariable Long marketId, @RequestParam LocalDate date) {
@@ -66,10 +54,7 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getMarketPrice(marketId, date));
     }
 
-    // =====================================================
     // GET TODAY PRICES
-    // GET /api/egg-prices/today
-    // =====================================================
 
     @GetMapping("/today")
     public ResponseEntity<List<EggPriceResponseDto>>
@@ -78,10 +63,7 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getTodayPrices());
     }
 
-    // =====================================================
     // GET YESTERDAY PRICES
-    // GET /api/egg-prices/yesterday
-    // =====================================================
 
     @GetMapping("/yesterday")
     public ResponseEntity<List<EggPriceResponseDto>>
@@ -90,10 +72,7 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getYesterdayPrices());
     }
 
-    // =====================================================
     // GET PRICE HISTORY
-    // GET /api/egg-prices/history/{marketId}
-    // =====================================================
 
     @GetMapping("/history/{marketId}")
     public ResponseEntity<List<EggPriceResponseDto>>
@@ -102,7 +81,6 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getPriceHistory(marketId, startDate, endDate));
     }
 
-    // =====================================================
     // USER - GET PRICES
     //
     // ACTIVE SUBSCRIPTION:
@@ -111,8 +89,6 @@ public class EggPriceController {
     // NO/EXPIRED SUBSCRIPTION:
     // 2 DAYS OLD + OLDER
     //
-    // GET /api/egg-prices/user/{userId}
-    // =====================================================
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<EggPriceResponseDto>>
@@ -121,7 +97,6 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getUserPrices(userId));
     }
 
-    // =====================================================
     // USER - GET PRICE HISTORY
     //
     // GET:
@@ -130,8 +105,6 @@ public class EggPriceController {
     // Example:
     // /api/egg-prices/user/1/history/5
     // ?startDate=2026-08-01
-    // &endDate=2026-08-26
-    // =====================================================
 
     @GetMapping("/user/{userId}/history/{marketId}")
     public ResponseEntity<List<EggPriceResponseDto>>
@@ -143,10 +116,7 @@ public class EggPriceController {
  return ResponseEntity.ok(eggPriceService.getUserPriceHistory(userId, marketId, startDate, endDate));
     }
 
-    // =====================================================
     // ADMIN - DELETE PRICE
-    // DELETE /api/egg-prices/{id}
-    // =====================================================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrice(@PathVariable Long id) {

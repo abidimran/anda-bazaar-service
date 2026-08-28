@@ -15,10 +15,7 @@ public class PriceUpdateScheduler {
 
     private final EggPriceRepository eggPriceRepository;
 
-    // =========================================================
     // DAILY PRICE CHECK
-    // Runs every day at 06:00 AM
-    // =========================================================
 
     @Scheduled(cron = "0 0 6 * * *")
     public void checkTodayPrices() {
@@ -32,11 +29,11 @@ public class PriceUpdateScheduler {
 
         if (todayPriceCount == 0) {
 
-            System.out.println( "WARNING: No egg prices found for today: " + today);
+            System.out.println("WARNING: No egg prices found for today: " + today);
 
         } else {
 
-            System.out.println( "Egg prices available for " + today + ". Total prices: " + todayPriceCount);
+            System.out.println("Egg prices available for " + today + ". Total prices: " + todayPriceCount);
         }
     }
 }

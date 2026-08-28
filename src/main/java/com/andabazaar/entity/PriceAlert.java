@@ -12,12 +12,10 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_price_alert_user",
-            columnList = "user_id"
-        ),
+            columnList = "user_id"),
         @Index(
             name = "idx_price_alert_market",
-            columnList = "market_id"
-        )
+            columnList = "market_id")
     }
 )
 @Getter
@@ -31,20 +29,12 @@ public class PriceAlert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // =========================================================
-    // USER
-    // =========================================================
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
         name = "user_id",
         nullable = false
     )
     private User user;
-
-    // =========================================================
-    // MARKET
-    // =========================================================
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
@@ -53,10 +43,6 @@ public class PriceAlert {
     )
     private Market market;
 
-    // =========================================================
-    // TARGET PRICE
-    // =========================================================
-
     @Column(
         nullable = false,
         precision = 10,
@@ -64,11 +50,8 @@ public class PriceAlert {
     )
     private BigDecimal targetPrice;
 
-    // =========================================================
     // ALERT CONDITION
     // DATABASE COLUMN = alert_condition
-    // JAVA FIELD = condition
-    // =========================================================
 
     @Column(
         name = "alert_condition",
@@ -77,17 +60,9 @@ public class PriceAlert {
     )
     private String condition;
 
-    // =========================================================
-    // ACTIVE
-    // =========================================================
-
     @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
-
-    // =========================================================
-    // CREATED AT
-    // =========================================================
 
     @Column(
         nullable = false,
@@ -95,15 +70,7 @@ public class PriceAlert {
     )
     private LocalDateTime createdAt;
 
-    // =========================================================
-    // UPDATED AT
-    // =========================================================
-
     private LocalDateTime updatedAt;
-
-    // =========================================================
-    // PRE PERSIST
-    // =========================================================
 
     @PrePersist
     protected void onCreate() {
@@ -111,10 +78,6 @@ public class PriceAlert {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
-
-    // =========================================================
-    // PRE UPDATE
-    // =========================================================
 
     @PreUpdate
     protected void onUpdate() {

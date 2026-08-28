@@ -61,22 +61,12 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final CouponRepository couponRepository;
 
-
-    // =========================================================
-    // ADMIN DASHBOARD
-    // =========================================================
-
     @Override
     public AdminDashboardDto getAdminDashboard() {
 
         LocalDate today = LocalDate.now();
 
         LocalDate yesterday = today.minusDays(1);
-
-
-        // =========================
-        // USERS
-        // =========================
 
         long totalUsers = userRepository.count();
 
@@ -86,11 +76,6 @@ public class DashboardServiceImpl implements DashboardService {
         long inactiveUsers =
                 userRepository.countByStatus( UserStatus.INACTIVE);
 
-
-        // =========================
-        // MARKETS
-        // =========================
-
         long totalMarkets =
                 marketRepository.count();
 
@@ -98,11 +83,6 @@ public class DashboardServiceImpl implements DashboardService {
                 marketRepository
                         .findByActiveTrueOrderByNameAsc()
                         .size();
-
-
-        // =========================
-        // EGG PRICES
-        // =========================
 
         long todayPriceCount =
                 eggPriceRepository
@@ -114,32 +94,17 @@ public class DashboardServiceImpl implements DashboardService {
                         .findByPriceDateOrderByPriceDateDesc( yesterday )
                         .size();
 
-
-        // =========================
-        // SUBSCRIPTIONS
-        // =========================
-
         long activeSubscriptions =
                 subscriptionRepository.countByStatus( SubscriptionStatus.ACTIVE);
 
         long expiredSubscriptions =
                 subscriptionRepository.countByStatus( SubscriptionStatus.EXPIRED);
 
-
-        // =========================
-        // PAYMENTS
-        // =========================
-
         long totalPayments =
                 paymentRepository.count();
 
         BigDecimal totalRevenue =
                 calculateTotalRevenue();
-
-
-        // =========================
-        // NOTIFICATIONS
-        // =========================
 
         long unreadNotifications =
                 notificationRepository
@@ -150,18 +115,8 @@ public class DashboardServiceImpl implements DashboardService {
                         )
                         .count();
 
-
-        // =========================
-        // PRICE REPORTS
-        // =========================
-
         long pendingPriceReports =
-                priceReportRepository.countByStatus( "PENDING");
-
-
-        // =========================
-        // SUPPORT TICKETS
-        // =========================
+                priceReportRepository.countByStatus("PENDING");
 
         long openSupportTickets =
                 supportTicketRepository
@@ -170,11 +125,6 @@ public class DashboardServiceImpl implements DashboardService {
         long closedSupportTickets =
                 supportTicketRepository
                         .countByStatus( TicketStatus.CLOSED);
-
-
-        // =========================
-        // COUPONS
-        // =========================
 
         long activeCoupons =
                 couponRepository
@@ -185,11 +135,6 @@ public class DashboardServiceImpl implements DashboardService {
                 couponRepository
                         .findByStatusOrderByCreatedAtDesc( CouponStatus.EXPIRED )
                         .size();
-
-
-        // =========================
-        // RESPONSE
-        // =========================
 
         return AdminDashboardDto.builder()
 
@@ -230,36 +175,23 @@ public class DashboardServiceImpl implements DashboardService {
                 .build();
     }
 
-
-    // =========================================================
-    // USER DASHBOARD
-    // =========================================================
-
     @Override
     public UserDashboardDto getUserDashboard( Long userId) {
 
         User user =
                 userRepository.findById(userId)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "User not found with id: "
+                                new ResourceNotFoundException("User not found with id: "
                                                 + userId
                                 ));
 
-
         LocalDate today =
                 LocalDate.now();
-
-
-        // =========================
-        // SUBSCRIPTION
-        // =========================
 
         UserSubscription subscription =
                 subscriptionRepository
                         .findFirstByUserIdAndStatusOrderByEndDateDesc( userId, SubscriptionStatus.ACTIVE )
                         .orElse(null);
-
 
         boolean hasActiveSubscription =
                 false;
@@ -276,7 +208,6 @@ public class DashboardServiceImpl implements DashboardService {
         long subscriptionDaysRemaining =
                 0;
 
-
         if (subscription != null
                 && subscription.getEndDate() != null
                 && !subscription.getEndDate()
@@ -284,13 +215,11 @@ public class DashboardServiceImpl implements DashboardService {
 
             hasActiveSubscription = true;
 
-
             if (subscription.getPlan() != null) {
 
                 subscriptionPlanName =
                         subscription.getPlan().getName();
             }
-
 
             subscriptionStartDate =
                     subscription.getStartDate();
@@ -298,15 +227,9 @@ public class DashboardServiceImpl implements DashboardService {
             subscriptionEndDate =
                     subscription.getEndDate();
 
-
             subscriptionDaysRemaining =
                     ChronoUnit.DAYS.between( today, subscriptionEndDate);
         }
-
-
-        // =========================
-        // FAVORITE MARKETS
-        // =========================
 
         long favoriteMarketCount =
                 favoriteMarketRepository
@@ -319,11 +242,6 @@ public class DashboardServiceImpl implements DashboardService {
                                         .equals(userId)
                         )
                         .count();
-
-
-        // =========================
-        // PRICE ALERTS
-        // =========================
 
         long activePriceAlerts =
                 priceAlertRepository
@@ -338,23 +256,12 @@ public class DashboardServiceImpl implements DashboardService {
                         )
                         .count();
 
-
-        // =========================
-        // PRICE REPORTS
-        // =========================
-
         long totalPriceReports =
                 priceReportRepository
                         .countByUserId(userId);
 
-
         long pendingPriceReports =
                 countPendingUserReports(userId);
-
-
-        // =========================
-        // NOTIFICATIONS
-        // =========================
 
         long unreadNotifications =
                 notificationRepository
@@ -364,11 +271,6 @@ public class DashboardServiceImpl implements DashboardService {
                                 Boolean.FALSE.equals( notification.getRead() )
                         )
                         .count();
-
-
-        // =========================
-        // SUPPORT TICKETS
-        // =========================
 
         long openSupportTickets =
                 supportTicketRepository
@@ -380,39 +282,21 @@ public class DashboardServiceImpl implements DashboardService {
                         )
                         .count();
 
-
-        // =========================
-        // TODAY EGG PRICES
-        // =========================
-
         List<EggPrice> todayPrices =
                 eggPriceRepository
                         .findByPriceDateOrderByPriceDateDesc( today);
 
-
         BigDecimal lowestEggPrice =
                 getLowestPrice(todayPrices);
-
 
         BigDecimal highestEggPrice =
                 getHighestPrice(todayPrices);
 
-
         BigDecimal averageEggPrice =
                 getAveragePrice(todayPrices);
 
-
-        // =========================
-        // USER NAME
-        // =========================
-
         String userName =
                 buildUserName(user);
-
-
-        // =========================
-        // RESPONSE
-        // =========================
 
         return UserDashboardDto.builder()
 
@@ -451,11 +335,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .build();
     }
 
-
-    // =========================================================
-    // TOTAL REVENUE
-    // =========================================================
-
     private BigDecimal calculateTotalRevenue() {
 
         return paymentRepository
@@ -465,11 +344,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .filter(amount -> amount != null)
                 .reduce( BigDecimal.ZERO, BigDecimal::add);
     }
-
-
-    // =========================================================
-    // PENDING PRICE REPORTS
-    // =========================================================
 
     private long countPendingUserReports( Long userId) {
 
@@ -481,11 +355,6 @@ public class DashboardServiceImpl implements DashboardService {
                 )
                 .count();
     }
-
-
-    // =========================================================
-    // LOWEST PRICE
-    // =========================================================
 
     private BigDecimal getLowestPrice( List<EggPrice> prices) {
 
@@ -500,11 +369,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .orElse(BigDecimal.ZERO);
     }
 
-
-    // =========================================================
-    // HIGHEST PRICE
-    // =========================================================
-
     private BigDecimal getHighestPrice( List<EggPrice> prices) {
 
         return prices.stream()
@@ -518,11 +382,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .orElse(BigDecimal.ZERO);
     }
 
-
-    // =========================================================
-    // AVERAGE PRICE
-    // =========================================================
-
     private BigDecimal getAveragePrice( List<EggPrice> prices) {
 
         List<BigDecimal> validPrices =
@@ -534,18 +393,15 @@ public class DashboardServiceImpl implements DashboardService {
 
                         .toList();
 
-
         if (validPrices.isEmpty()) {
 
             return BigDecimal.ZERO;
         }
 
-
         BigDecimal total =
                 validPrices.stream()
 
                         .reduce( BigDecimal.ZERO, BigDecimal::add);
-
 
         return total.divide(
                 BigDecimal.valueOf( validPrices.size()
@@ -554,11 +410,6 @@ public class DashboardServiceImpl implements DashboardService {
                 RoundingMode.HALF_UP);
     }
 
-
-    // =========================================================
-    // USER NAME
-    // =========================================================
-
     private String buildUserName( User user) {
 
         String firstName =
@@ -566,12 +417,10 @@ public class DashboardServiceImpl implements DashboardService {
                         ? user.getFirstName()
                         : "";
 
-
         String lastName =
                 user.getLastName() != null
                         ? user.getLastName()
                         : "";
-
 
         return (firstName + " " + lastName)
                 .trim();

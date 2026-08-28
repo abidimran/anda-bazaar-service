@@ -23,19 +23,11 @@ public class UserController {
 
     private final UserService userService;
 
-    // =========================================================
-    // CREATE USER
-    // =========================================================
-
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto request) {
 
  return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
-
-    // =========================================================
-    // GET USER
-    // =========================================================
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
@@ -43,29 +35,17 @@ public class UserController {
  return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    // =========================================================
-    // GET ALL USERS
-    // =========================================================
-
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
 
  return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // =========================================================
-    // UPDATE USER
-    // =========================================================
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto request) {
 
  return ResponseEntity.ok(userService.updateUser(id, request));
     }
-
-    // =========================================================
-    // DELETE USER
-    // =========================================================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
@@ -75,19 +55,11 @@ public class UserController {
  return ResponseEntity.noContent().build();
     }
 
-    // =========================================================
-    // USER PROFILE
-    // =========================================================
-
     @GetMapping("/{id}/profile")
     public ResponseEntity<UserProfileDto> getProfile(@PathVariable Long id) {
 
  return ResponseEntity.ok(userService.getProfile(id));
     }
-
-    // =========================================================
-    // CHANGE USER STATUS
-    // =========================================================
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<UserResponseDto> changeStatus(@PathVariable Long id, @RequestParam String status) {

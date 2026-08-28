@@ -2,10 +2,6 @@ package com.andabazaar.enums;
 
 public enum NotificationType {
 
-    // =========================================================
-    // SUBSCRIPTION
-    // =========================================================
-
     SUBSCRIPTION_PURCHASED,
 
     SUBSCRIPTION_ACTIVATED,
@@ -16,21 +12,11 @@ public enum NotificationType {
 
     SUBSCRIPTION_CANCELLED,
 
-
-    // =========================================================
-    // PAYMENT
-    // =========================================================
-
     PAYMENT_SUCCESS,
 
     PAYMENT_FAILED,
 
     PAYMENT_PENDING,
-
-
-    // =========================================================
-    // PRICE ALERT
-    // =========================================================
 
     PRICE_ALERT,
 
@@ -38,30 +24,15 @@ public enum NotificationType {
 
     PRICE_DECREASE,
 
-
-    // =========================================================
-    // PRICE REPORT
-    // =========================================================
-
     PRICE_REPORT_SUBMITTED,
 
     PRICE_REPORT_APPROVED,
 
     PRICE_REPORT_REJECTED,
 
-
-    // =========================================================
-    // MARKET
-    // =========================================================
-
     MARKET_ADDED,
 
     MARKET_UPDATED,
-
-
-    // =========================================================
-    // GENERAL
-    // =========================================================
 
     GENERAL,
 

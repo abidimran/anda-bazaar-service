@@ -30,10 +30,6 @@ public class PriceAnalyticsServiceImpl
     private final EggPriceRepository eggPriceRepository;
     private final MarketRepository marketRepository;
 
-    // =========================================================
-    // MARKET ANALYTICS
-    // =========================================================
-
     @Override
     public PriceAnalyticsResponseDto getMarketAnalytics( Long marketId, LocalDate startDate, LocalDate endDate) {
 
@@ -100,10 +96,6 @@ public class PriceAnalyticsServiceImpl
                 .build();
     }
 
-    // =========================================================
-    // MARKET STATISTICS
-    // =========================================================
-
     @Override
     public MarketStatisticsDto getMarketStatistics( Long marketId) {
 
@@ -142,10 +134,6 @@ public class PriceAnalyticsServiceImpl
                 .build();
     }
 
-    // =========================================================
-    // PRICE TREND
-    // =========================================================
-
     @Override
     public List<PriceTrendResponseDto> getPriceTrend( Long marketId, LocalDate startDate, LocalDate endDate) {
 
@@ -165,10 +153,6 @@ public class PriceAnalyticsServiceImpl
                 .toList();
     }
 
-    // =========================================================
-    // ALL MARKET STATISTICS
-    // =========================================================
-
     @Override
     public List<MarketStatisticsDto>
     getAllMarketStatistics() {
@@ -181,10 +165,6 @@ public class PriceAnalyticsServiceImpl
                 )
                 .toList();
     }
-
-    // =========================================================
-    // MAP TREND
-    // =========================================================
 
     private PriceTrendResponseDto mapTrend( EggPrice price) {
 
@@ -216,10 +196,6 @@ public class PriceAnalyticsServiceImpl
                 .build();
     }
 
-    // =========================================================
-    // LOWEST
-    // =========================================================
-
     private BigDecimal getLowestPrice( List<EggPrice> prices) {
 
         return prices.stream()
@@ -229,10 +205,6 @@ public class PriceAnalyticsServiceImpl
                 .orElse(BigDecimal.ZERO);
     }
 
-    // =========================================================
-    // HIGHEST
-    // =========================================================
-
     private BigDecimal getHighestPrice( List<EggPrice> prices) {
 
         return prices.stream()
@@ -241,10 +213,6 @@ public class PriceAnalyticsServiceImpl
                 .max(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
     }
-
-    // =========================================================
-    // AVERAGE
-    // =========================================================
 
     private BigDecimal getAveragePrice( List<EggPrice> prices) {
 
@@ -269,10 +237,6 @@ public class PriceAnalyticsServiceImpl
                 RoundingMode.HALF_UP);
     }
 
-    // =========================================================
-    // PERCENTAGE
-    // =========================================================
-
     private BigDecimal calculatePercentageChange( BigDecimal oldPrice, BigDecimal newPrice) {
 
         if (oldPrice == null
@@ -288,37 +252,26 @@ public class PriceAnalyticsServiceImpl
                 .divide( oldPrice, 2, RoundingMode.HALF_UP);
     }
 
-    // =========================================================
-    // FIND MARKET
-    // =========================================================
-
     private Market findMarket(Long marketId) {
 
         return marketRepository.findById(marketId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Market not found with id: "
+                        new ResourceNotFoundException("Market not found with id: "
                                         + marketId
                         ));
     }
-
-    // =========================================================
-    // VALIDATE DATES
-    // =========================================================
 
     private void validateDates( LocalDate startDate, LocalDate endDate) {
 
         if (startDate == null
                 || endDate == null) {
 
-            throw new BadRequestException(
-                    "Start date and end date are required");
+            throw new BadRequestException("Start date and end date are required");
         }
 
         if (startDate.isAfter(endDate)) {
 
-            throw new BadRequestException(
-                    "Start date cannot be after end date");
+            throw new BadRequestException("Start date cannot be after end date");
         }
     }
 }

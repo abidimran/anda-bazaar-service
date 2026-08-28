@@ -27,10 +27,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // =========================================================
-    // CREATE USER
-    // =========================================================
-
     @Override
     public UserResponseDto createUser(UserRequestDto request) {
 
@@ -44,8 +40,7 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.existsByEmail(email)) {
 
-            throw new BadRequestException(
-                    "Email already registered");
+            throw new BadRequestException("Email already registered");
         }
 
         // -----------------------------------------------------
@@ -56,8 +51,7 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.existsByPhone(phone)) {
 
-            throw new BadRequestException(
-                    "Phone number already registered");
+            throw new BadRequestException("Phone number already registered");
         }
 
         // -----------------------------------------------------
@@ -116,10 +110,6 @@ public class UserServiceImpl implements UserService {
         return mapToResponse(savedUser);
     }
 
-    // =========================================================
-    // GET USER BY ID
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public UserResponseDto getUserById(Long id) {
@@ -128,10 +118,6 @@ public class UserServiceImpl implements UserService {
 
         return mapToResponse(user);
     }
-
-    // =========================================================
-    // GET ALL USERS
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -142,10 +128,6 @@ public class UserServiceImpl implements UserService {
                 .map(this::mapToResponse)
                 .toList();
     }
-
-    // =========================================================
-    // UPDATE USER
-    // =========================================================
 
     @Override
     public UserResponseDto updateUser( Long id, UserRequestDto request) {
@@ -167,8 +149,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getEmail().equals(email)
                 && userRepository.existsByEmail(email)) {
 
-            throw new BadRequestException(
-                    "Email already registered");
+            throw new BadRequestException("Email already registered");
         }
 
         // -----------------------------------------------------
@@ -184,8 +165,7 @@ public class UserServiceImpl implements UserService {
         if (!user.getPhone().equals(phone)
                 && userRepository.existsByPhone(phone)) {
 
-            throw new BadRequestException(
-                    "Phone number already registered");
+            throw new BadRequestException("Phone number already registered");
         }
 
         // -----------------------------------------------------
@@ -256,10 +236,6 @@ public class UserServiceImpl implements UserService {
         return mapToResponse(updatedUser);
     }
 
-    // =========================================================
-    // DELETE USER
-    // =========================================================
-
     @Override
     public void deleteUser(Long id) {
 
@@ -267,10 +243,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
     }
-
-    // =========================================================
-    // GET USER PROFILE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -315,10 +287,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    // =========================================================
-    // CHANGE USER STATUS
-    // =========================================================
-
     @Override
     public UserResponseDto changeUserStatus( Long id, String status) {
 
@@ -326,8 +294,7 @@ public class UserServiceImpl implements UserService {
 
         if (status == null || status.isBlank()) {
 
-            throw new BadRequestException(
-                    "User status is required");
+            throw new BadRequestException("User status is required");
         }
 
         try {
@@ -339,8 +306,7 @@ public class UserServiceImpl implements UserService {
 
         } catch (IllegalArgumentException ex) {
 
-            throw new BadRequestException(
-                    "Invalid user status: " + status);
+            throw new BadRequestException("Invalid user status: " + status);
         }
 
         User updatedUser =
@@ -349,30 +315,20 @@ public class UserServiceImpl implements UserService {
         return mapToResponse(updatedUser);
     }
 
-    // =========================================================
-    // FIND USER
-    // =========================================================
-
     private User findUser(Long id) {
 
         if (id == null) {
 
-            throw new BadRequestException(
-                    "User ID is required");
+            throw new BadRequestException("User ID is required");
         }
 
         return userRepository.findById(id)
 
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: "
+                        new ResourceNotFoundException("User not found with id: "
                                         + id
                         ));
     }
-
-    // =========================================================
-    // MAP USER -> RESPONSE DTO
-    // =========================================================
 
     private UserResponseDto mapToResponse( User user) {
 

@@ -33,8 +33,7 @@ public class CouponServiceImpl implements CouponService {
         if (couponRepository.existsByCodeIgnoreCase(
                 request.getCode())) {
 
-            throw new BadRequestException(
-                    "Coupon code already exists");
+            throw new BadRequestException("Coupon code already exists");
         }
 
         validateDiscount(request);
@@ -113,8 +112,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository
                 .findByCodeIgnoreCase(code)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Coupon not found with code: "
+                        new ResourceNotFoundException("Coupon not found with code: "
                                         + code
                         ));
 
@@ -181,52 +179,44 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository
                 .findByCodeIgnoreCase(code)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Coupon not found"
-                        ));
+                        new ResourceNotFoundException("Coupon not found"));
 
         LocalDateTime now = LocalDateTime.now();
 
         if (!Boolean.TRUE.equals(
                 coupon.getActive())) {
 
-            throw new BadRequestException(
-                    "Coupon is inactive");
+            throw new BadRequestException("Coupon is inactive");
         }
 
         if (coupon.getStatus()
                 != CouponStatus.ACTIVE) {
 
-            throw new BadRequestException(
-                    "Coupon is not active");
+            throw new BadRequestException("Coupon is not active");
         }
 
         if (now.isBefore(
                 coupon.getStartDate())) {
 
-            throw new BadRequestException(
-                    "Coupon is not active yet");
+            throw new BadRequestException("Coupon is not active yet");
         }
 
         if (now.isAfter(
                 coupon.getEndDate())) {
 
-            throw new BadRequestException(
-                    "Coupon has expired");
+            throw new BadRequestException("Coupon has expired");
         }
 
         if (coupon.getUsedCount()
                 >= coupon.getUsageLimit()) {
 
-            throw new BadRequestException(
-                    "Coupon usage limit reached");
+            throw new BadRequestException("Coupon usage limit reached");
         }
 
         if (orderAmount.compareTo(
                 coupon.getMinimumOrderAmount()) < 0) {
 
-            throw new BadRequestException(
-                    "Minimum order amount is "
+            throw new BadRequestException("Minimum order amount is "
                             + coupon.getMinimumOrderAmount());
         }
 
@@ -257,8 +247,7 @@ public class CouponServiceImpl implements CouponService {
         return couponRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Coupon not found with id: "
+                        new ResourceNotFoundException("Coupon not found with id: "
                                         + id
                         ));
     }
@@ -267,8 +256,7 @@ public class CouponServiceImpl implements CouponService {
 
         if (endDate.isBefore(startDate)) {
 
-            throw new BadRequestException(
-                    "End date cannot be before start date");
+            throw new BadRequestException("End date cannot be before start date");
         }
     }
 
@@ -281,8 +269,7 @@ public class CouponServiceImpl implements CouponService {
                     .compareTo( BigDecimal.valueOf(100)
                     ) > 0) {
 
-                throw new BadRequestException(
-                        "Percentage discount cannot exceed 100");
+                throw new BadRequestException("Percentage discount cannot exceed 100");
             }
         }
     }
@@ -296,8 +283,7 @@ public class CouponServiceImpl implements CouponService {
             if (couponRepository
                     .existsByCodeIgnoreCase( newCode )) {
 
-                throw new BadRequestException(
-                        "Coupon code already exists");
+                throw new BadRequestException("Coupon code already exists");
             }
         }
     }

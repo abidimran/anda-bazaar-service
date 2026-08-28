@@ -43,8 +43,7 @@ public class SubscriptionServiceImpl
         if (planRepository.existsByNameIgnoreCase(
                 request.getName())) {
 
-            throw new BadRequestException(
-                    "Subscription plan already exists");
+            throw new BadRequestException("Subscription plan already exists");
         }
 
         SubscriptionPlan plan =
@@ -109,8 +108,7 @@ public class SubscriptionServiceImpl
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: "
+                        new ResourceNotFoundException("User not found with id: "
                                         + userId));
 
         SubscriptionPlan plan =
@@ -118,8 +116,7 @@ public class SubscriptionServiceImpl
 
         if (!Boolean.TRUE.equals(plan.getActive())) {
 
-            throw new BadRequestException(
-                    "Subscription plan is not active");
+            throw new BadRequestException("Subscription plan is not active");
         }
 
         LocalDate today = LocalDate.now();
@@ -153,15 +150,12 @@ public class SubscriptionServiceImpl
                 subscriptionRepository
                     .findFirstByUserIdAndStatusOrderByEndDateDesc( userId, SubscriptionStatus.ACTIVE )
                     .orElseThrow(() ->
-                            new ResourceNotFoundException(
-                                "No active subscription found"
-                            ));
+                            new ResourceNotFoundException("No active subscription found"));
 
         if (subscription.getEndDate()
                 .isBefore(LocalDate.now())) {
 
-            throw new BadRequestException(
-                    "Subscription has expired");
+            throw new BadRequestException("Subscription has expired");
         }
 
         return mapSubscription(subscription);
@@ -212,8 +206,7 @@ public class SubscriptionServiceImpl
 
         return planRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Subscription plan not found with id: "
+                        new ResourceNotFoundException("Subscription plan not found with id: "
                                         + id));
     }
 

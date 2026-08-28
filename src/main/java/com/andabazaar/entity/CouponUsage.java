@@ -12,12 +12,10 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_coupon_usage_coupon",
-            columnList = "coupon_id"
-        ),
+            columnList = "coupon_id"),
         @Index(
             name = "idx_coupon_usage_user",
-            columnList = "user_id"
-        )
+            columnList = "user_id")
     }
 )
 @Getter

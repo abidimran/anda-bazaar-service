@@ -23,15 +23,13 @@ public class EggPriceRequestDto {
     @NotNull(message = "Price per egg is required")
     @DecimalMin(
         value = "0.01",
-        message = "Price must be greater than 0"
-    )
+        message = "Price must be greater than 0")
     private BigDecimal pricePerEgg;
 
     @NotNull(message = "Price per tray is required")
     @DecimalMin(
         value = "0.01",
-        message = "Price must be greater than 0"
-    )
+        message = "Price must be greater than 0")
     private BigDecimal pricePerTray;
 
     @Size(max = 500)

@@ -32,10 +32,6 @@ public class EggPriceServiceImpl implements EggPriceService {
     // Subscription service required for user price access
     private final SubscriptionService subscriptionService;
 
-    // =========================================================
-    // ADMIN - CREATE PRICE
-    // =========================================================
-
     @Override
     public EggPriceResponseDto createPrice( EggPriceRequestDto request) {
 
@@ -45,8 +41,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 request.getMarketId(),
                 request.getPriceDate())) {
 
-            throw new BadRequestException(
-                    "Price already exists for this market and date");
+            throw new BadRequestException("Price already exists for this market and date");
         }
 
         BigDecimal previousPrice = getPreviousPrice( request.getMarketId(), request.getPriceDate());
@@ -72,10 +67,6 @@ public class EggPriceServiceImpl implements EggPriceService {
                 eggPriceRepository.save(eggPrice));
     }
 
-    // =========================================================
-    // ADMIN - UPDATE PRICE
-    // =========================================================
-
     @Override
     public EggPriceResponseDto updatePrice( Long id, EggPriceRequestDto request) {
 
@@ -91,8 +82,7 @@ public class EggPriceServiceImpl implements EggPriceService {
             if (eggPriceRepository
                     .existsByMarketIdAndPriceDate( request.getMarketId(), request.getPriceDate())) {
 
-                throw new BadRequestException(
-                        "Price already exists for this market and date");
+                throw new BadRequestException("Price already exists for this market and date");
             }
         }
 
@@ -116,20 +106,12 @@ public class EggPriceServiceImpl implements EggPriceService {
                 eggPriceRepository.save(eggPrice));
     }
 
-    // =========================================================
-    // GET PRICE BY ID
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public EggPriceResponseDto getPriceById(Long id) {
 
         return mapToResponse(findPrice(id));
     }
-
-    // =========================================================
-    // GET MARKET PRICE BY DATE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -138,15 +120,10 @@ public class EggPriceServiceImpl implements EggPriceService {
         EggPrice price = eggPriceRepository
                 .findByMarketIdAndPriceDate( marketId, date)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Egg price not found for market and date"));
+                        new ResourceNotFoundException("Egg price not found for market and date"));
 
         return mapToResponse(price);
     }
-
-    // =========================================================
-    // TODAY PRICES
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -164,10 +141,6 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .map(this::mapToResponse)
                 .toList();
     }
-
-    // =========================================================
-    // YESTERDAY PRICES
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -187,18 +160,13 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .toList();
     }
 
-    // =========================================================
-    // PRICE HISTORY - PUBLIC/ADMIN
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<EggPriceResponseDto> getPriceHistory( Long marketId, LocalDate startDate, LocalDate endDate) {
 
         if (startDate.isAfter(endDate)) {
 
-            throw new BadRequestException(
-                    "Start date cannot be after end date");
+            throw new BadRequestException("Start date cannot be after end date");
         }
 
         return eggPriceRepository
@@ -209,15 +177,12 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .toList();
     }
 
-    // =========================================================
     // USER PRICE ACCESS
     //
     // ACTIVE SUBSCRIPTION:
     // Today + Yesterday + Older
     //
     // NO/EXPIRED SUBSCRIPTION:
-    // Only 2 days old and older
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -254,18 +219,13 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .toList();
     }
 
-    // =========================================================
-    // USER PRICE HISTORY
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<EggPriceResponseDto> getUserPriceHistory( Long userId, Long marketId, LocalDate startDate, LocalDate endDate) {
 
         if (startDate.isAfter(endDate)) {
 
-            throw new BadRequestException(
-                    "Start date cannot be after end date");
+            throw new BadRequestException("Start date cannot be after end date");
         }
 
         boolean subscribed =
@@ -287,14 +247,12 @@ public class EggPriceServiceImpl implements EggPriceService {
 
             if (endDate.isAfter(maximumAllowedDate)) {
 
-                throw new BadRequestException(
-                        "Active subscription is required to view today and yesterday prices");
+                throw new BadRequestException("Active subscription is required to view today and yesterday prices");
             }
 
             if (startDate.isAfter(maximumAllowedDate)) {
 
-                throw new BadRequestException(
-                        "Active subscription is required to view recent prices");
+                throw new BadRequestException("Active subscription is required to view recent prices");
             }
 
             endDate = maximumAllowedDate;
@@ -308,10 +266,6 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .toList();
     }
 
-    // =========================================================
-    // DELETE PRICE - SOFT DELETE
-    // =========================================================
-
     @Override
     public void deletePrice(Long id) {
 
@@ -322,33 +276,19 @@ public class EggPriceServiceImpl implements EggPriceService {
         eggPriceRepository.save(eggPrice);
     }
 
-    // =========================================================
-    // FIND PRICE
-    // =========================================================
-
     private EggPrice findPrice(Long id) {
 
         return eggPriceRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Egg price not found with id: " + id));
+                        new ResourceNotFoundException("Egg price not found with id: " + id));
     }
-
-    // =========================================================
-    // FIND MARKET
-    // =========================================================
 
     private Market findMarket(Long id) {
 
         return marketRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Market not found with id: " + id));
+                        new ResourceNotFoundException("Market not found with id: " + id));
     }
-
-    // =========================================================
-    // PREVIOUS PRICE
-    // =========================================================
 
     private BigDecimal getPreviousPrice( Long marketId, LocalDate date) {
 
@@ -364,10 +304,6 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .map(EggPrice::getPricePerEgg)
                 .orElse(null);
     }
-
-    // =========================================================
-    // PRICE CHANGE TYPE
-    // =========================================================
 
     private String calculateChangeType( BigDecimal previousPrice, BigDecimal currentPrice) {
 
@@ -389,10 +325,6 @@ public class EggPriceServiceImpl implements EggPriceService {
         return "NO_CHANGE";
     }
 
-    // =========================================================
-    // PRICE CHANGE AMOUNT
-    // =========================================================
-
     private BigDecimal calculateChangeAmount( BigDecimal previousPrice, BigDecimal currentPrice) {
 
         if (previousPrice == null) {
@@ -401,10 +333,6 @@ public class EggPriceServiceImpl implements EggPriceService {
 
         return currentPrice.subtract(previousPrice);
     }
-
-    // =========================================================
-    // MAP ENTITY TO RESPONSE DTO
-    // =========================================================
 
     private EggPriceResponseDto mapToResponse( EggPrice price) {
 

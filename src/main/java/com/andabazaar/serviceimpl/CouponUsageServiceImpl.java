@@ -27,39 +27,31 @@ public class CouponUsageServiceImpl implements CouponUsageService {
     private final CouponRepository couponRepository;
     private final UserRepository userRepository;
 
-    // =========================================================
-    // RECORD COUPON USAGE
-    // =========================================================
-
     @Override
     public CouponUsage recordUsage( Long couponId, Long userId) {
 
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Coupon not found with id: "
+                        new ResourceNotFoundException("Coupon not found with id: "
                                         + couponId
                         ));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: "
+                        new ResourceNotFoundException("User not found with id: "
                                         + userId
                         ));
 
         if (coupon.getUsedCount()
                 >= coupon.getUsageLimit()) {
 
-            throw new BadRequestException(
-                    "Coupon usage limit reached");
+            throw new BadRequestException("Coupon usage limit reached");
         }
 
         if (couponUsageRepository
                 .existsByCouponIdAndUserId( couponId, userId )) {
 
-            throw new BadRequestException(
-                    "User has already used this coupon");
+            throw new BadRequestException("User has already used this coupon");
         }
 
         CouponUsage usage = CouponUsage.builder()
@@ -77,25 +69,16 @@ public class CouponUsageServiceImpl implements CouponUsageService {
         return couponUsageRepository.save(usage);
     }
 
-    // =========================================================
-    // GET USAGE BY ID
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public CouponUsage getUsageById(Long id) {
 
         return couponUsageRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Coupon usage not found with id: "
+                        new ResourceNotFoundException("Coupon usage not found with id: "
                                         + id
                         ));
     }
-
-    // =========================================================
-    // GET ALL USAGE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -104,27 +87,18 @@ public class CouponUsageServiceImpl implements CouponUsageService {
         return couponUsageRepository.findAll();
     }
 
-    // =========================================================
-    // GET USER USAGE
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<CouponUsage> getUserUsage( Long userId) {
 
         if (!userRepository.existsById(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return couponUsageRepository
                 .findByUserIdOrderByUsedAtDesc(userId);
     }
-
-    // =========================================================
-    // GET COUPON USAGE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -132,18 +106,13 @@ public class CouponUsageServiceImpl implements CouponUsageService {
 
         if (!couponRepository.existsById(couponId)) {
 
-            throw new ResourceNotFoundException(
-                    "Coupon not found with id: "
+            throw new ResourceNotFoundException("Coupon not found with id: "
                             + couponId);
         }
 
         return couponUsageRepository
                 .findByCouponIdOrderByUsedAtDesc( couponId);
     }
-
-    // =========================================================
-    // GET USER + COUPON USAGE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -153,10 +122,6 @@ public class CouponUsageServiceImpl implements CouponUsageService {
                 .findByUserIdAndCouponIdOrderByUsedAtDesc( userId, couponId);
     }
 
-    // =========================================================
-    // COUNT USER USAGE
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public long countUserUsage( Long userId) {
@@ -164,10 +129,6 @@ public class CouponUsageServiceImpl implements CouponUsageService {
         return couponUsageRepository
                 .countByUserId(userId);
     }
-
-    // =========================================================
-    // COUNT COUPON USAGE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)

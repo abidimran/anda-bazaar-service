@@ -31,11 +31,6 @@ public class PriceAlertServiceImpl
 
     private final MarketRepository marketRepository;
 
-
-    // =========================================================
-    // CREATE ALERT
-    // =========================================================
-
     @Override
     public PriceAlertResponseDto createAlert( PriceAlertRequestDto request) {
 
@@ -45,18 +40,15 @@ public class PriceAlertServiceImpl
 
         validateRequest(request);
 
-
         // -----------------------------------------------------
         // FIND USER
         // -----------------------------------------------------
 
         User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "User not found with id: "
+                new ResourceNotFoundException("User not found with id: "
                                 + request.getUserId()
                 ));
-
 
         // -----------------------------------------------------
         // FIND MARKET
@@ -64,11 +56,9 @@ public class PriceAlertServiceImpl
 
         Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "Market not found with id: "
+                new ResourceNotFoundException("Market not found with id: "
                                 + request.getMarketId()
                 ));
-
 
         // -----------------------------------------------------
         // CREATE ALERT
@@ -96,7 +86,6 @@ public class PriceAlertServiceImpl
 
                 .build();
 
-
         // -----------------------------------------------------
         // SAVE ALERT
         // -----------------------------------------------------
@@ -104,18 +93,12 @@ public class PriceAlertServiceImpl
         PriceAlert savedAlert =
                 priceAlertRepository.save(alert);
 
-
         // -----------------------------------------------------
         // RETURN RESPONSE
         // -----------------------------------------------------
 
         return mapToResponse(savedAlert);
     }
-
-
-    // =========================================================
-    // GET ALERT BY ID
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -125,11 +108,6 @@ public class PriceAlertServiceImpl
 
         return mapToResponse(alert);
     }
-
-
-    // =========================================================
-    // GET USER ALERTS
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -141,11 +119,9 @@ public class PriceAlertServiceImpl
 
         if (!userRepository.existsById(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "User not found with id: "
+            throw new ResourceNotFoundException("User not found with id: "
                             + userId);
         }
-
 
         // -----------------------------------------------------
         // GET ALERTS
@@ -161,11 +137,6 @@ public class PriceAlertServiceImpl
                 .toList();
     }
 
-
-    // =========================================================
-    // UPDATE ALERT
-    // =========================================================
-
     @Override
     public PriceAlertResponseDto updateAlert( Long id, PriceAlertRequestDto request) {
 
@@ -175,13 +146,11 @@ public class PriceAlertServiceImpl
 
         validateRequest(request);
 
-
         // -----------------------------------------------------
         // FIND EXISTING ALERT
         // -----------------------------------------------------
 
         PriceAlert alert = findAlert(id);
-
 
         // -----------------------------------------------------
         // FIND USER
@@ -189,11 +158,9 @@ public class PriceAlertServiceImpl
 
         User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "User not found with id: "
+                new ResourceNotFoundException("User not found with id: "
                                 + request.getUserId()
                 ));
-
 
         // -----------------------------------------------------
         // FIND MARKET
@@ -201,11 +168,9 @@ public class PriceAlertServiceImpl
 
         Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "Market not found with id: "
+                new ResourceNotFoundException("Market not found with id: "
                                 + request.getMarketId()
                 ));
-
 
         // -----------------------------------------------------
         // ACTIVE STATUS
@@ -215,7 +180,6 @@ public class PriceAlertServiceImpl
                 request.getActive() != null
                         ? request.getActive()
                         : Boolean.TRUE.equals( alert.getActive());
-
 
         // -----------------------------------------------------
         // UPDATE ALERT
@@ -231,7 +195,6 @@ public class PriceAlertServiceImpl
 
         alert.setActive(active);
 
-
         // -----------------------------------------------------
         // SAVE
         // -----------------------------------------------------
@@ -239,18 +202,12 @@ public class PriceAlertServiceImpl
         PriceAlert updatedAlert =
                 priceAlertRepository.save(alert);
 
-
         // -----------------------------------------------------
         // RETURN RESPONSE
         // -----------------------------------------------------
 
         return mapToResponse(updatedAlert);
     }
-
-
-    // =========================================================
-    // DELETE ALERT
-    // =========================================================
 
     @Override
     public void deleteAlert( Long id) {
@@ -261,18 +218,12 @@ public class PriceAlertServiceImpl
 
         PriceAlert alert = findAlert(id);
 
-
         // -----------------------------------------------------
         // DELETE
         // -----------------------------------------------------
 
         priceAlertRepository.delete(alert);
     }
-
-
-    // =========================================================
-    // TOGGLE ALERT
-    // =========================================================
 
     @Override
     public PriceAlertResponseDto toggleAlert( Long id) {
@@ -283,7 +234,6 @@ public class PriceAlertServiceImpl
 
         PriceAlert alert = findAlert(id);
 
-
         // -----------------------------------------------------
         // TOGGLE STATUS
         // -----------------------------------------------------
@@ -291,9 +241,7 @@ public class PriceAlertServiceImpl
         boolean newStatus =
                 !Boolean.TRUE.equals( alert.getActive());
 
-
         alert.setActive(newStatus);
-
 
         // -----------------------------------------------------
         // SAVE
@@ -302,7 +250,6 @@ public class PriceAlertServiceImpl
         PriceAlert updatedAlert =
                 priceAlertRepository.save(alert);
 
-
         // -----------------------------------------------------
         // RETURN RESPONSE
         // -----------------------------------------------------
@@ -310,27 +257,16 @@ public class PriceAlertServiceImpl
         return mapToResponse(updatedAlert);
     }
 
-
-    // =========================================================
-    // FIND ALERT
-    // =========================================================
-
     private PriceAlert findAlert( Long id) {
 
         return priceAlertRepository
                 .findById(id)
 
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Price alert not found with id: "
+                        new ResourceNotFoundException("Price alert not found with id: "
                                         + id
                         ));
     }
-
-
-    // =========================================================
-    // VALIDATE REQUEST
-    // =========================================================
 
     private void validateRequest( PriceAlertRequestDto request) {
 
@@ -340,10 +276,8 @@ public class PriceAlertServiceImpl
 
         if (request == null) {
 
-            throw new BadRequestException(
-                    "Price alert request cannot be null");
+            throw new BadRequestException("Price alert request cannot be null");
         }
-
 
         // -----------------------------------------------------
         // USER ID
@@ -351,10 +285,8 @@ public class PriceAlertServiceImpl
 
         if (request.getUserId() == null) {
 
-            throw new BadRequestException(
-                    "User id is required");
+            throw new BadRequestException("User id is required");
         }
-
 
         // -----------------------------------------------------
         // MARKET ID
@@ -362,10 +294,8 @@ public class PriceAlertServiceImpl
 
         if (request.getMarketId() == null) {
 
-            throw new BadRequestException(
-                    "Market id is required");
+            throw new BadRequestException("Market id is required");
         }
-
 
         // -----------------------------------------------------
         // TARGET PRICE
@@ -373,10 +303,8 @@ public class PriceAlertServiceImpl
 
         if (request.getTargetPrice() == null) {
 
-            throw new BadRequestException(
-                    "Target price is required");
+            throw new BadRequestException("Target price is required");
         }
-
 
         // -----------------------------------------------------
         // NEGATIVE PRICE
@@ -384,10 +312,8 @@ public class PriceAlertServiceImpl
 
         if (request.getTargetPrice().signum() < 0) {
 
-            throw new BadRequestException(
-                    "Target price cannot be negative");
+            throw new BadRequestException("Target price cannot be negative");
         }
-
 
         // -----------------------------------------------------
         // CONDITION
@@ -396,10 +322,8 @@ public class PriceAlertServiceImpl
         if (request.getCondition() == null
                 || request.getCondition().isBlank()) {
 
-            throw new BadRequestException(
-                    "Alert condition is required");
+            throw new BadRequestException("Alert condition is required");
         }
-
 
         // -----------------------------------------------------
         // CONDITION LENGTH
@@ -407,15 +331,9 @@ public class PriceAlertServiceImpl
 
         if (request.getCondition().length() > 20) {
 
-            throw new BadRequestException(
-                    "Alert condition cannot exceed 20 characters");
+            throw new BadRequestException("Alert condition cannot exceed 20 characters");
         }
     }
-
-
-    // =========================================================
-    // ENTITY -> RESPONSE DTO
-    // =========================================================
 
     private PriceAlertResponseDto mapToResponse( PriceAlert alert) {
 

@@ -26,25 +26,19 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // =========================================================
-    // CREATE ADMIN
-    // =========================================================
-
     @Override
     public UserResponseDto createAdmin( UserRequestDto request) {
 
         if (userRepository.existsByEmail(
                 request.getEmail())) {
 
-            throw new BadRequestException(
-                    "Email already registered");
+            throw new BadRequestException("Email already registered");
         }
 
         if (userRepository.existsByPhone(
                 request.getPhone())) {
 
-            throw new BadRequestException(
-                    "Phone number already registered");
+            throw new BadRequestException("Phone number already registered");
         }
 
         User admin = User.builder()
@@ -68,10 +62,6 @@ public class AdminServiceImpl implements AdminService {
         return mapToResponse(savedAdmin);
     }
 
-    // =========================================================
-    // GET ALL USERS
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<UserResponseDto> getAllUsers() {
@@ -82,10 +72,6 @@ public class AdminServiceImpl implements AdminService {
                 .toList();
     }
 
-    // =========================================================
-    // GET USER
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public UserResponseDto getUser(Long id) {
@@ -94,10 +80,6 @@ public class AdminServiceImpl implements AdminService {
 
         return mapToResponse(user);
     }
-
-    // =========================================================
-    // CHANGE STATUS
-    // =========================================================
 
     @Override
     public UserResponseDto changeUserStatus( Long id, String status) {
@@ -113,17 +95,12 @@ public class AdminServiceImpl implements AdminService {
 
         } catch (IllegalArgumentException ex) {
 
-            throw new BadRequestException(
-                    "Invalid user status: " + status);
+            throw new BadRequestException("Invalid user status: " + status);
         }
 
         return mapToResponse(
                 userRepository.save(user));
     }
-
-    // =========================================================
-    // DELETE USER
-    // =========================================================
 
     @Override
     public void deleteUser(Long id) {
@@ -133,22 +110,13 @@ public class AdminServiceImpl implements AdminService {
         userRepository.delete(user);
     }
 
-    // =========================================================
-    // FIND USER
-    // =========================================================
-
     private User findUser(Long id) {
 
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: "
+                        new ResourceNotFoundException("User not found with id: "
                                         + id));
     }
-
-    // =========================================================
-    // MAP RESPONSE
-    // =========================================================
 
     private UserResponseDto mapToResponse( User user) {
 

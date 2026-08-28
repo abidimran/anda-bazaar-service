@@ -30,8 +30,7 @@ public class UserRequestDto {
     @NotBlank(message = "Phone is required")
     @Pattern(
         regexp = "^[0-9]{10,15}$",
-        message = "Phone must contain 10 to 15 digits"
-    )
+        message = "Phone must contain 10 to 15 digits")
     private String phone;
 
     @NotBlank(message = "Password is required")

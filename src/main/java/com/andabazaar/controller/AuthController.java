@@ -23,29 +23,17 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // =====================================================
-    // REGISTER
-    // =====================================================
-
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto request) {
 
  return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
     }
 
-    // =====================================================
-    // LOGIN
-    // =====================================================
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
 
  return ResponseEntity.ok(authService.login(request));
     }
-
-    // =====================================================
-    // CURRENT LOGGED-IN USER
-    // =====================================================
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getCurrentUser( Authentication authentication) {

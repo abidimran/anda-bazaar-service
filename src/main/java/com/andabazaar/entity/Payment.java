@@ -15,16 +15,13 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_payment_user",
-            columnList = "user_id"
-        ),
+            columnList = "user_id"),
         @Index(
             name = "idx_payment_transaction",
-            columnList = "transaction_id"
-        ),
+            columnList = "transaction_id"),
         @Index(
             name = "idx_payment_razorpay_order",
-            columnList = "razorpay_order_id"
-        )
+            columnList = "razorpay_order_id")
     }
 )
 @Getter

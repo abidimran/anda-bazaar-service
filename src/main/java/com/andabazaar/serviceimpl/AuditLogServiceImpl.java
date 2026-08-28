@@ -34,8 +34,7 @@ public class AuditLogServiceImpl implements AuditLogService {
 
             user = userRepository.findById( request.getUserId()
             ).orElseThrow(() ->
-                    new ResourceNotFoundException(
-                            "User not found with id: "
+                    new ResourceNotFoundException("User not found with id: "
                                     + request.getUserId()
                     ));
         }
@@ -87,8 +86,7 @@ public class AuditLogServiceImpl implements AuditLogService {
 
         if (!userRepository.existsById(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "User not found with id: "
+            throw new ResourceNotFoundException("User not found with id: "
                             + userId);
         }
 
@@ -145,8 +143,7 @@ public class AuditLogServiceImpl implements AuditLogService {
 
         return auditLogRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Audit log not found with id: "
+                        new ResourceNotFoundException("Audit log not found with id: "
                                         + id
                         ));
     }

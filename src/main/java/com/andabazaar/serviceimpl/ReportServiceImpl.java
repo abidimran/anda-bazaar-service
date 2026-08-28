@@ -31,16 +31,11 @@ public class ReportServiceImpl implements ReportService {
 
     private final MarketRepository marketRepository;
 
-    // =========================================================
-    // CREATE REPORT
-    // =========================================================
-
     @Override
     public PriceReportResponseDto createReport( PriceReportRequestDto request) {
 
         if (request == null) {
-            throw new IllegalArgumentException(
-                    "Report request cannot be null");
+            throw new IllegalArgumentException("Report request cannot be null");
         }
 
         // -----------------------------------------------------
@@ -49,8 +44,7 @@ public class ReportServiceImpl implements ReportService {
 
         User user = userRepository.findById( request.getUserId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "User not found with id: "
+                new ResourceNotFoundException("User not found with id: "
                                 + request.getUserId()
                 ));
 
@@ -60,8 +54,7 @@ public class ReportServiceImpl implements ReportService {
 
         Market market = marketRepository.findById( request.getMarketId()
         ).orElseThrow(() ->
-                new ResourceNotFoundException(
-                        "Market not found with id: "
+                new ResourceNotFoundException("Market not found with id: "
                                 + request.getMarketId()
                 ));
 
@@ -89,10 +82,6 @@ public class ReportServiceImpl implements ReportService {
         return convertToResponse(saved);
     }
 
-    // =========================================================
-    // GET BY ID
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public PriceReportResponseDto getReportById( Long id) {
@@ -100,17 +89,12 @@ public class ReportServiceImpl implements ReportService {
         PriceReport report =
                 priceReportRepository.findById(id)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Price report not found with id: "
+                                new ResourceNotFoundException("Price report not found with id: "
                                                 + id
                                 ));
 
         return convertToResponse(report);
     }
-
-    // =========================================================
-    // GET ALL
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -123,10 +107,6 @@ public class ReportServiceImpl implements ReportService {
                 .collect(Collectors.toList());
     }
 
-    // =========================================================
-    // GET USER REPORTS
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<PriceReportResponseDto> getUserReports( Long userId) {
@@ -137,10 +117,6 @@ public class ReportServiceImpl implements ReportService {
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
-
-    // =========================================================
-    // GET MARKET REPORTS
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -153,17 +129,12 @@ public class ReportServiceImpl implements ReportService {
                 .collect(Collectors.toList());
     }
 
-    // =========================================================
-    // GET BY STATUS
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<PriceReportResponseDto> getReportsByStatus( String status) {
 
         if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Report status is required");
+            throw new IllegalArgumentException("Report status is required");
         }
 
         return priceReportRepository
@@ -173,10 +144,6 @@ public class ReportServiceImpl implements ReportService {
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
-
-    // =========================================================
-    // GET REVIEWED REPORTS
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -189,31 +156,24 @@ public class ReportServiceImpl implements ReportService {
                 .collect(Collectors.toList());
     }
 
-    // =========================================================
-    // REVIEW REPORT
-    // =========================================================
-
     @Override
     public PriceReportResponseDto reviewReport( Long id, PriceReportReviewRequestDto request) {
 
         if (request == null) {
-            throw new IllegalArgumentException(
-                    "Review request cannot be null");
+            throw new IllegalArgumentException("Review request cannot be null");
         }
 
         PriceReport report =
                 priceReportRepository.findById(id)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Price report not found with id: "
+                                new ResourceNotFoundException("Price report not found with id: "
                                                 + id
                                 ));
 
         if (request.getStatus() == null
                 || request.getStatus().trim().isEmpty()) {
 
-            throw new IllegalArgumentException(
-                    "Status is required");
+            throw new IllegalArgumentException("Status is required");
         }
 
         String status =
@@ -228,8 +188,7 @@ public class ReportServiceImpl implements ReportService {
         if (!status.equals("CONFIRMED")
                 && !status.equals("REJECTED")) {
 
-            throw new IllegalArgumentException(
-                    "Status must be CONFIRMED or REJECTED");
+            throw new IllegalArgumentException("Status must be CONFIRMED or REJECTED");
         }
 
         // -----------------------------------------------------
@@ -248,39 +207,25 @@ public class ReportServiceImpl implements ReportService {
         return convertToResponse(updated);
     }
 
-    // =========================================================
-    // DELETE
-    // =========================================================
-
     @Override
     public void deleteReport(Long id) {
 
         PriceReport report =
                 priceReportRepository.findById(id)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Price report not found with id: "
+                                new ResourceNotFoundException("Price report not found with id: "
                                                 + id
                                 ));
 
         priceReportRepository.delete(report);
     }
 
-    // =========================================================
-    // COUNT PENDING
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public long countPendingReports() {
 
-        return priceReportRepository.countByStatus(
-                "PENDING");
+        return priceReportRepository.countByStatus("PENDING");
     }
-
-    // =========================================================
-    // ENTITY -> DTO
-    // =========================================================
 
     private PriceReportResponseDto convertToResponse( PriceReport report) {
 
@@ -367,10 +312,6 @@ public class ReportServiceImpl implements ReportService {
 
                 .build();
     }
-
-    // =========================================================
-    // USER NAME
-    // =========================================================
 
     private String buildUserName(User user) {
 

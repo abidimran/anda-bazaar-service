@@ -92,9 +92,6 @@
 //    }
 //}
 
-
-
-
 package com.andabazaar.security;
 
 import java.io.IOException;
@@ -166,21 +163,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     null,
                                     userDetails.getAuthorities());
 
-                    authentication.setDetails( new WebAuthenticationDetailsSource() .buildDetails(request));
+                    authentication.setDetails(new WebAuthenticationDetailsSource() .buildDetails(request));
 
                     SecurityContextHolder
                             .getContext()
                             .setAuthentication(authentication);
 
-                    System.out.println( "JWT AUTHENTICATION SUCCESS: " + email);
+                    System.out.println("JWT AUTHENTICATION SUCCESS: " + email);
                 }
             }
 
         } catch (Exception ex) {
 
-            System.out.println( "JWT ERROR: " + ex.getClass().getName());
+            System.out.println("JWT ERROR: " + ex.getClass().getName());
 
-            System.out.println( "JWT ERROR MESSAGE: " + ex.getMessage());
+            System.out.println("JWT ERROR MESSAGE: " + ex.getMessage());
         }
 
         filterChain.doFilter(request, response);

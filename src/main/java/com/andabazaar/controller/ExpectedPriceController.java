@@ -20,20 +20,12 @@ public class ExpectedPriceController {
 
     private final ExpectedPriceService expectedPriceService;
 
-    // =========================================================
-    // CREATE
-    // =========================================================
-
     @PostMapping
     public ResponseEntity<ExpectedPriceResponseDto>
             createExpectedPrice(@RequestBody ExpectedPriceRequestDto request) {
 
  return ResponseEntity.ok(expectedPriceService.createExpectedPrice(request));
     }
-
-    // =========================================================
-    // UPDATE
-    // =========================================================
 
     @PutMapping("/{id}")
     public ResponseEntity<ExpectedPriceResponseDto>
@@ -42,10 +34,6 @@ public class ExpectedPriceController {
  return ResponseEntity.ok(expectedPriceService.updateExpectedPrice(id, request));
     }
 
-    // =========================================================
-    // GET BY ID
-    // =========================================================
-
     @GetMapping("/{id}")
     public ResponseEntity<ExpectedPriceResponseDto>
             getExpectedPriceById(@PathVariable Long id) {
@@ -53,20 +41,12 @@ public class ExpectedPriceController {
  return ResponseEntity.ok(expectedPriceService.getExpectedPriceById(id));
     }
 
-    // =========================================================
-    // GET BY MARKET
-    // =========================================================
-
     @GetMapping("/market/{marketId}")
     public ResponseEntity<List<ExpectedPriceResponseDto>>
             getByMarket(@PathVariable Long marketId) {
 
  return ResponseEntity.ok(expectedPriceService.getByMarket(marketId));
     }
-
-    // =========================================================
-    // GET BY MARKET + DATE
-    // =========================================================
 
     @GetMapping("/market/{marketId}/date")
     public ResponseEntity<ExpectedPriceResponseDto>
@@ -80,20 +60,12 @@ public class ExpectedPriceController {
  return ResponseEntity.ok(expectedPriceService.getByMarketAndDate(marketId, date));
     }
 
-    // =========================================================
-    // GET ALL ACTIVE
-    // =========================================================
-
     @GetMapping
     public ResponseEntity<List<ExpectedPriceResponseDto>>
             getActiveExpectedPrices() {
 
  return ResponseEntity.ok(expectedPriceService.getActiveExpectedPrices());
     }
-
-    // =========================================================
-    // GET BY DATE RANGE
-    // =========================================================
 
     @GetMapping("/date-range")
     public ResponseEntity<List<ExpectedPriceResponseDto>>
@@ -108,10 +80,6 @@ public class ExpectedPriceController {
 
  return ResponseEntity.ok(expectedPriceService.getByDateRange(startDate, endDate));
     }
-
-    // =========================================================
-    // MARKET + DATE RANGE
-    // =========================================================
 
     @GetMapping("/market/{marketId}/date-range")
     public ResponseEntity<List<ExpectedPriceResponseDto>>
@@ -132,10 +100,6 @@ public class ExpectedPriceController {
  return ResponseEntity.ok(expectedPriceService.getMarketDateRange(marketId, startDate, endDate));
     }
 
-    // =========================================================
-    // SOFT DELETE
-    // =========================================================
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
             deleteExpectedPrice(@PathVariable Long id) {
@@ -144,10 +108,6 @@ public class ExpectedPriceController {
 
  return ResponseEntity.noContent().build();
     }
-
-    // =========================================================
-    // COUNT ACTIVE
-    // =========================================================
 
     @GetMapping("/count")
     public ResponseEntity<Long>

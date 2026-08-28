@@ -13,12 +13,10 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_notification_user",
-            columnList = "user_id"
-        ),
+            columnList = "user_id"),
         @Index(
             name = "idx_notification_created",
-            columnList = "created_at"
-        )
+            columnList = "created_at")
     }
 )
 @Getter
@@ -54,8 +52,7 @@ public class Notification {
 
     @Column(
         nullable = false,
-        columnDefinition = "TEXT"
-    )
+        columnDefinition = "TEXT")
     private String message;
 
     // CHANGED

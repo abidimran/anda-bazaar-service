@@ -14,12 +14,10 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_user_subscription_user",
-            columnList = "user_id"
-        ),
+            columnList = "user_id"),
         @Index(
             name = "idx_user_subscription_expiry",
-            columnList = "end_date"
-        )
+            columnList = "end_date")
     }
 )
 @Getter

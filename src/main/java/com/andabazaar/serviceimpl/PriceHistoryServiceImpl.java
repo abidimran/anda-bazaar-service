@@ -27,35 +27,30 @@ public class PriceHistoryServiceImpl
     public PriceHistory createPriceHistory( PriceHistory priceHistory) {
 
         if (priceHistory == null) {
-            throw new BadRequestException(
-                    "Price history cannot be null");
+            throw new BadRequestException("Price history cannot be null");
         }
 
         if (priceHistory.getMarket() == null
                 || priceHistory.getMarket().getId() == null) {
 
-            throw new BadRequestException(
-                    "Market is required");
+            throw new BadRequestException("Market is required");
         }
 
         if (priceHistory.getPriceDate() == null) {
 
-            throw new BadRequestException(
-                    "Price date is required");
+            throw new BadRequestException("Price date is required");
         }
 
         if (priceHistory.getPricePerEgg() == null) {
 
-            throw new BadRequestException(
-                    "Price per egg is required");
+            throw new BadRequestException("Price per egg is required");
         }
 
         if (priceHistoryRepository
                 .existsByMarketIdAndPriceDate( priceHistory.getMarket().getId(), priceHistory.getPriceDate()
                 )) {
 
-            throw new BadRequestException(
-                    "Price history already exists for this market and date");
+            throw new BadRequestException("Price history already exists for this market and date");
         }
 
         return priceHistoryRepository.save(
@@ -68,8 +63,7 @@ public class PriceHistoryServiceImpl
 
         return priceHistoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Price history not found with id: "
+                        new ResourceNotFoundException("Price history not found with id: "
                                         + id
                         ));
     }
@@ -89,14 +83,12 @@ public class PriceHistoryServiceImpl
 
         if (startDate == null || endDate == null) {
 
-            throw new BadRequestException(
-                    "Start date and end date are required");
+            throw new BadRequestException("Start date and end date are required");
         }
 
         if (startDate.isAfter(endDate)) {
 
-            throw new BadRequestException(
-                    "Start date cannot be after end date");
+            throw new BadRequestException("Start date cannot be after end date");
         }
 
         return priceHistoryRepository
@@ -109,8 +101,7 @@ public class PriceHistoryServiceImpl
 
         if (date == null) {
 
-            throw new BadRequestException(
-                    "Date is required");
+            throw new BadRequestException("Date is required");
         }
 
         return priceHistoryRepository

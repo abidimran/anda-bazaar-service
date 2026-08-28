@@ -64,8 +64,7 @@ public class RazorpayWebhookService {
                     paymentEntity.optJSONObject("entity");
 
             if (entity != null) {
-                return entity.optString(
-                        "order_id",
+                return entity.optString("order_id",
                         null);
             }
         }
@@ -79,8 +78,7 @@ public class RazorpayWebhookService {
                     orderEntity.optJSONObject("entity");
 
             if (entity != null) {
-                return entity.optString(
-                        "id",
+                return entity.optString("id",
                         null);
             }
         }
@@ -115,8 +113,7 @@ public class RazorpayWebhookService {
             return null;
         }
 
-        return entity.optString(
-                "id",
+        return entity.optString("id",
                 null);
     }
 }

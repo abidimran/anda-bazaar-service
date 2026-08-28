@@ -33,8 +33,7 @@ public class AppSettingServiceImpl
         if (appSettingRepository
                 .existsBySettingKey(key)) {
 
-            throw new BadRequestException(
-                    "Setting key already exists");
+            throw new BadRequestException("Setting key already exists");
         }
 
         AppSetting setting = AppSetting.builder()
@@ -63,8 +62,7 @@ public class AppSettingServiceImpl
                 && appSettingRepository
                         .existsBySettingKey(key)) {
 
-            throw new BadRequestException(
-                    "Setting key already exists");
+            throw new BadRequestException("Setting key already exists");
         }
 
         setting.setSettingKey(key);
@@ -96,8 +94,7 @@ public class AppSettingServiceImpl
                         .findBySettingKey( key.trim().toUpperCase()
                         )
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Setting not found with key: "
+                                new ResourceNotFoundException("Setting not found with key: "
                                                 + key
                                 ));
 
@@ -151,8 +148,7 @@ public class AppSettingServiceImpl
         return appSettingRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Setting not found with id: "
+                        new ResourceNotFoundException("Setting not found with id: "
                                         + id
                         ));
     }

@@ -19,11 +19,8 @@ public class EggRateApiController {
 
     private final EggRateApiService eggRateApiService;
 
-    // =========================================================
     // GET ALL EGG RATES
     //
-    // GET /api/egg-rates-external?city=Jaipur&state=Rajasthan
-    // =========================================================
 
     @GetMapping
     public ResponseEntity<EggRateApiResponseDto> getEggRates(@RequestParam String city, @RequestParam String state) {
@@ -31,11 +28,8 @@ public class EggRateApiController {
  return ResponseEntity.ok(eggRateApiService.getEggRates(city, state));
     }
 
-    // =========================================================
     // GET TODAY'S EGG RATE
     //
-    // GET /api/egg-rates-external/today?city=Jaipur&state=Rajasthan
-    // =========================================================
 
     @GetMapping("/today")
     public ResponseEntity<EggRateSingleResponseDto> getTodayRate(@RequestParam String city, @RequestParam String state) {
@@ -43,11 +37,8 @@ public class EggRateApiController {
  return ResponseEntity.ok(eggRateApiService.getTodayRate(city, state));
     }
 
-    // =========================================================
     // GET YESTERDAY'S EGG RATE
     //
-    // GET /api/egg-rates-external/yesterday?city=Jaipur&state=Rajasthan
-    // =========================================================
 
     @GetMapping("/yesterday")
     public ResponseEntity<EggRateSingleResponseDto> getYesterdayRate(@RequestParam String city, @RequestParam String state) {

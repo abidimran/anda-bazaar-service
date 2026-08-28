@@ -21,8 +21,7 @@ public class ExpectedPriceRequestDto {
     @NotNull(message = "Expected price is required")
     @DecimalMin(
         value = "0.01",
-        message = "Expected price must be greater than 0"
-    )
+        message = "Expected price must be greater than 0")
     private BigDecimal expectedPrice;
 
     @NotNull(message = "Expected date is required")
@@ -30,7 +29,6 @@ public class ExpectedPriceRequestDto {
 
     @Size(
         max = 500,
-        message = "Reason cannot exceed 500 characters"
-    )
+        message = "Reason cannot exceed 500 characters")
     private String reason;
 }

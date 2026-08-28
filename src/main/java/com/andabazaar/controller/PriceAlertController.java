@@ -18,19 +18,11 @@ public class PriceAlertController {
 
     private final PriceAlertService priceAlertService;
 
-    // =========================================================
-    // CREATE ALERT
-    // =========================================================
-
     @PostMapping
     public ResponseEntity<PriceAlertResponseDto> createAlert(@RequestBody PriceAlertRequestDto request) {
 
  return ResponseEntity.ok(priceAlertService.createAlert(request));
     }
-
-    // =========================================================
-    // GET ALERT BY ID
-    // =========================================================
 
     @GetMapping("/{id}")
     public ResponseEntity<PriceAlertResponseDto> getAlertById(@PathVariable Long id) {
@@ -38,29 +30,17 @@ public class PriceAlertController {
  return ResponseEntity.ok(priceAlertService.getAlertById(id));
     }
 
-    // =========================================================
-    // GET USER ALERTS
-    // =========================================================
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PriceAlertResponseDto>> getUserAlerts(@PathVariable Long userId) {
 
  return ResponseEntity.ok(priceAlertService.getUserAlerts(userId));
     }
 
-    // =========================================================
-    // UPDATE ALERT
-    // =========================================================
-
     @PutMapping("/{id}")
     public ResponseEntity<PriceAlertResponseDto> updateAlert(@PathVariable Long id, @RequestBody PriceAlertRequestDto request) {
 
  return ResponseEntity.ok(priceAlertService.updateAlert(id, request));
     }
-
-    // =========================================================
-    // DELETE ALERT
-    // =========================================================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAlert(@PathVariable Long id) {
@@ -69,10 +49,6 @@ public class PriceAlertController {
 
  return ResponseEntity.noContent().build();
     }
-
-    // =========================================================
-    // TOGGLE ALERT
-    // =========================================================
 
     @PatchMapping("/{id}/toggle")
     public ResponseEntity<PriceAlertResponseDto> toggleAlert(@PathVariable Long id) {

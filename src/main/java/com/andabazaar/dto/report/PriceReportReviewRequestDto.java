@@ -20,13 +20,11 @@ public class PriceReportReviewRequestDto {
     @NotBlank(message = "Status is required")
     @Pattern(
         regexp = "CONFIRMED|REJECTED",
-        message = "Status must be CONFIRMED or REJECTED"
-    )
+        message = "Status must be CONFIRMED or REJECTED")
     private String status;
 
     @Size(
         max = 1000,
-        message = "Admin remarks cannot exceed 1000 characters"
-    )
+        message = "Admin remarks cannot exceed 1000 characters")
     private String adminRemarks;
 }

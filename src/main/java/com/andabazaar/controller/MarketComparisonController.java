@@ -17,20 +17,12 @@ public class MarketComparisonController {
 
     private final MarketComparisonService marketComparisonService;
 
-    // =========================================================
-    // COMPARE ALL MARKETS
-    // =========================================================
-
     @GetMapping
     public ResponseEntity<List<MarketComparisonResponseDto>>
             compareMarkets() {
 
  return ResponseEntity.ok(marketComparisonService.compareMarkets());
     }
-
-    // =========================================================
-    // COMPARE ONE MARKET
-    // =========================================================
 
     @GetMapping("/{marketId}")
     public ResponseEntity<MarketComparisonResponseDto>

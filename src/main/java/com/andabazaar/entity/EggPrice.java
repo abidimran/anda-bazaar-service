@@ -18,8 +18,7 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_egg_price_market_date",
-            columnList = "market_id, price_date"
-        )
+            columnList = "market_id, price_date")
     }
 )
 @Getter

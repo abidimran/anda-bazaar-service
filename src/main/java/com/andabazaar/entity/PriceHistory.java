@@ -13,12 +13,10 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_price_history_market",
-            columnList = "market_id"
-        ),
+            columnList = "market_id"),
         @Index(
             name = "idx_price_history_date",
-            columnList = "price_date"
-        )
+            columnList = "price_date")
     }
 )
 @Getter

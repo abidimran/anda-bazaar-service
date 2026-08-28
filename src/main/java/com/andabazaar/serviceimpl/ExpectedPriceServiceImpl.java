@@ -28,10 +28,6 @@ public class ExpectedPriceServiceImpl
     private final ExpectedPriceRepository expectedPriceRepository;
     private final MarketRepository marketRepository;
 
-    // =========================================================
-    // CREATE
-    // =========================================================
-
     @Override
     public ExpectedPriceResponseDto createExpectedPrice( ExpectedPriceRequestDto request) {
 
@@ -40,8 +36,7 @@ public class ExpectedPriceServiceImpl
         if (expectedPriceRepository
                 .existsByMarketIdAndExpectedDate( request.getMarketId(), request.getExpectedDate())) {
 
-            throw new BadRequestException(
-                    "Expected price already exists for this market and date");
+            throw new BadRequestException("Expected price already exists for this market and date");
         }
 
         ExpectedPrice expectedPrice = ExpectedPrice.builder()
@@ -55,10 +50,6 @@ public class ExpectedPriceServiceImpl
         return mapToResponse(
                 expectedPriceRepository.save(expectedPrice));
     }
-
-    // =========================================================
-    // UPDATE
-    // =========================================================
 
     @Override
     public ExpectedPriceResponseDto updateExpectedPrice( Long id, ExpectedPriceRequestDto request) {
@@ -82,8 +73,7 @@ public class ExpectedPriceServiceImpl
             if (expectedPriceRepository
                     .existsByMarketIdAndExpectedDate( request.getMarketId(), request.getExpectedDate())) {
 
-                throw new BadRequestException(
-                        "Expected price already exists for this market and date");
+                throw new BadRequestException("Expected price already exists for this market and date");
             }
         }
 
@@ -96,10 +86,6 @@ public class ExpectedPriceServiceImpl
                 expectedPriceRepository.save(expectedPrice));
     }
 
-    // =========================================================
-    // GET BY ID
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public ExpectedPriceResponseDto getExpectedPriceById( Long id) {
@@ -108,18 +94,13 @@ public class ExpectedPriceServiceImpl
                 findExpectedPrice(id));
     }
 
-    // =========================================================
-    // GET BY MARKET
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<ExpectedPriceResponseDto> getByMarket( Long marketId) {
 
         if (!marketRepository.existsById(marketId)) {
 
-            throw new ResourceNotFoundException(
-                    "Market not found with id: " + marketId);
+            throw new ResourceNotFoundException("Market not found with id: " + marketId);
         }
 
         return expectedPriceRepository
@@ -130,10 +111,6 @@ public class ExpectedPriceServiceImpl
                 .toList();
     }
 
-    // =========================================================
-    // GET BY MARKET + DATE
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public ExpectedPriceResponseDto getByMarketAndDate( Long marketId, LocalDate expectedDate) {
@@ -142,23 +119,16 @@ public class ExpectedPriceServiceImpl
                 expectedPriceRepository
                         .findByMarketIdAndExpectedDate( marketId, expectedDate )
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Expected price not found for market and date"
-                                ));
+                                new ResourceNotFoundException("Expected price not found for market and date"));
 
         if (!Boolean.TRUE.equals(
                 expectedPrice.getActive())) {
 
-            throw new ResourceNotFoundException(
-                    "Expected price is not active");
+            throw new ResourceNotFoundException("Expected price is not active");
         }
 
         return mapToResponse(expectedPrice);
     }
-
-    // =========================================================
-    // GET ACTIVE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -171,10 +141,6 @@ public class ExpectedPriceServiceImpl
                 .map(this::mapToResponse)
                 .toList();
     }
-
-    // =========================================================
-    // DATE RANGE
-    // =========================================================
 
     @Override
     @Transactional(readOnly = true)
@@ -190,10 +156,6 @@ public class ExpectedPriceServiceImpl
                 .toList();
     }
 
-    // =========================================================
-    // MARKET + DATE RANGE
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public List<ExpectedPriceResponseDto>
@@ -203,8 +165,7 @@ public class ExpectedPriceServiceImpl
 
         if (!marketRepository.existsById(marketId)) {
 
-            throw new ResourceNotFoundException(
-                    "Market not found with id: " + marketId);
+            throw new ResourceNotFoundException("Market not found with id: " + marketId);
         }
 
         return expectedPriceRepository
@@ -214,10 +175,6 @@ public class ExpectedPriceServiceImpl
                 .map(this::mapToResponse)
                 .toList();
     }
-
-    // =========================================================
-    // DELETE - SOFT DELETE
-    // =========================================================
 
     @Override
     public void deleteExpectedPrice(Long id) {
@@ -230,10 +187,6 @@ public class ExpectedPriceServiceImpl
         expectedPriceRepository.save(expectedPrice);
     }
 
-    // =========================================================
-    // COUNT ACTIVE
-    // =========================================================
-
     @Override
     @Transactional(readOnly = true)
     public long countActiveExpectedPrices() {
@@ -242,58 +195,38 @@ public class ExpectedPriceServiceImpl
                 .countByActiveTrue();
     }
 
-    // =========================================================
-    // FIND EXPECTED PRICE
-    // =========================================================
-
     private ExpectedPrice findExpectedPrice( Long id) {
 
         return expectedPriceRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Expected price not found with id: "
+                        new ResourceNotFoundException("Expected price not found with id: "
                                         + id
                         ));
     }
-
-    // =========================================================
-    // FIND MARKET
-    // =========================================================
 
     private Market findMarket(Long id) {
 
         return marketRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Market not found with id: "
+                        new ResourceNotFoundException("Market not found with id: "
                                         + id
                         ));
     }
-
-    // =========================================================
-    // VALIDATE DATE RANGE
-    // =========================================================
 
     private void validateDateRange( LocalDate startDate, LocalDate endDate) {
 
         if (startDate == null || endDate == null) {
 
-            throw new BadRequestException(
-                    "Start date and end date are required");
+            throw new BadRequestException("Start date and end date are required");
         }
 
         if (startDate.isAfter(endDate)) {
 
-            throw new BadRequestException(
-                    "Start date cannot be after end date");
+            throw new BadRequestException("Start date cannot be after end date");
         }
     }
-
-    // =========================================================
-    // MAP ENTITY TO RESPONSE DTO
-    // =========================================================
 
     private ExpectedPriceResponseDto mapToResponse( ExpectedPrice expectedPrice) {
 

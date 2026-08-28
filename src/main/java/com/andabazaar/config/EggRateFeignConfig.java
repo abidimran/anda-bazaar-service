@@ -17,11 +17,11 @@ public class EggRateFeignConfig {
 
         return requestTemplate -> {
 
-            requestTemplate.header( "Content-Type", "application/json");
+            requestTemplate.header("Content-Type", "application/json");
 
-            requestTemplate.header( "x-rapidapi-host", eggRateApiConfig.getHost());
+            requestTemplate.header("x-rapidapi-host", eggRateApiConfig.getHost());
 
-            requestTemplate.header( "x-rapidapi-key", eggRateApiConfig.getKey());
+            requestTemplate.header("x-rapidapi-key", eggRateApiConfig.getKey());
         };
     }
 }

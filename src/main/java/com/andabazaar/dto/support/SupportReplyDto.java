@@ -19,8 +19,7 @@ public class SupportReplyDto {
     @NotBlank(message = "Message is required")
     @Size(
         max = 3000,
-        message = "Message cannot exceed 3000 characters"
-    )
+        message = "Message cannot exceed 3000 characters")
     private String message;
 
     private Boolean adminReply;

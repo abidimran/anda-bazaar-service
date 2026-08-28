@@ -25,8 +25,7 @@ public class RazorpayServiceImpl implements RazorpayService {
         if (amount == null ||
                 amount.compareTo(BigDecimal.ZERO) <= 0) {
 
-            throw new IllegalArgumentException(
-                    "Amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         }
 
         long amountInPaise =
@@ -42,13 +41,13 @@ public class RazorpayServiceImpl implements RazorpayService {
         JSONObject orderRequest =
                 new JSONObject();
 
-        orderRequest.put( "amount", amountInPaise);
+        orderRequest.put("amount", amountInPaise);
 
-        orderRequest.put( "currency", currency);
+        orderRequest.put("currency", currency);
 
-        orderRequest.put( "receipt", receipt);
+        orderRequest.put("receipt", receipt);
 
-        orderRequest.put( "payment_capture", 1);
+        orderRequest.put("payment_capture", 1);
 
         return razorpayClient.orders.create(
                 orderRequest);
@@ -67,11 +66,11 @@ public class RazorpayServiceImpl implements RazorpayService {
         JSONObject attributes =
                 new JSONObject();
 
-        attributes.put( "razorpay_order_id", orderId);
+        attributes.put("razorpay_order_id", orderId);
 
-        attributes.put( "razorpay_payment_id", paymentId);
+        attributes.put("razorpay_payment_id", paymentId);
 
-        attributes.put( "razorpay_signature", signature);
+        attributes.put("razorpay_signature", signature);
 
         return Utils.verifyPaymentSignature(
                 attributes,

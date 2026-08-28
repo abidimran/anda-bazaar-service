@@ -11,8 +11,7 @@ import lombok.*;
     uniqueConstraints = {
         @UniqueConstraint(
             name = "uk_role_name",
-            columnNames = "name"
-        )
+            columnNames = "name")
     }
 )
 @Getter

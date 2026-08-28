@@ -31,21 +31,18 @@ public class FavoriteMarketServiceImpl
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found with id: " + userId
+                        new ResourceNotFoundException("User not found with id: " + userId
                         ));
 
         Market market = marketRepository.findById(marketId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Market not found with id: " + marketId
+                        new ResourceNotFoundException("Market not found with id: " + marketId
                         ));
 
         if (favoriteMarketRepository
                 .existsByUserIdAndMarketId(userId, marketId)) {
 
-            throw new RuntimeException(
-                    "Market is already in favorites");
+            throw new RuntimeException("Market is already in favorites");
         }
 
         FavoriteMarket favorite =
@@ -63,8 +60,7 @@ public class FavoriteMarketServiceImpl
         if (!favoriteMarketRepository
                 .existsByUserIdAndMarketId( userId, marketId )) {
 
-            throw new ResourceNotFoundException(
-                    "Favorite market not found");
+            throw new ResourceNotFoundException("Favorite market not found");
         }
 
         favoriteMarketRepository
@@ -76,8 +72,7 @@ public class FavoriteMarketServiceImpl
     public List<FavoriteMarket> getUserFavorites( Long userId) {
 
         if (!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException(
-                    "User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return favoriteMarketRepository

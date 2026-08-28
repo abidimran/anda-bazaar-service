@@ -20,6 +20,6 @@ public class FirebaseNotificationService
          * will be added here.
          */
 
-        log.info( "Push notification for user {}: {} - {}", userId, title, message);
+        log.info("Push notification for user {}: {} - {}", userId, title, message);
     }
 }

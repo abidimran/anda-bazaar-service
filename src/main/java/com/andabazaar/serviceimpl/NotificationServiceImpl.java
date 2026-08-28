@@ -34,9 +34,7 @@ public class NotificationServiceImpl
         User user = userRepository
                 .findById(request.getUserId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                            "User not found"
-                        ));
+                        new ResourceNotFoundException("User not found"));
 
         Notification notification =
                 Notification.builder()
@@ -91,16 +89,13 @@ public class NotificationServiceImpl
                 notificationRepository
                         .findById(notificationId)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                    "Notification not found"
-                                ));
+                                new ResourceNotFoundException("Notification not found"));
 
         if (!notification.getUser()
                 .getId()
                 .equals(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "Notification not found");
+            throw new ResourceNotFoundException("Notification not found");
         }
 
         notification.setRead(true);
@@ -131,16 +126,13 @@ public class NotificationServiceImpl
                 notificationRepository
                     .findById(notificationId)
                     .orElseThrow(() ->
-                            new ResourceNotFoundException(
-                                "Notification not found"
-                            ));
+                            new ResourceNotFoundException("Notification not found"));
 
         if (!notification.getUser()
                 .getId()
                 .equals(userId)) {
 
-            throw new ResourceNotFoundException(
-                    "Notification not found");
+            throw new ResourceNotFoundException("Notification not found");
         }
 
         notificationRepository.delete(notification);

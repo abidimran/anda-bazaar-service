@@ -22,10 +22,6 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
-    // =========================
-    // PUBLIC / USER
-    // =========================
-
     @GetMapping("/plans")
     public ResponseEntity<
             List<SubscriptionPlanResponseDto>>
@@ -63,10 +59,6 @@ public class SubscriptionController {
 
  return ResponseEntity.ok(subscriptionService.getSubscriptionHistory(userId));
     }
-
-    // =========================
-    // ADMIN
-    // =========================
 
     @PostMapping("/admin/plans")
     public ResponseEntity<

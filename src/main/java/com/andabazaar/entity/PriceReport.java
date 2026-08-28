@@ -28,20 +28,16 @@ import lombok.Setter;
     indexes = {
         @Index(
             name = "idx_price_report_user",
-            columnList = "user_id"
-        ),
+            columnList = "user_id"),
         @Index(
             name = "idx_price_report_market",
-            columnList = "market_id"
-        ),
+            columnList = "market_id"),
         @Index(
             name = "idx_price_report_status",
-            columnList = "status"
-        ),
+            columnList = "status"),
         @Index(
             name = "idx_price_report_created",
-            columnList = "created_at"
-        )
+            columnList = "created_at")
     }
 )
 @Getter
@@ -55,10 +51,6 @@ public class PriceReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // =========================================================
-    // USER
-    // =========================================================
-
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
@@ -68,10 +60,6 @@ public class PriceReport {
         nullable = false
     )
     private User user;
-
-    // =========================================================
-    // MARKET
-    // =========================================================
 
     @ManyToOne(
         fetch = FetchType.LAZY,
@@ -83,10 +71,6 @@ public class PriceReport {
     )
     private Market market;
 
-    // =========================================================
-    // REPORTED PRICE
-    // =========================================================
-
     @Column(
         nullable = false,
         precision = 10,
@@ -94,28 +78,16 @@ public class PriceReport {
     )
     private BigDecimal reportedPrice;
 
-    // =========================================================
-    // REASON
-    // =========================================================
-
     @Column(
         nullable = false,
         length = 500
     )
     private String reason;
 
-    // =========================================================
-    // DESCRIPTION
-    // =========================================================
-
     @Column(
         length = 1000
     )
     private String description;
-
-    // =========================================================
-    // STATUS
-    // =========================================================
 
     @Column(
         nullable = false,
@@ -124,28 +96,16 @@ public class PriceReport {
     @Builder.Default
     private String status = "PENDING";
 
-    // =========================================================
-    // REVIEWED
-    // =========================================================
-
     @Column(
         nullable = false
     )
     @Builder.Default
     private Boolean reviewed = false;
 
-    // =========================================================
-    // ADMIN REMARKS
-    // =========================================================
-
     @Column(
         length = 1000
     )
     private String adminRemarks;
-
-    // =========================================================
-    // CREATED AT
-    // =========================================================
 
     @Column(
         nullable = false,
@@ -153,15 +113,7 @@ public class PriceReport {
     )
     private LocalDateTime createdAt;
 
-    // =========================================================
-    // UPDATED AT
-    // =========================================================
-
     private LocalDateTime updatedAt;
-
-    // =========================================================
-    // PRE PERSIST
-    // =========================================================
 
     @PrePersist
     protected void onCreate() {
@@ -171,10 +123,6 @@ public class PriceReport {
         createdAt = now;
         updatedAt = now;
     }
-
-    // =========================================================
-    // PRE UPDATE
-    // =========================================================
 
     @PreUpdate
     protected void onUpdate() {

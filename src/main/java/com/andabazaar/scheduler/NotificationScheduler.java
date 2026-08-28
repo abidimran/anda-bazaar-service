@@ -26,10 +26,7 @@ public class NotificationScheduler {
     private final NotificationRepository notificationRepository;
     private final UserSubscriptionRepository subscriptionRepository;
 
-    // =========================================================
     // SUBSCRIPTION EXPIRY NOTIFICATION
-    // Runs every day at 09:00 AM
-    // =========================================================
 
     @Scheduled(cron = "0 0 9 * * *")
     @Transactional
@@ -52,10 +49,6 @@ public class NotificationScheduler {
             LocalDate endDate =
                     subscription.getEndDate();
 
-            // =================================================
-            // EXPIRES TODAY
-            // =================================================
-
             if (endDate.equals(today)) {
 
                 createNotification(
@@ -66,10 +59,6 @@ public class NotificationScheduler {
                                 + getPlanName(subscription)
                                 + " subscription expires today.");
             }
-
-            // =================================================
-            // EXPIRES TOMORROW
-            // =================================================
 
             else if (endDate.equals(tomorrow)) {
 
@@ -83,10 +72,6 @@ public class NotificationScheduler {
             }
         }
     }
-
-    // =========================================================
-    // CREATE NOTIFICATION
-    // =========================================================
 
     private void createNotification( User user, NotificationType type, String title, String message) {
 
@@ -102,10 +87,6 @@ public class NotificationScheduler {
 
         notificationRepository.save(notification);
     }
-
-    // =========================================================
-    // PLAN NAME
-    // =========================================================
 
     private String getPlanName( UserSubscription subscription) {
 

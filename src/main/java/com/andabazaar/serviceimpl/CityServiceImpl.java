@@ -34,8 +34,7 @@ public class CityServiceImpl implements CityService {
         if (cityRepository
                 .existsByNameIgnoreCaseAndStateId( request.getName(), request.getStateId())) {
 
-            throw new BadRequestException(
-                    "City already exists in this state");
+            throw new BadRequestException("City already exists in this state");
         }
 
         City city = City.builder()
@@ -95,8 +94,7 @@ public class CityServiceImpl implements CityService {
                 cityRepository
                     .existsByNameIgnoreCaseAndStateId( request.getName(), request.getStateId())) {
 
-            throw new BadRequestException(
-                    "City already exists in this state");
+            throw new BadRequestException("City already exists in this state");
         }
 
         city.setName(request.getName().trim());
@@ -120,16 +118,14 @@ public class CityServiceImpl implements CityService {
 
         return cityRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "City not found with id: " + id));
+                        new ResourceNotFoundException("City not found with id: " + id));
     }
 
     private State findState(Long id) {
 
         return stateRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "State not found with id: " + id));
+                        new ResourceNotFoundException("State not found with id: " + id));
     }
 
     private CityResponseDto mapToResponse( City city) {

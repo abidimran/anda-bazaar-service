@@ -26,10 +26,6 @@ public class MarketComparisonServiceImpl
     private final MarketRepository marketRepository;
     private final EggPriceRepository eggPriceRepository;
 
-    // =========================================================
-    // COMPARE ALL MARKETS
-    // =========================================================
-
     @Override
     public List<MarketComparisonResponseDto> compareMarkets() {
 
@@ -40,26 +36,17 @@ public class MarketComparisonServiceImpl
                 .toList();
     }
 
-    // =========================================================
-    // COMPARE ONE MARKET
-    // =========================================================
-
     @Override
     public MarketComparisonResponseDto compareMarket( Long marketId) {
 
         Market market = marketRepository.findById(marketId)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Market not found with id: "
+                        new ResourceNotFoundException("Market not found with id: "
                                         + marketId
                         ));
 
         return mapMarket(market);
     }
-
-    // =========================================================
-    // MAP MARKET
-    // =========================================================
 
     private MarketComparisonResponseDto mapMarket( Market market) {
 
@@ -102,10 +89,6 @@ public class MarketComparisonServiceImpl
                 .averagePrice(averagePrice)
                 .build();
     }
-
-    // =========================================================
-    // AVERAGE
-    // =========================================================
 
     private BigDecimal calculateAverage( List<BigDecimal> prices) {
 

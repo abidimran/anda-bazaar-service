@@ -13,16 +13,13 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_support_ticket_user",
-            columnList = "user_id"
-        ),
+            columnList = "user_id"),
         @Index(
             name = "idx_support_ticket_status",
-            columnList = "status"
-        ),
+            columnList = "status"),
         @Index(
             name = "idx_support_ticket_created",
-            columnList = "created_at"
-        )
+            columnList = "created_at")
     }
 )
 @Getter

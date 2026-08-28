@@ -171,8 +171,7 @@ public class NewsServiceImpl implements NewsService {
 
         return newsRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "News not found with id: "
+                        new ResourceNotFoundException("News not found with id: "
                                         + id
                         ));
     }

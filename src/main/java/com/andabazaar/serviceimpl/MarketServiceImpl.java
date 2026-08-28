@@ -34,8 +34,7 @@ public class MarketServiceImpl implements MarketService {
         if (marketRepository
                 .existsByNameIgnoreCaseAndCityId( request.getName(), request.getCityId())) {
 
-            throw new BadRequestException(
-                    "Market already exists in this city");
+            throw new BadRequestException("Market already exists in this city");
         }
 
         Market market = Market.builder()
@@ -100,8 +99,7 @@ public class MarketServiceImpl implements MarketService {
                 marketRepository
                     .existsByNameIgnoreCaseAndCityId( request.getName(), request.getCityId())) {
 
-            throw new BadRequestException(
-                    "Market already exists in this city");
+            throw new BadRequestException("Market already exists in this city");
         }
 
         market.setName(request.getName().trim());
@@ -129,16 +127,14 @@ public class MarketServiceImpl implements MarketService {
 
         return marketRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Market not found with id: " + id));
+                        new ResourceNotFoundException("Market not found with id: " + id));
     }
 
     private City findCity(Long id) {
 
         return cityRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "City not found with id: " + id));
+                        new ResourceNotFoundException("City not found with id: " + id));
     }
 
     private MarketResponseDto mapToResponse( Market market) {

@@ -38,11 +38,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final NotificationService notificationService;
 
-
-    // =========================================================
-    // REGISTER
-    // =========================================================
-
     @Override
     public UserResponseDto register(RegisterRequestDto request) {
 
@@ -52,46 +47,24 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("PHONE = " + request.getPhone());
         System.out.println("========================================");
 
-
-        // =====================================================
-        // NORMALIZE EMAIL
-        // =====================================================
-
         String email = request.getEmail()
                 .trim()
                 .toLowerCase();
 
-
-        // =====================================================
-        // CHECK EMAIL
-        // =====================================================
-
         if (userRepository.existsByEmail(email)) {
 
-            System.out.println( "REGISTER FAILED: EMAIL ALREADY EXISTS");
+            System.out.println("REGISTER FAILED: EMAIL ALREADY EXISTS");
 
-            throw new BadRequestException(
-                    "Email already registered");
+            throw new BadRequestException("Email already registered");
         }
-
-
-        // =====================================================
-        // CHECK PHONE
-        // =====================================================
 
         if (userRepository.existsByPhone(
                 request.getPhone())) {
 
-            System.out.println( "REGISTER FAILED: PHONE ALREADY EXISTS");
+            System.out.println("REGISTER FAILED: PHONE ALREADY EXISTS");
 
-            throw new BadRequestException(
-                    "Phone number already registered");
+            throw new BadRequestException("Phone number already registered");
         }
-
-
-        // =====================================================
-        // CREATE USER
-        // =====================================================
 
         User user = User.builder()
 
@@ -124,22 +97,12 @@ public class AuthServiceImpl implements AuthService {
 
                 .build();
 
-
-        // =====================================================
-        // SAVE USER
-        // =====================================================
-
         User savedUser =
                 userRepository.save(user);
 
-        System.out.println( "USER SAVED SUCCESSFULLY");
+        System.out.println("USER SAVED SUCCESSFULLY");
 
-        System.out.println( "USER ID = " + savedUser.getId());
-
-
-        // =====================================================
-        // WELCOME NOTIFICATION
-        // =====================================================
+        System.out.println("USER ID = " + savedUser.getId());
 
         /*
          * Notification failure should NOT stop
@@ -155,17 +118,17 @@ public class AuthServiceImpl implements AuthService {
 
                             .type( NotificationType.SYSTEM )
 
-                            .title( "Welcome to Anda Bazaar" )
+                            .title("Welcome to Anda Bazaar")
 
-                            .message( "Welcome to Anda Bazaar! " + "Your account has been " + "created successfully." )
+                            .message("Welcome to Anda Bazaar! " + "Your account has been " + "created successfully.")
 
                             .build());
 
-            System.out.println( "WELCOME NOTIFICATION CREATED");
+            System.out.println("WELCOME NOTIFICATION CREATED");
 
         } catch (Exception e) {
 
-            System.out.println( "WELCOME NOTIFICATION FAILED");
+            System.out.println("WELCOME NOTIFICATION FAILED");
 
             e.printStackTrace();
 
@@ -176,99 +139,52 @@ public class AuthServiceImpl implements AuthService {
              */
         }
 
-
-        // =====================================================
-        // RESPONSE
-        // =====================================================
-
         UserResponseDto response =
                 mapToResponse(savedUser);
 
+        System.out.println("REGISTER RESPONSE READY");
 
-        System.out.println( "REGISTER RESPONSE READY");
+        System.out.println("REGISTER SUCCESS");
 
-        System.out.println( "REGISTER SUCCESS");
-
-        System.out.println( "========================================");
-
+        System.out.println("========================================");
 
         return response;
     }
-
-
-    // =========================================================
-    // LOGIN
-    // =========================================================
 
     @Override
     public LoginResponseDto login( LoginRequestDto request) {
 
         System.out.println("========================================");
         System.out.println("LOGIN START");
-        System.out.println( "EMAIL = " + request.getEmail());
+        System.out.println("EMAIL = " + request.getEmail());
         System.out.println("========================================");
-
-
-        // =====================================================
-        // NORMALIZE EMAIL
-        // =====================================================
 
         String email = request.getEmail()
                 .trim()
                 .toLowerCase();
 
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken( email, request.getPassword() ));
 
-        // =====================================================
-        // AUTHENTICATE
-        // =====================================================
-
-        authenticationManager.authenticate( new UsernamePasswordAuthenticationToken( email, request.getPassword() ));
-
-
-        System.out.println( "AUTHENTICATION SUCCESS");
-
-
-        // =====================================================
-        // FIND USER
-        // =====================================================
+        System.out.println("AUTHENTICATION SUCCESS");
 
         User user =
                 userRepository.findByEmail(email)
                         .orElseThrow(() ->
-                                new BadRequestException(
-                                        "User not found"
-                                ));
-
-
-        // =====================================================
-        // CHECK STATUS
-        // =====================================================
+                                new BadRequestException("User not found"));
 
         if (user.getStatus() != UserStatus.ACTIVE) {
 
-            throw new BadRequestException(
-                    "User account is not active");
+            throw new BadRequestException("User account is not active");
         }
-
-
-        // =====================================================
-        // GENERATE JWT
-        // =====================================================
 
         String token =
                 jwtService.generateToken(user);
 
+        System.out.println("JWT TOKEN GENERATED");
 
-        System.out.println( "JWT TOKEN GENERATED");
+        System.out.println("USER ID = " + user.getId());
 
-        System.out.println( "USER ID = " + user.getId());
-
-        System.out.println( "ROLE = " + user.getRole());
-
-
-        // =====================================================
-        // RESPONSE
-        // =====================================================
+        System.out.println("ROLE = " + user.getRole());
 
         LoginResponseDto response =
                 LoginResponseDto.builder()
@@ -293,19 +209,12 @@ public class AuthServiceImpl implements AuthService {
 
                         .build();
 
+        System.out.println("LOGIN SUCCESS");
 
-        System.out.println( "LOGIN SUCCESS");
-
-        System.out.println( "========================================");
-
+        System.out.println("========================================");
 
         return response;
     }
-
-
-    // =========================================================
-    // MAP USER RESPONSE
-    // =========================================================
 
     private UserResponseDto mapToResponse( User user) {
 
@@ -355,9 +264,6 @@ public class AuthServiceImpl implements AuthService {
     
     
     
- // =========================================================
- // CURRENT LOGGED-IN USER
- // =========================================================
 
  @Override
  public UserResponseDto getCurrentUser(String email) {
@@ -369,25 +275,18 @@ public class AuthServiceImpl implements AuthService {
 
      User user = userRepository.findByEmail( email.trim().toLowerCase()
      ).orElseThrow(() ->
-             new BadRequestException(
-                     "User not found"
-             ));
-
-     // =====================================================
-     // CHECK STATUS
-     // =====================================================
+             new BadRequestException("User not found"));
 
      if (user.getStatus() != UserStatus.ACTIVE) {
 
-         throw new BadRequestException(
-                 "User account is not active");
+         throw new BadRequestException("User account is not active");
      }
 
-     System.out.println( "CURRENT USER ID = " + user.getId());
+     System.out.println("CURRENT USER ID = " + user.getId());
 
-     System.out.println( "CURRENT USER EMAIL = " + user.getEmail());
+     System.out.println("CURRENT USER EMAIL = " + user.getEmail());
 
-     System.out.println( "CURRENT USER ROLE = " + user.getRole());
+     System.out.println("CURRENT USER ROLE = " + user.getRole());
 
      return mapToResponse(user);
  }

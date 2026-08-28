@@ -21,10 +21,6 @@ public class PriceAnalyticsController {
 
     private final PriceAnalyticsService priceAnalyticsService;
 
-    // =========================================================
-    // MARKET ANALYTICS
-    // =========================================================
-
     @GetMapping("/market/{marketId}")
     public ResponseEntity<PriceAnalyticsResponseDto>
     getMarketAnalytics(@PathVariable Long marketId, @RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
@@ -39,20 +35,12 @@ public class PriceAnalyticsController {
  return ResponseEntity.ok(priceAnalyticsService.getMarketAnalytics(marketId, startDate, endDate));
     }
 
-    // =========================================================
-    // MARKET STATISTICS
-    // =========================================================
-
     @GetMapping("/market/{marketId}/statistics")
     public ResponseEntity<MarketStatisticsDto>
     getMarketStatistics(@PathVariable Long marketId) {
 
  return ResponseEntity.ok(priceAnalyticsService.getMarketStatistics(marketId));
     }
-
-    // =========================================================
-    // PRICE TREND
-    // =========================================================
 
     @GetMapping("/market/{marketId}/trend")
     public ResponseEntity<List<PriceTrendResponseDto>>
@@ -67,10 +55,6 @@ public class PriceAnalyticsController {
 
  return ResponseEntity.ok(priceAnalyticsService.getPriceTrend(marketId, startDate, endDate));
     }
-
-    // =========================================================
-    // ALL MARKETS
-    // =========================================================
 
     @GetMapping("/markets")
     public ResponseEntity<List<MarketStatisticsDto>>

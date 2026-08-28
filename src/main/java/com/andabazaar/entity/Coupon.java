@@ -14,16 +14,13 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_coupon_code",
-            columnList = "code"
-        ),
+            columnList = "code"),
         @Index(
             name = "idx_coupon_status",
-            columnList = "status"
-        ),
+            columnList = "status"),
         @Index(
             name = "idx_coupon_expiry",
-            columnList = "end_date"
-        )
+            columnList = "end_date")
     }
 )
 @Getter

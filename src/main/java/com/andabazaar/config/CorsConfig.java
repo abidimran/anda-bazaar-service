@@ -19,8 +19,7 @@ public class CorsConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(
-                List.of(
-                        "http://localhost:*",
+                List.of("http://localhost:*",
                         "http://127.0.0.1:*",
                         "http://10.0.2.2:*",
                         "http://192.168.*.*:*",
@@ -39,10 +38,9 @@ public class CorsConfig {
                         "http://172.28.*.*:*",
                         "http://172.29.*.*:*",
                         "http://172.30.*.*:*",
-                        "http://172.31.*.*:*"
-                ));
+                        "http://172.31.*.*:*"));
 
-        configuration.setAllowedMethods( List.of( "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ));
+        configuration.setAllowedMethods( List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
         configuration.setAllowedHeaders( List.of("*"));
 
@@ -51,7 +49,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration( "/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
