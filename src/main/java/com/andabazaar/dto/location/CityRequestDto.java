@@ -1,0 +1,22 @@
+package com.andabazaar.dto.location;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CityRequestDto {
+
+    @NotBlank(message = "City name is required")
+    @Size(max = 100)
+    private String name;
+
+    @NotNull(message = "State ID is required")
+    private Long stateId;
+}

@@ -1,0 +1,141 @@
+package com.andabazaar.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.andabazaar.dto.report.PriceReportRequestDto;
+import com.andabazaar.dto.report.PriceReportResponseDto;
+import com.andabazaar.service.PriceReportService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/price-reports")
+@RequiredArgsConstructor
+public class PriceReportController {
+
+    private final PriceReportService priceReportService;
+
+    // Create price report
+    @PostMapping
+    public ResponseEntity<PriceReportResponseDto> createReport(
+            @Valid @RequestBody PriceReportRequestDto request) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        priceReportService.createReport(request)
+                );
+    }
+
+    // Get report by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<PriceReportResponseDto> getReportById(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                priceReportService.getReportById(id)
+        );
+    }
+
+    // Get all reports
+    @GetMapping
+    public ResponseEntity<List<PriceReportResponseDto>>
+            getAllReports() {
+
+        return ResponseEntity.ok(
+                priceReportService.getAllReports()
+        );
+    }
+
+    // Get reports by user
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PriceReportResponseDto>>
+            getUserReports(
+                    @PathVariable Long userId) {
+
+        return ResponseEntity.ok(
+                priceReportService.getUserReports(userId)
+        );
+    }
+
+    // Get reports by market
+    @GetMapping("/market/{marketId}")
+    public ResponseEntity<List<PriceReportResponseDto>>
+            getMarketReports(
+                    @PathVariable Long marketId) {
+
+        return ResponseEntity.ok(
+                priceReportService.getMarketReports(marketId)
+        );
+    }
+
+    // Get reports by status
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<PriceReportResponseDto>>
+            getReportsByStatus(
+                    @PathVariable String status) {
+
+        return ResponseEntity.ok(
+                priceReportService.getReportsByStatus(status)
+        );
+    }
+
+    // Get pending reports
+    @GetMapping("/pending")
+    public ResponseEntity<List<PriceReportResponseDto>>
+            getPendingReports() {
+
+        return ResponseEntity.ok(
+                priceReportService.getPendingReports()
+        );
+    }
+
+    // Review report
+    @PutMapping("/{id}/review")
+    public ResponseEntity<PriceReportResponseDto> reviewReport(
+            @PathVariable Long id,
+            @RequestParam String status,
+            @RequestParam(required = false) String adminRemarks) {
+
+        return ResponseEntity.ok(
+                priceReportService.reviewReport(
+                        id,
+                        status,
+                        adminRemarks
+                )
+        );
+    }
+
+    // Count reports by status
+    @GetMapping("/count/{status}")
+    public ResponseEntity<Long> countByStatus(
+            @PathVariable String status) {
+
+        return ResponseEntity.ok(
+                priceReportService.countByStatus(status)
+        );
+    }
+
+    // Delete report
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReport(
+            @PathVariable Long id) {
+
+        priceReportService.deleteReport(id);
+
+        return ResponseEntity.noContent().build();
+    }
+}
