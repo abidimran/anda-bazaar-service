@@ -44,8 +44,8 @@ class EggRateFetchSchedulerTest {
 
     @BeforeEach
     void setUp() {
-        state = State.builder().id(1L).name("Karnataka").active(true).build();
-        city = City.builder().id(1L).name("Bangalore").state(state).active(true).build();
+        state = State.builder().id(1L).name("Karnataka").build();
+        city = City.builder().id(1L).name("Bangalore").build();
     }
 
     @Nested
@@ -53,9 +53,9 @@ class EggRateFetchSchedulerTest {
     class FetchAndSaveRates {
 
         @Test
-        @DisplayName("should skip when no active states found")
+        @DisplayName("should skip when no states found")
         void shouldSkipWhenNoStates() {
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(Collections.emptyList());
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(Collections.emptyList());
 
             scheduler.fetchAndSaveRates();
 
@@ -68,8 +68,8 @@ class EggRateFetchSchedulerTest {
             EggRateSingleResponseDto response = EggRateSingleResponseDto.builder()
                     .success(true).rate("5.50").trend("up").change("0.50").build();
 
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(response);
             when(dailyEggRateRepository.findTopByCityIdAndRateDateBeforeOrderByRateDateDesc(eq(1L), any(LocalDate.class)))
                     .thenReturn(Optional.empty());
@@ -92,8 +92,8 @@ class EggRateFetchSchedulerTest {
                     .id(1L).city(city).state(state).rateDate(LocalDate.now())
                     .rate(new BigDecimal("5.00")).build();
 
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(response);
             when(dailyEggRateRepository.findTopByCityIdAndRateDateBeforeOrderByRateDateDesc(eq(1L), any(LocalDate.class)))
                     .thenReturn(Optional.empty());
@@ -109,8 +109,8 @@ class EggRateFetchSchedulerTest {
         @Test
         @DisplayName("should skip when response is null")
         void shouldSkipWhenResponseIsNull() {
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(null);
 
             scheduler.fetchAndSaveRates();
@@ -124,8 +124,8 @@ class EggRateFetchSchedulerTest {
             EggRateSingleResponseDto response = EggRateSingleResponseDto.builder()
                     .success(false).build();
 
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(response);
 
             scheduler.fetchAndSaveRates();
@@ -139,8 +139,8 @@ class EggRateFetchSchedulerTest {
             EggRateSingleResponseDto response = EggRateSingleResponseDto.builder()
                     .success(null).build();
 
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(response);
 
             scheduler.fetchAndSaveRates();
@@ -151,8 +151,8 @@ class EggRateFetchSchedulerTest {
         @Test
         @DisplayName("should handle exception gracefully and continue")
         void shouldHandleException() {
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka"))
                     .thenThrow(new RuntimeException("API error"));
 
@@ -167,8 +167,8 @@ class EggRateFetchSchedulerTest {
             EggRateSingleResponseDto response = EggRateSingleResponseDto.builder()
                     .success(true).rate("5.50").trend("stable").change(null).build();
 
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(response);
             when(dailyEggRateRepository.findTopByCityIdAndRateDateBeforeOrderByRateDateDesc(eq(1L), any(LocalDate.class)))
                     .thenReturn(Optional.empty());
@@ -191,8 +191,8 @@ class EggRateFetchSchedulerTest {
             DailyEggRate previousRate = DailyEggRate.builder()
                     .id(2L).rate(new BigDecimal("5.00")).build();
 
-            when(stateRepository.findByActiveTrueOrderByNameAsc()).thenReturn(List.of(state));
-            when(cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(1L)).thenReturn(List.of(city));
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(List.of(city));
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(response);
             when(dailyEggRateRepository.findTopByCityIdAndRateDateBeforeOrderByRateDateDesc(eq(1L), any(LocalDate.class)))
                     .thenReturn(Optional.of(previousRate));
@@ -205,6 +205,17 @@ class EggRateFetchSchedulerTest {
             verify(dailyEggRateRepository).save(argThat(rate ->
                     rate.getPreviousRate() != null &&
                     rate.getPreviousRate().compareTo(new BigDecimal("5.00")) == 0));
+        }
+
+        @Test
+        @DisplayName("should skip when no cities found")
+        void shouldSkipWhenNoCities() {
+            when(stateRepository.findAllByOrderByNameAsc()).thenReturn(List.of(state));
+            when(cityRepository.findAll()).thenReturn(Collections.emptyList());
+
+            scheduler.fetchAndSaveRates();
+
+            verify(eggRateApiClient, never()).getTodayRate(anyString(), anyString());
         }
     }
 }

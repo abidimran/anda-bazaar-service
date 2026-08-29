@@ -25,7 +25,6 @@ import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.Market;
 import com.andabazaar.repository.entity.Notification;
 import com.andabazaar.repository.entity.Payment;
-import com.andabazaar.repository.entity.State;
 import com.andabazaar.repository.entity.User;
 import com.andabazaar.enums.NotificationType;
 import com.andabazaar.enums.RoleType;
@@ -49,7 +48,6 @@ class DashboardServiceImplTest {
     private DashboardServiceImpl dashboardService;
 
     private User user;
-    private State state;
     private City city;
     private Market market;
     private EggPrice eggPrice;
@@ -61,8 +59,7 @@ class DashboardServiceImplTest {
                 .email("john@test.com").phone("1234567890")
                 .password("enc").role(RoleType.USER).status(UserStatus.ACTIVE).build();
 
-        state = State.builder().id(1L).name("Karnataka").active(true).build();
-        city = City.builder().id(1L).name("Bangalore").state(state).active(true).build();
+        city = City.builder().id(1L).name("Bangalore").build();
         market = Market.builder().id(1L).name("Market").city(city).active(true).build();
 
         eggPrice = EggPrice.builder()

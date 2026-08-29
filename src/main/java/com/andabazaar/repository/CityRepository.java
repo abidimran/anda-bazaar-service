@@ -10,9 +10,9 @@ import com.andabazaar.repository.entity.City;
 public interface CityRepository
         extends JpaRepository<City, Long> {
 
-    List<City> findByStateIdAndActiveTrueOrderByNameAsc( Long stateId);
+    Optional<City> findByNameIgnoreCase(String name);
 
-    Optional<City> findByNameIgnoreCaseAndStateId( String name, Long stateId);
+    boolean existsByNameIgnoreCase(String name);
 
-    boolean existsByNameIgnoreCaseAndStateId( String name, Long stateId);
+    List<City> findAllByOrderByNameAsc();
 }

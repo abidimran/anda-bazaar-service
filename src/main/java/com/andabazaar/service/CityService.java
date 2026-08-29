@@ -7,15 +7,13 @@ import com.andabazaar.dto.location.CityResponseDto;
 
 public interface CityService {
 
-    CityResponseDto createCity( CityRequestDto request);
+    CityResponseDto createCity(CityRequestDto request);
 
     CityResponseDto getCityById(Long id);
 
     List<CityResponseDto> getAllCities();
 
-    List<CityResponseDto> getCitiesByState( Long stateId);
-
-    CityResponseDto updateCity( Long id, CityRequestDto request);
+    CityResponseDto updateCity(Long id, CityRequestDto request);
 
     void deleteCity(Long id);
 }

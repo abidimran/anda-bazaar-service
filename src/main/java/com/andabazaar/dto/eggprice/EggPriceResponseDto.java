@@ -22,10 +22,6 @@ public class EggPriceResponseDto {
 
     private String cityName;
 
-    private Long stateId;
-
-    private String stateName;
-
     private LocalDate priceDate;
 
     private BigDecimal pricePerEgg;

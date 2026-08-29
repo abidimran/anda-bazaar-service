@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/egg-prices/**").authenticated()
 
                 .requestMatchers("/api/egg-rates-external/**").authenticated()
+                .requestMatchers("/api/locations/**").authenticated()
                 .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/api/users/**").authenticated()
 

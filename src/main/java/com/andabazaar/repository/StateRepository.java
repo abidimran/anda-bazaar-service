@@ -14,5 +14,5 @@ public interface StateRepository
 
     boolean existsByNameIgnoreCase(String name);
 
-    List<State> findByActiveTrueOrderByNameAsc();
+    List<State> findAllByOrderByNameAsc();
 }

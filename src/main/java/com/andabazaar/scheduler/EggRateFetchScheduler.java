@@ -36,10 +36,17 @@ public class EggRateFetchScheduler {
         log.info("EggRateFetchScheduler started");
 
         LocalDate today = LocalDate.now();
-        List<State> states = stateRepository.findByActiveTrueOrderByNameAsc();
+        List<State> states = stateRepository.findAllByOrderByNameAsc();
 
         if (states.isEmpty()) {
-            log.warn("No active states found, skipping");
+            log.warn("No states found, skipping");
+            return;
+        }
+
+        List<City> cities = cityRepository.findAll();
+
+        if (cities.isEmpty()) {
+            log.warn("No cities found, skipping");
             return;
         }
 
@@ -49,9 +56,6 @@ public class EggRateFetchScheduler {
         int failed = 0;
 
         for (State state : states) {
-
-            List<City> cities = cityRepository.findByStateIdAndActiveTrueOrderByNameAsc(state.getId());
-
             for (City city : cities) {
                 try {
                     EggRateSingleResponseDto response = eggRateApiClient.getTodayRate(city.getName(), state.getName());

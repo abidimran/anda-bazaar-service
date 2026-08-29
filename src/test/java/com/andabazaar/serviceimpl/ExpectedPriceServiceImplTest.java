@@ -24,7 +24,6 @@ import com.andabazaar.dto.expectedprice.ExpectedPriceResponseDto;
 import com.andabazaar.repository.entity.City;
 import com.andabazaar.repository.entity.ExpectedPrice;
 import com.andabazaar.repository.entity.Market;
-import com.andabazaar.repository.entity.State;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.ExpectedPriceRepository;
@@ -40,7 +39,6 @@ class ExpectedPriceServiceImplTest {
     @InjectMocks
     private ExpectedPriceServiceImpl expectedPriceService;
 
-    private State state;
     private City city;
     private Market market;
     private ExpectedPrice expectedPrice;
@@ -48,8 +46,7 @@ class ExpectedPriceServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        state = State.builder().id(1L).name("Karnataka").active(true).build();
-        city = City.builder().id(1L).name("Bangalore").state(state).active(true).build();
+        city = City.builder().id(1L).name("Bangalore").build();
         market = Market.builder().id(1L).name("Main Market").city(city).active(true).build();
 
         expectedPrice = ExpectedPrice.builder()

@@ -24,7 +24,6 @@ import com.andabazaar.dto.eggprice.EggPriceResponseDto;
 import com.andabazaar.repository.entity.City;
 import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.Market;
-import com.andabazaar.repository.entity.State;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.EggPriceRepository;
@@ -43,7 +42,6 @@ class EggPriceServiceImplTest {
     @InjectMocks
     private EggPriceServiceImpl eggPriceService;
 
-    private State state;
     private City city;
     private Market market;
     private EggPrice eggPrice;
@@ -51,8 +49,7 @@ class EggPriceServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        state = State.builder().id(1L).name("Karnataka").active(true).build();
-        city = City.builder().id(1L).name("Bangalore").state(state).active(true).build();
+        city = City.builder().id(1L).name("Bangalore").build();
         market = Market.builder().id(1L).name("Main Market").city(city).active(true).build();
 
         eggPrice = EggPrice.builder()

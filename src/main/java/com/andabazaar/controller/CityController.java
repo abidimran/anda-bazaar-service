@@ -26,47 +26,32 @@ public class CityController {
     @Operation(summary = "Create City")
     @PostMapping
     public ResponseEntity<CityResponseDto> createCity(@Valid @RequestBody CityRequestDto request) {
-
- return ResponseEntity.status(HttpStatus.CREATED).body(cityService.createCity(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cityService.createCity(request));
     }
 
     @Operation(summary = "Get All Cities")
     @GetMapping
     public ResponseEntity<PagedResponse<CityResponseDto>>
             getAllCities(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-
- return ResponseEntity.ok(PagedResponse.fromList(cityService.getAllCities(), page, size));
-    }
-
-    @Operation(summary = "Get Cities By State")
-    @GetMapping("/state/{stateId}")
-    public ResponseEntity<PagedResponse<CityResponseDto>>
-            getCitiesByState(@PathVariable Long stateId,
-                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-
- return ResponseEntity.ok(PagedResponse.fromList(cityService.getCitiesByState(stateId), page, size));
+        return ResponseEntity.ok(PagedResponse.fromList(cityService.getAllCities(), page, size));
     }
 
     @Operation(summary = "Get City")
     @GetMapping("/{id}")
     public ResponseEntity<CityResponseDto> getCity(@PathVariable Long id) {
-
- return ResponseEntity.ok(cityService.getCityById(id));
+        return ResponseEntity.ok(cityService.getCityById(id));
     }
 
     @Operation(summary = "Update City")
     @PutMapping("/{id}")
     public ResponseEntity<CityResponseDto> updateCity(@PathVariable Long id, @Valid @RequestBody CityRequestDto request) {
-
- return ResponseEntity.ok(cityService.updateCity(id, request));
+        return ResponseEntity.ok(cityService.updateCity(id, request));
     }
 
     @Operation(summary = "Delete City")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
-
         cityService.deleteCity(id);
-
- return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }

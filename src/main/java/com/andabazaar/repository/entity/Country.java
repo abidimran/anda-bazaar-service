@@ -5,16 +5,16 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "states", uniqueConstraints = {
+@Table(name = "countries", uniqueConstraints = {
     @UniqueConstraint(columnNames = "name")
 })
 @Getter
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class State extends BaseEntity {
+public class Country extends BaseEntity {
 
-    public State(Long id, String name) {
+    public Country(Long id, String name) {
         super(id, name);
     }
 }
