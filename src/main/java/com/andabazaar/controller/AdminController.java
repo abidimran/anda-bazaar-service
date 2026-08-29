@@ -1,12 +1,5 @@
 package com.andabazaar.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.dashboard.AdminDashboardDto;
 import com.andabazaar.dto.user.UserRequestDto;
@@ -15,14 +8,19 @@ import com.andabazaar.service.AdminService;
 import com.andabazaar.service.DashboardService;
 
 import jakarta.validation.Valid;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Admin", description = "Admin dashboard and user management")
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
-
     private final DashboardService dashboardService;
     private final AdminService adminService;
 
@@ -30,14 +28,12 @@ public class AdminController {
     @GetMapping("/dashboard")
     public ResponseEntity<AdminDashboardDto>
             getAdminDashboard() {
-
  return ResponseEntity.ok(dashboardService.getAdminDashboard());
     }
 
     @Operation(summary = "Create Admin")
     @PostMapping()
     public ResponseEntity<UserResponseDto> createAdmin(@Valid @RequestBody UserRequestDto request) {
-
  return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createAdmin(request));
     }
 
@@ -45,7 +41,6 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<PagedResponse<UserResponseDto>>
             getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-
  return ResponseEntity.ok(PagedResponse.fromList(adminService.getAllUsers(), page, size));
     }
 
@@ -53,7 +48,6 @@ public class AdminController {
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponseDto>
             getUser(@PathVariable Long id) {
-
  return ResponseEntity.ok(adminService.getUser(id));
     }
 
@@ -61,7 +55,6 @@ public class AdminController {
     @PatchMapping("/users/{id}/status")
     public ResponseEntity<UserResponseDto>
             changeUserStatus(@PathVariable Long id, @RequestParam String status) {
-
  return ResponseEntity.ok(adminService.changeUserStatus(id, status));
     }
 
@@ -69,9 +62,7 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Void>
             deleteUser(@PathVariable Long id) {
-
         adminService.deleteUser(id);
-
  return ResponseEntity.noContent().build();
     }
 }

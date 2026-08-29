@@ -12,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ExpectedPriceResponseDto {
-
     private Long id;
 
     private Long marketId;

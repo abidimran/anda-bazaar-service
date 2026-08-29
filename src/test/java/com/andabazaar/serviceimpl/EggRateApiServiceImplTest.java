@@ -1,7 +1,9 @@
 package com.andabazaar.serviceimpl;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.andabazaar.dto.eggrate.EggRateApiResponseDto;
+import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
+import com.andabazaar.exception.BadRequestException;
+import com.andabazaar.feign.EggRateApiClient;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,16 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.andabazaar.dto.eggrate.EggRateApiResponseDto;
-import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
-import com.andabazaar.exception.BadRequestException;
-import com.andabazaar.feign.EggRateApiClient;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("EggRateApiServiceImpl Tests")
 class EggRateApiServiceImplTest {
-
     @Mock
     private EggRateApiClient eggRateApiClient;
 
@@ -35,7 +33,6 @@ class EggRateApiServiceImplTest {
         apiResponse = EggRateApiResponseDto.builder()
                 .success(true).city("Bangalore").state("Karnataka")
                 .todayRate("5.50").yesterdayRate("5.00").trend("up").change("0.50").build();
-
         singleResponse = EggRateSingleResponseDto.builder()
                 .success(true).city("Bangalore").state("Karnataka")
                 .rate("5.50").trend("up").change("0.50").build();
@@ -44,14 +41,11 @@ class EggRateApiServiceImplTest {
     @Nested
     @DisplayName("getEggRates")
     class GetEggRates {
-
         @Test
         @DisplayName("should return egg rates successfully")
         void shouldReturnEggRates() {
             when(eggRateApiClient.getEggRates("Bangalore", "Karnataka")).thenReturn(apiResponse);
-
             EggRateApiResponseDto result = eggRateApiService.getEggRates("Bangalore", "Karnataka");
-
             assertThat(result).isNotNull();
             assertThat(result.getSuccess()).isTrue();
         }
@@ -60,9 +54,7 @@ class EggRateApiServiceImplTest {
         @DisplayName("should trim city and state")
         void shouldTrimCityAndState() {
             when(eggRateApiClient.getEggRates("Bangalore", "Karnataka")).thenReturn(apiResponse);
-
             EggRateApiResponseDto result = eggRateApiService.getEggRates(" Bangalore ", " Karnataka ");
-
             assertThat(result).isNotNull();
         }
 
@@ -71,7 +63,6 @@ class EggRateApiServiceImplTest {
         void shouldThrowWhenApiFails() {
             when(eggRateApiClient.getEggRates("Bangalore", "Karnataka"))
                     .thenThrow(new RuntimeException("API error"));
-
             assertThatThrownBy(() -> eggRateApiService.getEggRates("Bangalore", "Karnataka"))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessageContaining("Failed to fetch egg rates");
@@ -113,14 +104,11 @@ class EggRateApiServiceImplTest {
     @Nested
     @DisplayName("getTodayRate")
     class GetTodayRate {
-
         @Test
         @DisplayName("should return today rate")
         void shouldReturnTodayRate() {
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka")).thenReturn(singleResponse);
-
             EggRateSingleResponseDto result = eggRateApiService.getTodayRate("Bangalore", "Karnataka");
-
             assertThat(result).isNotNull();
         }
 
@@ -129,7 +117,6 @@ class EggRateApiServiceImplTest {
         void shouldThrowWhenApiFails() {
             when(eggRateApiClient.getTodayRate("Bangalore", "Karnataka"))
                     .thenThrow(new RuntimeException("API error"));
-
             assertThatThrownBy(() -> eggRateApiService.getTodayRate("Bangalore", "Karnataka"))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessageContaining("Failed to fetch today's egg rate");
@@ -146,14 +133,11 @@ class EggRateApiServiceImplTest {
     @Nested
     @DisplayName("getYesterdayRate")
     class GetYesterdayRate {
-
         @Test
         @DisplayName("should return yesterday rate")
         void shouldReturnYesterdayRate() {
             when(eggRateApiClient.getYesterdayRate("Bangalore", "Karnataka")).thenReturn(singleResponse);
-
             EggRateSingleResponseDto result = eggRateApiService.getYesterdayRate("Bangalore", "Karnataka");
-
             assertThat(result).isNotNull();
         }
 
@@ -162,7 +146,6 @@ class EggRateApiServiceImplTest {
         void shouldThrowWhenApiFails() {
             when(eggRateApiClient.getYesterdayRate("Bangalore", "Karnataka"))
                     .thenThrow(new RuntimeException("API error"));
-
             assertThatThrownBy(() -> eggRateApiService.getYesterdayRate("Bangalore", "Karnataka"))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessageContaining("Failed to fetch yesterday's egg rate");

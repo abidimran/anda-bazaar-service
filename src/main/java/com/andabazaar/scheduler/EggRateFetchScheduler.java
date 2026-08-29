@@ -1,30 +1,28 @@
 package com.andabazaar.scheduler;
 
+import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
+import com.andabazaar.feign.EggRateApiClient;
+import com.andabazaar.repository.CityRepository;
+import com.andabazaar.repository.DailyEggRateRepository;
+import com.andabazaar.repository.StateRepository;
+import com.andabazaar.repository.entity.City;
+import com.andabazaar.repository.entity.DailyEggRate;
+import com.andabazaar.repository.entity.State;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
-import com.andabazaar.repository.entity.City;
-import com.andabazaar.repository.entity.DailyEggRate;
-import com.andabazaar.repository.entity.State;
-import com.andabazaar.feign.EggRateApiClient;
-import com.andabazaar.repository.CityRepository;
-import com.andabazaar.repository.DailyEggRateRepository;
-import com.andabazaar.repository.StateRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class EggRateFetchScheduler {
-
     private final EggRateApiClient eggRateApiClient;
     private final StateRepository stateRepository;
     private final CityRepository cityRepository;
@@ -32,19 +30,15 @@ public class EggRateFetchScheduler {
 
     @Scheduled(fixedRate = 3600000)
     public void fetchAndSaveRates() {
-
         log.info("EggRateFetchScheduler started");
-
         LocalDate today = LocalDate.now();
         List<State> states = stateRepository.findAllByOrderByNameAsc();
-
         if (states.isEmpty()) {
             log.warn("No states found, skipping");
             return;
         }
 
         List<City> cities = cityRepository.findAll();
-
         if (cities.isEmpty()) {
             log.warn("No cities found, skipping");
             return;
@@ -54,27 +48,21 @@ public class EggRateFetchScheduler {
         int updated = 0;
         int skipped = 0;
         int failed = 0;
-
         for (State state : states) {
             for (City city : cities) {
                 try {
                     EggRateSingleResponseDto response = eggRateApiClient.getTodayRate(city.getName(), state.getName());
-
                     if (response == null || response.getSuccess() == null || !response.getSuccess()) {
                         skipped++;
                         continue;
                     }
-
                     BigDecimal rate = new BigDecimal(response.getRate());
                     BigDecimal changeAmount = response.getChange() != null ? new BigDecimal(response.getChange()) : BigDecimal.ZERO;
-
                     BigDecimal previousRate = dailyEggRateRepository
                             .findTopByCityIdAndRateDateBeforeOrderByRateDateDesc(city.getId(), today)
                             .map(DailyEggRate::getRate)
                             .orElse(null);
-
                     Optional<DailyEggRate> existing = dailyEggRateRepository.findByCityIdAndRateDate(city.getId(), today);
-
                     if (existing.isPresent()) {
                         DailyEggRate record = existing.get();
                         record.setRate(rate);
@@ -98,7 +86,6 @@ public class EggRateFetchScheduler {
                         dailyEggRateRepository.save(record);
                         saved++;
                     }
-
                 } catch (Exception e) {
                     failed++;
                     log.debug("No rate for city={} state={}: {}", city.getName(), state.getName(), e.getMessage());

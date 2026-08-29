@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserProfileDto {
-
     private Long id;
 
     private String firstName;

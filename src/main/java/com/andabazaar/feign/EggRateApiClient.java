@@ -1,12 +1,12 @@
 package com.andabazaar.feign;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.andabazaar.config.EggRateFeignConfig;
 import com.andabazaar.dto.eggrate.EggRateApiResponseDto;
 import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
         name = "egg-rate-api",
@@ -14,7 +14,6 @@ import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
         configuration = EggRateFeignConfig.class
 )
 public interface EggRateApiClient {
-
     @GetMapping("/api/Today-Egg-Rates/all_rates.php")
     EggRateApiResponseDto getEggRates(@RequestParam("city") String city, @RequestParam("state") String state);
 

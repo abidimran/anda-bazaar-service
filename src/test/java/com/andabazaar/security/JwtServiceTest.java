@@ -1,20 +1,18 @@
 package com.andabazaar.security;
 
-import static org.assertj.core.api.Assertions.*;
+import com.andabazaar.config.JwtConfig;
+import com.andabazaar.enums.RoleType;
+import com.andabazaar.enums.UserStatus;
+import com.andabazaar.repository.entity.User;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import com.andabazaar.config.JwtConfig;
-import com.andabazaar.repository.entity.User;
-import com.andabazaar.enums.RoleType;
-import com.andabazaar.enums.UserStatus;
+import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("JwtService Tests")
 class JwtServiceTest {
-
     private JwtService jwtService;
     private TokenBlacklistService tokenBlacklistService;
     private User user;
@@ -24,10 +22,8 @@ class JwtServiceTest {
         JwtConfig jwtConfig = new JwtConfig();
         jwtConfig.setSecret("myTestSecretKeyThatIsLongEnoughForHS256Algorithm123");
         jwtConfig.setExpiration(3600000L);
-
         tokenBlacklistService = new TokenBlacklistService();
         jwtService = new JwtService(jwtConfig, tokenBlacklistService);
-
         user = User.builder()
                 .id(1L).email("test@example.com").firstName("Test").lastName("User")
                 .password("encodedPassword").role(RoleType.USER).status(UserStatus.ACTIVE).build();
@@ -36,7 +32,6 @@ class JwtServiceTest {
     @Nested
     @DisplayName("generateToken")
     class GenerateToken {
-
         @Test
         @DisplayName("should generate a non-null token")
         void shouldGenerateNonNullToken() {
@@ -54,7 +49,6 @@ class JwtServiceTest {
     @Nested
     @DisplayName("extractEmail")
     class ExtractEmail {
-
         @Test
         @DisplayName("should extract email from token")
         void shouldExtractEmail() {
@@ -66,7 +60,6 @@ class JwtServiceTest {
     @Nested
     @DisplayName("isTokenValid")
     class IsTokenValid {
-
         @Test
         @DisplayName("should return true for valid token")
         void shouldReturnTrueForValidToken() {
@@ -111,7 +104,6 @@ class JwtServiceTest {
     @Nested
     @DisplayName("getExpirationTime")
     class GetExpirationTime {
-
         @Test
         @DisplayName("should return future expiration time")
         void shouldReturnFutureExpiration() {

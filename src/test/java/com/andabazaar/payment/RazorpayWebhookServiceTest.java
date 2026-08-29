@@ -1,6 +1,6 @@
 package com.andabazaar.payment;
 
-import static org.assertj.core.api.Assertions.*;
+import com.andabazaar.config.RazorpayConfig;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,13 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.andabazaar.config.RazorpayConfig;
+import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("RazorpayWebhookService Tests")
 class RazorpayWebhookServiceTest {
-
     @Mock
     private RazorpayConfig razorpayConfig;
 
@@ -26,7 +24,6 @@ class RazorpayWebhookServiceTest {
     @Nested
     @DisplayName("verifyWebhookSignature")
     class VerifyWebhookSignature {
-
         @Test
         @DisplayName("should return false for null payload")
         void shouldReturnFalseForNullPayload() {
@@ -67,14 +64,11 @@ class RazorpayWebhookServiceTest {
     @Nested
     @DisplayName("getEvent")
     class GetEvent {
-
         @Test
         @DisplayName("should extract event from payload")
         void shouldExtractEvent() {
             String payload = "{\"event\": \"payment.captured\"}";
-
             String result = webhookService.getEvent(payload);
-
             assertThat(result).isEqualTo("payment.captured");
         }
     }
@@ -82,7 +76,6 @@ class RazorpayWebhookServiceTest {
     @Nested
     @DisplayName("getRazorpayOrderId")
     class GetRazorpayOrderId {
-
         @Test
         @DisplayName("should extract order id from payment entity")
         void shouldExtractFromPayment() {
@@ -97,7 +90,6 @@ class RazorpayWebhookServiceTest {
                   }
                 }
                 """;
-
             String result = webhookService.getRazorpayOrderId(payload);
             assertThat(result).isEqualTo("order_123");
         }
@@ -116,7 +108,6 @@ class RazorpayWebhookServiceTest {
                   }
                 }
                 """;
-
             String result = webhookService.getRazorpayOrderId(payload);
             assertThat(result).isEqualTo("order_456");
         }
@@ -141,7 +132,6 @@ class RazorpayWebhookServiceTest {
     @Nested
     @DisplayName("getRazorpayPaymentId")
     class GetRazorpayPaymentId {
-
         @Test
         @DisplayName("should extract payment id")
         void shouldExtractPaymentId() {
@@ -156,7 +146,6 @@ class RazorpayWebhookServiceTest {
                   }
                 }
                 """;
-
             String result = webhookService.getRazorpayPaymentId(payload);
             assertThat(result).isEqualTo("pay_123");
         }

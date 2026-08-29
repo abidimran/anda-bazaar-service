@@ -1,7 +1,6 @@
 package com.andabazaar.dto.eggrate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.*;
 
 @Getter
@@ -10,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class EggRateSingleResponseDto {
-
     private Boolean success;
 
     private String city;

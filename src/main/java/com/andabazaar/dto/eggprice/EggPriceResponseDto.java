@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class EggPriceResponseDto {
-
     private Long id;
 
     private Long marketId;

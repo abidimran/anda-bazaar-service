@@ -5,15 +5,12 @@ import java.math.RoundingMode;
 import java.util.List;
 
 public final class PriceCalculationUtil {
-
     private PriceCalculationUtil() {
     }
 
     public static BigDecimal calculateChange( BigDecimal previousPrice, BigDecimal currentPrice) {
-
         if (previousPrice == null
                 || currentPrice == null) {
-
             return BigDecimal.ZERO;
         }
 
@@ -21,15 +18,12 @@ public final class PriceCalculationUtil {
     }
 
     public static String calculateChangeType( BigDecimal previousPrice, BigDecimal currentPrice) {
-
         if (previousPrice == null
                 || currentPrice == null) {
-
             return "NO_CHANGE";
         }
 
         int result = currentPrice.compareTo(previousPrice);
-
         if (result > 0) {
             return "INCREASE";
         }
@@ -42,11 +36,9 @@ public final class PriceCalculationUtil {
     }
 
     public static BigDecimal calculatePercentageChange( BigDecimal previousPrice, BigDecimal currentPrice) {
-
         if (previousPrice == null
                 || currentPrice == null
                 || previousPrice.compareTo( BigDecimal.ZERO) == 0) {
-
             return BigDecimal.ZERO;
         }
 
@@ -57,7 +49,6 @@ public final class PriceCalculationUtil {
     }
 
     public static BigDecimal calculateAverage( List<BigDecimal> prices) {
-
         if (prices == null || prices.isEmpty()) {
             return BigDecimal.ZERO;
         }
@@ -66,7 +57,6 @@ public final class PriceCalculationUtil {
                 prices.stream()
                         .filter(price -> price != null)
                         .toList();
-
         if (validPrices.isEmpty()) {
             return BigDecimal.ZERO;
         }
@@ -74,16 +64,10 @@ public final class PriceCalculationUtil {
         BigDecimal total =
                 validPrices.stream()
                         .reduce( BigDecimal.ZERO, BigDecimal::add);
-
-        return total.divide(
-                BigDecimal.valueOf( validPrices.size()
-                ),
-                2,
-                RoundingMode.HALF_UP);
+        return total.divide( BigDecimal.valueOf( validPrices.size() ), 2, RoundingMode.HALF_UP);
     }
 
     public static BigDecimal findLowestPrice( List<BigDecimal> prices) {
-
         if (prices == null) {
             return BigDecimal.ZERO;
         }
@@ -95,7 +79,6 @@ public final class PriceCalculationUtil {
     }
 
     public static BigDecimal findHighestPrice( List<BigDecimal> prices) {
-
         if (prices == null) {
             return BigDecimal.ZERO;
         }

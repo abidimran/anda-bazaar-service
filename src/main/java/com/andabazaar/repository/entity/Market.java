@@ -1,8 +1,8 @@
 package com.andabazaar.repository.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Market {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public final class DateTimeUtil {
-
     private DateTimeUtil() {
     }
 
@@ -26,28 +25,23 @@ public final class DateTimeUtil {
     }
 
     public static LocalDateTime startOfDay( LocalDate date) {
-
         return date.atStartOfDay();
     }
 
     public static LocalDateTime endOfDay( LocalDate date) {
-
         return date.atTime(LocalTime.MAX);
     }
 
     public static boolean isToday( LocalDate date) {
-
         return LocalDate.now().equals(date);
     }
 
     public static boolean isPast( LocalDate date) {
-
         return date != null
                 && date.isBefore(LocalDate.now());
     }
 
     public static boolean isFuture( LocalDate date) {
-
         return date != null
                 && date.isAfter(LocalDate.now());
     }

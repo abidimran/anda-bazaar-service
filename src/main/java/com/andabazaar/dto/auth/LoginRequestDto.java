@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LoginRequestDto {
-
     @NotBlank(message = "Email is required")
     @Email(message = "Enter a valid email")
     private String email;

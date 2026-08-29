@@ -14,20 +14,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class AdminDashboardDto {
-
     // Users
     private long totalUsers;
     private long activeUsers;
     private long inactiveUsers;
-
     // Egg Prices
     private long todayPriceCount;
     private long yesterdayPriceCount;
-
     // Payments
     private long totalPayments;
     private BigDecimal totalRevenue;
-
     // Notifications
     private long unreadNotifications;
 }

@@ -1,24 +1,22 @@
 package com.andabazaar.security;
 
-import java.util.Date;
-
-import javax.crypto.SecretKey;
-
-import org.springframework.stereotype.Service;
-
 import com.andabazaar.config.JwtConfig;
 import com.andabazaar.repository.entity.User;
+
+import java.util.Date;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+import javax.crypto.SecretKey;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-
     private final JwtConfig jwtConfig;
     private final TokenBlacklistService tokenBlacklistService;
 
@@ -29,7 +27,6 @@ public class JwtService {
     public String generateToken(User user) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + jwtConfig.getExpiration());
-
         return Jwts.builder()
                 .subject(user.getEmail())
                 .claim("userId", user.getId())

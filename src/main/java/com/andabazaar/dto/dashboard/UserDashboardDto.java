@@ -14,14 +14,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class UserDashboardDto {
-
     // User
     private Long userId;
     private String userName;
-
     // Notifications
     private long unreadNotifications;
-
     // Today's Price
     private BigDecimal lowestEggPrice;
     private BigDecimal highestEggPrice;

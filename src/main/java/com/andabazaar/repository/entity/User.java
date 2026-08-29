@@ -1,11 +1,11 @@
 package com.andabazaar.repository.entity;
 
-import java.time.LocalDateTime;
-
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
 @Entity
@@ -22,7 +22,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

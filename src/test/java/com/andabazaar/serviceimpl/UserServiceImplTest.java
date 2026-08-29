@@ -1,8 +1,15 @@
 package com.andabazaar.serviceimpl;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import com.andabazaar.dto.user.UserProfileDto;
+import com.andabazaar.dto.user.UserRequestDto;
+import com.andabazaar.dto.user.UserResponseDto;
+import com.andabazaar.enums.RoleType;
+import com.andabazaar.enums.UserStatus;
+import com.andabazaar.exception.BadRequestException;
+import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.UserMapper;
+import com.andabazaar.repository.UserRepository;
+import com.andabazaar.repository.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,22 +23,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.andabazaar.dto.user.UserProfileDto;
-import com.andabazaar.dto.user.UserRequestDto;
-import com.andabazaar.dto.user.UserResponseDto;
-import com.andabazaar.repository.entity.User;
-import com.andabazaar.enums.RoleType;
-import com.andabazaar.enums.UserStatus;
-import com.andabazaar.exception.BadRequestException;
-import com.andabazaar.exception.ResourceNotFoundException;
-import com.andabazaar.mapper.UserMapper;
-import com.andabazaar.repository.UserRepository;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserServiceImpl Tests")
 class UserServiceImplTest {
-
     @Mock
     private UserRepository userRepository;
 
@@ -62,7 +60,6 @@ class UserServiceImplTest {
                 .preferredCity("Bangalore")
                 .notificationEnabled(true)
                 .build();
-
         lenient().when(userMapper.toResponseDto(any(User.class))).thenAnswer(inv -> {
             User u = inv.getArgument(0);
             return UserResponseDto.builder()
@@ -73,7 +70,6 @@ class UserServiceImplTest {
                     .notificationEnabled(u.getNotificationEnabled())
                     .createdAt(u.getCreatedAt()).updatedAt(u.getUpdatedAt()).build();
         });
-
         lenient().when(userMapper.toProfileDto(any(User.class))).thenAnswer(inv -> {
             User u = inv.getArgument(0);
             return UserProfileDto.builder()
@@ -83,7 +79,6 @@ class UserServiceImplTest {
                     .preferredLanguage(u.getPreferredLanguage()).preferredCity(u.getPreferredCity())
                     .notificationEnabled(u.getNotificationEnabled()).build();
         });
-
         requestDto = UserRequestDto.builder()
                 .firstName("John")
                 .lastName("Doe")
@@ -99,7 +94,6 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("createUser")
     class CreateUser {
-
         @Test
         @DisplayName("should create user successfully")
         void shouldCreateUserSuccessfully() {
@@ -107,9 +101,7 @@ class UserServiceImplTest {
             when(userRepository.existsByPhone("1234567890")).thenReturn(false);
             when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             UserResponseDto result = userService.createUser(requestDto);
-
             assertThat(result).isNotNull();
             assertThat(result.getFirstName()).isEqualTo("John");
             assertThat(result.getRole()).isEqualTo(RoleType.USER);
@@ -120,14 +112,11 @@ class UserServiceImplTest {
         @DisplayName("should create user with null notificationEnabled defaults to true")
         void shouldCreateUserWithNullNotificationEnabled() {
             requestDto.setNotificationEnabled(null);
-
             when(userRepository.existsByEmail("john@example.com")).thenReturn(false);
             when(userRepository.existsByPhone("1234567890")).thenReturn(false);
             when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             UserResponseDto result = userService.createUser(requestDto);
-
             assertThat(result).isNotNull();
         }
 
@@ -135,7 +124,6 @@ class UserServiceImplTest {
         @DisplayName("should throw when email already registered")
         void shouldThrowWhenEmailAlreadyRegistered() {
             when(userRepository.existsByEmail("john@example.com")).thenReturn(true);
-
             assertThatThrownBy(() -> userService.createUser(requestDto))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Email already registered");
@@ -146,7 +134,6 @@ class UserServiceImplTest {
         void shouldThrowWhenPhoneAlreadyRegistered() {
             when(userRepository.existsByEmail("john@example.com")).thenReturn(false);
             when(userRepository.existsByPhone("1234567890")).thenReturn(true);
-
             assertThatThrownBy(() -> userService.createUser(requestDto))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Phone number already registered");
@@ -156,14 +143,11 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("getUserById")
     class GetUserById {
-
         @Test
         @DisplayName("should return user by id")
         void shouldReturnUserById() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
             UserResponseDto result = userService.getUserById(1L);
-
             assertThat(result).isNotNull();
             assertThat(result.getId()).isEqualTo(1L);
         }
@@ -172,7 +156,6 @@ class UserServiceImplTest {
         @DisplayName("should throw when user not found")
         void shouldThrowWhenUserNotFound() {
             when(userRepository.findById(99L)).thenReturn(Optional.empty());
-
             assertThatThrownBy(() -> userService.getUserById(99L))
                     .isInstanceOf(ResourceNotFoundException.class);
         }
@@ -189,14 +172,11 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("getAllUsers")
     class GetAllUsers {
-
         @Test
         @DisplayName("should return all users")
         void shouldReturnAllUsers() {
             when(userRepository.findAll()).thenReturn(List.of(user));
-
             List<UserResponseDto> result = userService.getAllUsers();
-
             assertThat(result).hasSize(1);
         }
 
@@ -204,9 +184,7 @@ class UserServiceImplTest {
         @DisplayName("should return empty list when no users")
         void shouldReturnEmptyList() {
             when(userRepository.findAll()).thenReturn(List.of());
-
             List<UserResponseDto> result = userService.getAllUsers();
-
             assertThat(result).isEmpty();
         }
     }
@@ -214,15 +192,12 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("updateUser")
     class UpdateUser {
-
         @Test
         @DisplayName("should update user successfully")
         void shouldUpdateUserSuccessfully() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             UserResponseDto result = userService.updateUser(1L, requestDto);
-
             assertThat(result).isNotNull();
             verify(userRepository).save(any(User.class));
         }
@@ -233,9 +208,7 @@ class UserServiceImplTest {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(passwordEncoder.encode("password123")).thenReturn("newEncodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             userService.updateUser(1L, requestDto);
-
             verify(passwordEncoder).encode("password123");
         }
 
@@ -245,9 +218,7 @@ class UserServiceImplTest {
             requestDto.setPassword(null);
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             userService.updateUser(1L, requestDto);
-
             verify(passwordEncoder, never()).encode(any());
         }
 
@@ -257,9 +228,7 @@ class UserServiceImplTest {
             requestDto.setPassword("   ");
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             userService.updateUser(1L, requestDto);
-
             verify(passwordEncoder, never()).encode(any());
         }
 
@@ -269,7 +238,6 @@ class UserServiceImplTest {
             requestDto.setEmail("other@example.com");
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.existsByEmail("other@example.com")).thenReturn(true);
-
             assertThatThrownBy(() -> userService.updateUser(1L, requestDto))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Email already registered");
@@ -281,7 +249,6 @@ class UserServiceImplTest {
             requestDto.setPhone("9999999999");
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.existsByPhone("9999999999")).thenReturn(true);
-
             assertThatThrownBy(() -> userService.updateUser(1L, requestDto))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Phone number already registered");
@@ -293,9 +260,7 @@ class UserServiceImplTest {
             requestDto.setNotificationEnabled(false);
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             userService.updateUser(1L, requestDto);
-
             verify(userRepository).save(argThat(u -> Boolean.FALSE.equals(u.getNotificationEnabled())));
         }
     }
@@ -303,14 +268,11 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("deleteUser")
     class DeleteUser {
-
         @Test
         @DisplayName("should delete user successfully")
         void shouldDeleteUserSuccessfully() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
             userService.deleteUser(1L);
-
             verify(userRepository).delete(user);
         }
     }
@@ -318,14 +280,11 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("getProfile")
     class GetProfile {
-
         @Test
         @DisplayName("should return user profile")
         void shouldReturnProfile() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
             UserProfileDto result = userService.getProfile(1L);
-
             assertThat(result).isNotNull();
             assertThat(result.getId()).isEqualTo(1L);
             assertThat(result.getFirstName()).isEqualTo("John");
@@ -337,15 +296,12 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("changeUserStatus")
     class ChangeUserStatus {
-
         @Test
         @DisplayName("should change user status successfully")
         void shouldChangeStatusSuccessfully() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
             when(userRepository.save(any(User.class))).thenReturn(user);
-
             UserResponseDto result = userService.changeUserStatus(1L, "INACTIVE");
-
             assertThat(result).isNotNull();
         }
 
@@ -353,7 +309,6 @@ class UserServiceImplTest {
         @DisplayName("should throw when status is invalid")
         void shouldThrowWhenInvalidStatus() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
             assertThatThrownBy(() -> userService.changeUserStatus(1L, "INVALID"))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessageContaining("Invalid user status");
@@ -363,7 +318,6 @@ class UserServiceImplTest {
         @DisplayName("should throw when status is null")
         void shouldThrowWhenStatusIsNull() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
             assertThatThrownBy(() -> userService.changeUserStatus(1L, null))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("User status is required");
@@ -373,7 +327,6 @@ class UserServiceImplTest {
         @DisplayName("should throw when status is blank")
         void shouldThrowWhenStatusIsBlank() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
             assertThatThrownBy(() -> userService.changeUserStatus(1L, "  "))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("User status is required");

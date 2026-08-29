@@ -1,8 +1,13 @@
 package com.andabazaar.security;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.andabazaar.enums.RoleType;
+import com.andabazaar.enums.UserStatus;
+import com.andabazaar.repository.entity.User;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,20 +19,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.andabazaar.repository.entity.User;
-import com.andabazaar.enums.RoleType;
-import com.andabazaar.enums.UserStatus;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("JwtAuthenticationFilter Tests")
 class JwtAuthenticationFilterTest {
-
     @Mock private JwtService jwtService;
     @Mock private CustomUserDetailsService userDetailsService;
     @Mock private HttpServletRequest request;
@@ -52,14 +49,11 @@ class JwtAuthenticationFilterTest {
     @Nested
     @DisplayName("doFilterInternal")
     class DoFilterInternal {
-
         @Test
         @DisplayName("should pass through when no auth header")
         void shouldPassThroughWhenNoAuthHeader() throws ServletException, IOException {
             when(request.getHeader("Authorization")).thenReturn(null);
-
             jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-
             verify(filterChain).doFilter(request, response);
             assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         }
@@ -68,9 +62,7 @@ class JwtAuthenticationFilterTest {
         @DisplayName("should pass through when auth header does not start with Bearer")
         void shouldPassThroughWhenNotBearer() throws ServletException, IOException {
             when(request.getHeader("Authorization")).thenReturn("Basic abc123");
-
             jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-
             verify(filterChain).doFilter(request, response);
         }
 
@@ -81,9 +73,7 @@ class JwtAuthenticationFilterTest {
             // We can only test the no-auth and exception paths.
             when(request.getHeader("Authorization")).thenReturn("Bearer some.token");
             when(jwtService.extractEmail("some.token")).thenThrow(new RuntimeException("parse error"));
-
             jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-
             verify(filterChain).doFilter(request, response);
         }
 
@@ -92,9 +82,7 @@ class JwtAuthenticationFilterTest {
         void shouldHandleException() throws ServletException, IOException {
             when(request.getHeader("Authorization")).thenReturn("Bearer bad.token");
             when(jwtService.extractEmail("bad.token")).thenThrow(new RuntimeException("Invalid token"));
-
             jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-
             verify(filterChain).doFilter(request, response);
             assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         }
@@ -104,9 +92,7 @@ class JwtAuthenticationFilterTest {
         void shouldNotAuthenticateWhenEmailNull() throws ServletException, IOException {
             when(request.getHeader("Authorization")).thenReturn("Bearer some.token");
             when(jwtService.extractEmail("some.token")).thenReturn(null);
-
             jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-
             verify(filterChain).doFilter(request, response);
             assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         }

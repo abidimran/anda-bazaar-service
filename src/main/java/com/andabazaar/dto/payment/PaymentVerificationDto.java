@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PaymentVerificationDto {
-
     @NotBlank(message = "Razorpay order ID is required")
     private String razorpayOrderId;
 
@@ -21,4 +20,3 @@ public class PaymentVerificationDto {
     @NotBlank(message = "Razorpay signature is required")
     private String razorpaySignature;
 }
-

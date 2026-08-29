@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PagedResponse<T> {
-
     private List<T> content;
     private int page;
     private int size;
@@ -37,10 +36,8 @@ public class PagedResponse<T> {
         int total = list.size();
         int start = page * size;
         int end = Math.min(start + size, total);
-
         List<T> content = (start >= total) ? List.of() : list.subList(start, end);
         int totalPages = (int) Math.ceil((double) total / size);
-
         return PagedResponse.<T>builder()
                 .content(content)
                 .page(page)

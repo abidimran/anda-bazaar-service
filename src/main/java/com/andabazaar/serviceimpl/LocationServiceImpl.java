@@ -1,10 +1,5 @@
 package com.andabazaar.serviceimpl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.andabazaar.dto.location.LocationRequestDto;
 import com.andabazaar.dto.location.LocationResponseDto;
 import com.andabazaar.exception.BadRequestException;
@@ -20,13 +15,16 @@ import com.andabazaar.repository.entity.Location;
 import com.andabazaar.repository.entity.State;
 import com.andabazaar.service.LocationService;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class LocationServiceImpl implements LocationService {
-
     private final LocationRepository locationRepository;
     private final CountryRepository countryRepository;
     private final StateRepository stateRepository;
@@ -38,7 +36,6 @@ public class LocationServiceImpl implements LocationService {
         Country country = findOrCreateCountry(request.getCountryName().trim());
         State state = findOrCreateState(request.getStateName().trim());
         City city = findOrCreateCity(request.getCityName().trim());
-
         Location location = Location.builder()
                 .country(country)
                 .state(state)
@@ -47,7 +44,6 @@ public class LocationServiceImpl implements LocationService {
                 .longitude(request.getLongitude())
                 .rapidEnabled(request.isRapidEnabled())
                 .build();
-
         return locationMapper.toResponseDto(locationRepository.save(location));
     }
 
@@ -66,18 +62,15 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationResponseDto updateLocation(Long id, LocationRequestDto request) {
         Location location = findLocation(id);
-
         Country country = findOrCreateCountry(request.getCountryName().trim());
         State state = findOrCreateState(request.getStateName().trim());
         City city = findOrCreateCity(request.getCityName().trim());
-
         location.setCountry(country);
         location.setState(state);
         location.setCity(city);
         location.setLatitude(request.getLatitude());
         location.setLongitude(request.getLongitude());
         location.setRapidEnabled(request.isRapidEnabled());
-
         return locationMapper.toResponseDto(locationRepository.save(location));
     }
 

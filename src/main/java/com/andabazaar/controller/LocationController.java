@@ -1,26 +1,24 @@
 package com.andabazaar.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.location.LocationRequestDto;
 import com.andabazaar.dto.location.LocationResponseDto;
 import com.andabazaar.service.LocationService;
 
 import jakarta.validation.Valid;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Locations", description = "Location management with auto-create for country, state, city")
 @RestController
 @RequestMapping("/api/locations")
 @RequiredArgsConstructor
 public class LocationController {
-
     private final LocationService locationService;
 
     @Operation(summary = "Create location")

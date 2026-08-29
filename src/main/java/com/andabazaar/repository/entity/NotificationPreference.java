@@ -1,6 +1,7 @@
 package com.andabazaar.repository.entity;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 
 @Entity
@@ -11,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class NotificationPreference {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

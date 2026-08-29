@@ -1,10 +1,10 @@
 package com.andabazaar.repository.entity;
 
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -27,7 +27,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class EggPrice {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -92,14 +91,12 @@ public class EggPrice {
 
     @PrePersist
     protected void onCreate() {
-
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-
         updatedAt = LocalDateTime.now();
     }
 }

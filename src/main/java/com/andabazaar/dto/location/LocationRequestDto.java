@@ -1,6 +1,7 @@
 package com.andabazaar.dto.location;
 
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.*;
 
 @Getter
@@ -9,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LocationRequestDto {
-
     @NotBlank(message = "Country name is required")
     private String countryName;
 

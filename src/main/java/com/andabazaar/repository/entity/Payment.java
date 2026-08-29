@@ -1,12 +1,12 @@
 
 package com.andabazaar.repository.entity;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 import com.andabazaar.enums.PaymentStatus;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
 @Entity
@@ -30,7 +30,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Payment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -127,4 +126,3 @@ public class Payment {
         updatedAt = LocalDateTime.now();
     }
 }
-

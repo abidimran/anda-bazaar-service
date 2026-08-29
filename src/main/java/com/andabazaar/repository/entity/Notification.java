@@ -1,10 +1,10 @@
 package com.andabazaar.repository.entity;
 
-import java.time.LocalDateTime;
-
 import com.andabazaar.enums.NotificationType;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
 @Entity
@@ -25,7 +25,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Notification {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,7 +53,6 @@ public class Notification {
         nullable = false,
         columnDefinition = "TEXT")
     private String message;
-
     // CHANGED
     @Column(name = "isRead", nullable = false)
     @Builder.Default

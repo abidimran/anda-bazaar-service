@@ -1,9 +1,9 @@
 package com.andabazaar.dto.user;
 
-import java.time.LocalDateTime;
-
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
+
+import java.time.LocalDateTime;
 
 import lombok.*;
 
@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserResponseDto {
-
     private Long id;
 
     private String firstName;

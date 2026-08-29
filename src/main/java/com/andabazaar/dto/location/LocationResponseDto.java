@@ -1,6 +1,7 @@
 package com.andabazaar.dto.location;
 
 import java.time.LocalDateTime;
+
 import lombok.*;
 
 @Getter
@@ -9,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LocationResponseDto {
-
     private Long id;
     private String countryName;
     private String stateName;

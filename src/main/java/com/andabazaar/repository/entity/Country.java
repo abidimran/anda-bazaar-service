@@ -1,6 +1,7 @@
 package com.andabazaar.repository.entity;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class Country extends BaseEntity {
-
     public Country(Long id, String name) {
         super(id, name);
     }

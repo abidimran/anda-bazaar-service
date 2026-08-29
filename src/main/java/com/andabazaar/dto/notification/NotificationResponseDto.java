@@ -1,8 +1,8 @@
 package com.andabazaar.dto.notification;
 
-import java.time.LocalDateTime;
-
 import com.andabazaar.enums.NotificationType;
+
+import java.time.LocalDateTime;
 
 import lombok.*;
 
@@ -12,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class NotificationResponseDto {
-
     private Long id;
 
     private Long userId;

@@ -1,10 +1,10 @@
 package com.andabazaar.repository.entity;
 
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -17,7 +17,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class DailyEggRate {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

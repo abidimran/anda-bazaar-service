@@ -1,10 +1,10 @@
 
 package com.andabazaar.dto.payment;
 
+import com.andabazaar.enums.PaymentStatus;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import com.andabazaar.enums.PaymentStatus;
 
 import lombok.*;
 
@@ -14,7 +14,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PaymentResponseDto {
-
     private Long id;
 
     private Long userId;

@@ -1,9 +1,8 @@
 package com.andabazaar.dto.eggprice;
 
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import jakarta.validation.constraints.*;
 
 import lombok.*;
 
@@ -13,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class EggPriceRequestDto {
-
     @NotNull(message = "Market ID is required")
     private Long marketId;
 
