@@ -20,18 +20,15 @@ import lombok.RequiredArgsConstructor;
 public class JwtService {
 
     private final JwtConfig jwtConfig;
+    private final TokenBlacklistService tokenBlacklistService;
 
     private SecretKey getSigningKey() {
-
-        return Keys.hmacShaKeyFor(
-                jwtConfig.getSecret().getBytes());
+        return Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes());
     }
 
     public String generateToken(User user) {
-
         Date now = new Date();
-
-        Date expiration = new Date( now.getTime() + jwtConfig.getExpiration());
+        Date expiration = new Date(now.getTime() + jwtConfig.getExpiration());
 
         return Jwts.builder()
                 .subject(user.getEmail())
@@ -44,33 +41,30 @@ public class JwtService {
     }
 
     public String extractEmail(String token) {
-
         return extractClaims(token).getSubject();
     }
 
-    public boolean isTokenValid( String token, User user) {
-
+    public boolean isTokenValid(String token, User user) {
         try {
-
+            if (tokenBlacklistService.isBlacklisted(token)) {
+                return false;
+            }
             String email = extractEmail(token);
-
-            return email.equals(user.getEmail())
-                    && !isTokenExpired(token);
-
+            return email.equals(user.getEmail()) && !isTokenExpired(token);
         } catch (Exception ex) {
             return false;
         }
     }
 
-    private boolean isTokenExpired(String token) {
+    public long getExpirationTime(String token) {
+        return extractClaims(token).getExpiration().getTime();
+    }
 
-        return extractClaims(token)
-                .getExpiration()
-                .before(new Date());
+    private boolean isTokenExpired(String token) {
+        return extractClaims(token).getExpiration().before(new Date());
     }
 
     private Claims extractClaims(String token) {
-
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()

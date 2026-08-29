@@ -16,25 +16,21 @@ import com.andabazaar.enums.UserStatus;
 class JwtServiceTest {
 
     private JwtService jwtService;
+    private TokenBlacklistService tokenBlacklistService;
     private User user;
 
     @BeforeEach
     void setUp() {
         JwtConfig jwtConfig = new JwtConfig();
         jwtConfig.setSecret("myTestSecretKeyThatIsLongEnoughForHS256Algorithm123");
-        jwtConfig.setExpiration(3600000L); // 1 hour
+        jwtConfig.setExpiration(3600000L);
 
-        jwtService = new JwtService(jwtConfig);
+        tokenBlacklistService = new TokenBlacklistService();
+        jwtService = new JwtService(jwtConfig, tokenBlacklistService);
 
         user = User.builder()
-                .id(1L)
-                .email("test@example.com")
-                .firstName("Test")
-                .lastName("User")
-                .password("encodedPassword")
-                .role(RoleType.USER)
-                .status(UserStatus.ACTIVE)
-                .build();
+                .id(1L).email("test@example.com").firstName("Test").lastName("User")
+                .password("encodedPassword").role(RoleType.USER).status(UserStatus.ACTIVE).build();
     }
 
     @Nested
@@ -44,22 +40,14 @@ class JwtServiceTest {
         @Test
         @DisplayName("should generate a non-null token")
         void shouldGenerateNonNullToken() {
-            String token = jwtService.generateToken(user);
-
-            assertThat(token).isNotNull().isNotBlank();
+            assertThat(jwtService.generateToken(user)).isNotNull().isNotBlank();
         }
 
         @Test
         @DisplayName("should generate different tokens for different users")
         void shouldGenerateDifferentTokens() {
-            User anotherUser = User.builder()
-                    .id(2L).email("another@example.com")
-                    .role(RoleType.ADMIN).status(UserStatus.ACTIVE).build();
-
-            String token1 = jwtService.generateToken(user);
-            String token2 = jwtService.generateToken(anotherUser);
-
-            assertThat(token1).isNotEqualTo(token2);
+            User other = User.builder().id(2L).email("other@example.com").role(RoleType.ADMIN).status(UserStatus.ACTIVE).build();
+            assertThat(jwtService.generateToken(user)).isNotEqualTo(jwtService.generateToken(other));
         }
     }
 
@@ -71,10 +59,7 @@ class JwtServiceTest {
         @DisplayName("should extract email from token")
         void shouldExtractEmail() {
             String token = jwtService.generateToken(user);
-
-            String email = jwtService.extractEmail(token);
-
-            assertThat(email).isEqualTo("test@example.com");
+            assertThat(jwtService.extractEmail(token)).isEqualTo("test@example.com");
         }
     }
 
@@ -86,24 +71,15 @@ class JwtServiceTest {
         @DisplayName("should return true for valid token")
         void shouldReturnTrueForValidToken() {
             String token = jwtService.generateToken(user);
-
-            boolean valid = jwtService.isTokenValid(token, user);
-
-            assertThat(valid).isTrue();
+            assertThat(jwtService.isTokenValid(token, user)).isTrue();
         }
 
         @Test
         @DisplayName("should return false for wrong user")
         void shouldReturnFalseForWrongUser() {
             String token = jwtService.generateToken(user);
-
-            User anotherUser = User.builder()
-                    .id(2L).email("another@example.com")
-                    .role(RoleType.USER).status(UserStatus.ACTIVE).build();
-
-            boolean valid = jwtService.isTokenValid(token, anotherUser);
-
-            assertThat(valid).isFalse();
+            User other = User.builder().id(2L).email("other@example.com").role(RoleType.USER).status(UserStatus.ACTIVE).build();
+            assertThat(jwtService.isTokenValid(token, other)).isFalse();
         }
 
         @Test
@@ -111,22 +87,36 @@ class JwtServiceTest {
         void shouldReturnFalseForExpiredToken() {
             JwtConfig expiredConfig = new JwtConfig();
             expiredConfig.setSecret("myTestSecretKeyThatIsLongEnoughForHS256Algorithm123");
-            expiredConfig.setExpiration(-1000L); // already expired
-
-            JwtService expiredJwtService = new JwtService(expiredConfig);
+            expiredConfig.setExpiration(-1000L);
+            JwtService expiredJwtService = new JwtService(expiredConfig, tokenBlacklistService);
             String token = expiredJwtService.generateToken(user);
-
-            boolean valid = jwtService.isTokenValid(token, user);
-
-            assertThat(valid).isFalse();
+            assertThat(jwtService.isTokenValid(token, user)).isFalse();
         }
 
         @Test
         @DisplayName("should return false for invalid token string")
         void shouldReturnFalseForInvalidToken() {
-            boolean valid = jwtService.isTokenValid("invalid.token.string", user);
+            assertThat(jwtService.isTokenValid("invalid.token.string", user)).isFalse();
+        }
 
-            assertThat(valid).isFalse();
+        @Test
+        @DisplayName("should return false for blacklisted token")
+        void shouldReturnFalseForBlacklistedToken() {
+            String token = jwtService.generateToken(user);
+            tokenBlacklistService.blacklist(token, jwtService.getExpirationTime(token));
+            assertThat(jwtService.isTokenValid(token, user)).isFalse();
+        }
+    }
+
+    @Nested
+    @DisplayName("getExpirationTime")
+    class GetExpirationTime {
+
+        @Test
+        @DisplayName("should return future expiration time")
+        void shouldReturnFutureExpiration() {
+            String token = jwtService.generateToken(user);
+            assertThat(jwtService.getExpirationTime(token)).isGreaterThan(System.currentTimeMillis());
         }
     }
 }
