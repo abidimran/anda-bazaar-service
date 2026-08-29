@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 
 import com.andabazaar.config.JwtConfig;
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

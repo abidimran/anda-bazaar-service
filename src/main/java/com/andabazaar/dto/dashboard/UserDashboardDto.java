@@ -27,21 +27,8 @@ public class UserDashboardDto {
     private LocalDate subscriptionEndDate;
     private long subscriptionDaysRemaining;
 
-    // Favorite Markets
-    private long favoriteMarketCount;
-
-    // Price Alerts
-    private long activePriceAlerts;
-
-    // Price Reports
-    private long totalPriceReports;
-    private long pendingPriceReports;
-
     // Notifications
     private long unreadNotifications;
-
-    // Support
-    private long openSupportTickets;
 
     // Today's Price
     private BigDecimal lowestEggPrice;

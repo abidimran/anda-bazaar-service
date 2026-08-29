@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.location.CityRequestDto;
 import com.andabazaar.dto.location.CityResponseDto;
-import com.andabazaar.entity.City;
-import com.andabazaar.entity.State;
+import com.andabazaar.repository.entity.City;
+import com.andabazaar.repository.entity.State;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.CityRepository;

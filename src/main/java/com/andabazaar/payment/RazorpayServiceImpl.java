@@ -38,8 +38,7 @@ public class RazorpayServiceImpl implements RazorpayService {
                         razorpayConfig.getKeyId(),
                         razorpayConfig.getKeySecret());
 
-        JSONObject orderRequest =
-                new JSONObject();
+        JSONObject orderRequest = new JSONObject();
 
         orderRequest.put("amount", amountInPaise);
 
@@ -63,8 +62,7 @@ public class RazorpayServiceImpl implements RazorpayService {
             return false;
         }
 
-        JSONObject attributes =
-                new JSONObject();
+        JSONObject attributes = new JSONObject();
 
         attributes.put("razorpay_order_id", orderId);
 

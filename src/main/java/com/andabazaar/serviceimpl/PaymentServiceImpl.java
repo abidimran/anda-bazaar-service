@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.payment.PaymentResponseDto;
 import com.andabazaar.dto.payment.PaymentVerificationDto;
-import com.andabazaar.entity.Payment;
-import com.andabazaar.entity.SubscriptionPlan;
-import com.andabazaar.entity.User;
-import com.andabazaar.entity.UserSubscription;
+import com.andabazaar.repository.entity.Payment;
+import com.andabazaar.repository.entity.SubscriptionPlan;
+import com.andabazaar.repository.entity.User;
+import com.andabazaar.repository.entity.UserSubscription;
 import com.andabazaar.enums.PaymentStatus;
 import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.exception.BadRequestException;
@@ -69,18 +69,13 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         String receipt =
-                "AB_"
-                        + userId
-                        + "_"
-                        + System.currentTimeMillis();
+                "AB_" + userId + "_" + System.currentTimeMillis();
 
         try {
 
-            Order order =
-                    razorpayService.createOrder( amount, "INR", receipt);
+            Order order = razorpayService.createOrder( amount, "INR", receipt);
 
-            String razorpayOrderId =
-                    order.get("id");
+            String razorpayOrderId = order.get("id");
 
             if (razorpayOrderId == null ||
                     razorpayOrderId.isBlank()) {
@@ -99,8 +94,7 @@ public class PaymentServiceImpl implements PaymentService {
                             .status( PaymentStatus.PENDING )
                             .build();
 
-            Payment savedPayment =
-                    paymentRepository.save(payment);
+            Payment savedPayment = paymentRepository.save(payment);
 
             return paymentMapper.toDto(
                     savedPayment);
@@ -160,8 +154,7 @@ public class PaymentServiceImpl implements PaymentService {
             return paymentMapper.toDto(payment);
         }
 
-        SubscriptionPlan plan =
-                payment.getSubscriptionPlan();
+        SubscriptionPlan plan = payment.getSubscriptionPlan();
 
         if (plan == null) {
             throw new BadRequestException("Subscription plan not found for payment");
@@ -223,8 +216,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         payment.setFailureReason(null);
 
-        Payment savedPayment =
-                paymentRepository.save(payment);
+        Payment savedPayment = paymentRepository.save(payment);
 
         // -----------------------------------------------------
         // ACTIVATE SUBSCRIPTION
@@ -247,40 +239,33 @@ public class PaymentServiceImpl implements PaymentService {
 
         try {
 
-            JSONObject json =
-                    new JSONObject(payload);
+            JSONObject json = new JSONObject(payload);
 
-            String event =
-                    json.optString("event");
+            String event = json.optString("event");
 
-            JSONObject payloadObject =
-                    json.optJSONObject("payload");
+            JSONObject payloadObject = json.optJSONObject("payload");
 
             if (payloadObject == null) {
                 return;
             }
 
-            JSONObject paymentObject =
-                    payloadObject.optJSONObject("payment");
+            JSONObject paymentObject = payloadObject.optJSONObject("payment");
 
             if (paymentObject == null) {
 
                 return;
             }
 
-            JSONObject entity =
-                    paymentObject.optJSONObject("entity");
+            JSONObject entity = paymentObject.optJSONObject("entity");
 
             if (entity == null) {
 
                 return;
             }
 
-            String razorpayPaymentId =
-                    entity.optString("id", null);
+            String razorpayPaymentId = entity.optString("id", null);
 
-            String razorpayOrderId =
-                    entity.optString("order_id", null);
+            String razorpayOrderId = entity.optString("order_id", null);
 
             if (razorpayOrderId == null ||
                     razorpayOrderId.isBlank()) {
@@ -335,8 +320,7 @@ public class PaymentServiceImpl implements PaymentService {
                     return;
                 }
 
-                String errorDescription =
-                        entity.optString("error_description", "Payment failed");
+                String errorDescription = entity.optString("error_description", "Payment failed");
 
                 if (razorpayPaymentId != null &&
                         !razorpayPaymentId.isBlank()) {
@@ -365,9 +349,7 @@ public class PaymentServiceImpl implements PaymentService {
                 paymentRepository
                         .findById(id)
                         .orElseThrow(() ->
-                                new ResourceNotFoundException("Payment not found with id: "
-                                                + id
-                                ));
+                                new ResourceNotFoundException("Payment not found with id: " + id));
 
         return paymentMapper.toDto(payment);
     }
@@ -418,8 +400,7 @@ public class PaymentServiceImpl implements PaymentService {
             throw new BadRequestException("Subscription plan is invalid");
         }
 
-        LocalDate today =
-                LocalDate.now();
+        LocalDate today = LocalDate.now();
 
         UserSubscription existingSubscription =
                 subscriptionRepository
@@ -442,16 +423,14 @@ public class PaymentServiceImpl implements PaymentService {
             return;
         }
 
-        int durationDays =
-                plan.getDurationDays();
+        int durationDays = plan.getDurationDays();
 
         if (durationDays <= 0) {
 
             throw new BadRequestException("Invalid subscription plan duration");
         }
 
-        LocalDate endDate =
-                today.plusDays(durationDays);
+        LocalDate endDate = today.plusDays(durationDays);
 
         // -----------------------------------------------------
         // UPDATE EXISTING SUBSCRIPTION
@@ -500,9 +479,7 @@ public class PaymentServiceImpl implements PaymentService {
         return userRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id: "
-                                        + id
-                        ));
+                        new ResourceNotFoundException("User not found with id: " + id));
     }
 
     private SubscriptionPlan findPlan( Long id) {
@@ -515,9 +492,7 @@ public class PaymentServiceImpl implements PaymentService {
         return planRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Subscription plan not found with id: "
-                                        + id
-                        ));
+                        new ResourceNotFoundException("Subscription plan not found with id: " + id));
     }
 }
 

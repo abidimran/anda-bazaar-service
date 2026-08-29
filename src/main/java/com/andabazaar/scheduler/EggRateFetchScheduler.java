@@ -9,9 +9,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.andabazaar.dto.eggrate.EggRateSingleResponseDto;
-import com.andabazaar.entity.City;
-import com.andabazaar.entity.DailyEggRate;
-import com.andabazaar.entity.State;
+import com.andabazaar.repository.entity.City;
+import com.andabazaar.repository.entity.DailyEggRate;
+import com.andabazaar.repository.entity.State;
 import com.andabazaar.feign.EggRateApiClient;
 import com.andabazaar.repository.CityRepository;
 import com.andabazaar.repository.DailyEggRateRepository;

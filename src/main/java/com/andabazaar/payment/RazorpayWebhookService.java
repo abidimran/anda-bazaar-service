@@ -37,19 +37,16 @@ public class RazorpayWebhookService {
 
     public String getEvent(String payload) {
 
-        JSONObject json =
-                new JSONObject(payload);
+        JSONObject json = new JSONObject(payload);
 
         return json.optString("event");
     }
 
     public String getRazorpayOrderId( String payload) {
 
-        JSONObject json =
-                new JSONObject(payload);
+        JSONObject json = new JSONObject(payload);
 
-        JSONObject payloadObject =
-                json.optJSONObject("payload");
+        JSONObject payloadObject = json.optJSONObject("payload");
 
         if (payloadObject == null) {
             return null;
@@ -60,8 +57,7 @@ public class RazorpayWebhookService {
                         .optJSONObject("payment");
 
         if (paymentEntity != null) {
-            JSONObject entity =
-                    paymentEntity.optJSONObject("entity");
+            JSONObject entity = paymentEntity.optJSONObject("entity");
 
             if (entity != null) {
                 return entity.optString("order_id",
@@ -74,8 +70,7 @@ public class RazorpayWebhookService {
                         .optJSONObject("order");
 
         if (orderEntity != null) {
-            JSONObject entity =
-                    orderEntity.optJSONObject("entity");
+            JSONObject entity = orderEntity.optJSONObject("entity");
 
             if (entity != null) {
                 return entity.optString("id",
@@ -88,11 +83,9 @@ public class RazorpayWebhookService {
 
     public String getRazorpayPaymentId( String payload) {
 
-        JSONObject json =
-                new JSONObject(payload);
+        JSONObject json = new JSONObject(payload);
 
-        JSONObject payloadObject =
-                json.optJSONObject("payload");
+        JSONObject payloadObject = json.optJSONObject("payload");
 
         if (payloadObject == null) {
             return null;
@@ -106,8 +99,7 @@ public class RazorpayWebhookService {
             return null;
         }
 
-        JSONObject entity =
-                paymentObject.optJSONObject("entity");
+        JSONObject entity = paymentObject.optJSONObject("entity");
 
         if (entity == null) {
             return null;

@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.andabazaar.entity.Payment;
+import com.andabazaar.repository.entity.Payment;
 import com.andabazaar.enums.PaymentStatus;
 
 public interface PaymentRepository

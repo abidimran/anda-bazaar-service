@@ -29,12 +29,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(AbstractHttpConfigurer::disable)
@@ -51,12 +51,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/egg-prices/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/egg-prices/**").authenticated()
 
-                .requestMatchers(HttpMethod.POST, "/api/locations/sync").hasRole("ADMIN")
-
                 .requestMatchers("/api/egg-rates-external/**").authenticated()
                 .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/api/users/**").authenticated()
-                .requestMatchers("/api/states/**").authenticated()
 
                 .anyRequest().authenticated()
             )

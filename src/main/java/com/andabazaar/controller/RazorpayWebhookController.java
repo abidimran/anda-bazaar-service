@@ -12,7 +12,7 @@ import com.andabazaar.service.PaymentService;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "Webhooks", description = "Razorpay payment webhook handler")
+@Tag(name = "RazorPay Webhooks", description = "Razorpay payment webhook handler")
 @RestController
 @RequestMapping("/api/payments/webhook")
 @RequiredArgsConstructor
@@ -30,8 +30,7 @@ public class RazorpayWebhookController {
                     required = false
             ) String signature) {
 
-        boolean valid =
-                webhookService.verifyWebhookSignature( payload, signature);
+        boolean valid = webhookService.verifyWebhookSignature( payload, signature);
 
         if (!valid) {
  return ResponseEntity.badRequest().body("Invalid webhook signature");

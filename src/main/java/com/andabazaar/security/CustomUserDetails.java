@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 
 import lombok.Getter;
 

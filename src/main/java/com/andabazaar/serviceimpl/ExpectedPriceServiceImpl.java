@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.expectedprice.ExpectedPriceRequestDto;
 import com.andabazaar.dto.expectedprice.ExpectedPriceResponseDto;
-import com.andabazaar.entity.City;
-import com.andabazaar.entity.ExpectedPrice;
-import com.andabazaar.entity.Market;
+import com.andabazaar.repository.entity.City;
+import com.andabazaar.repository.entity.ExpectedPrice;
+import com.andabazaar.repository.entity.Market;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.ExpectedPriceRepository;
@@ -54,11 +54,9 @@ public class ExpectedPriceServiceImpl
     @Override
     public ExpectedPriceResponseDto updateExpectedPrice( Long id, ExpectedPriceRequestDto request) {
 
-        ExpectedPrice expectedPrice =
-                findExpectedPrice(id);
+        ExpectedPrice expectedPrice = findExpectedPrice(id);
 
-        Market market =
-                findMarket(request.getMarketId());
+        Market market = findMarket(request.getMarketId());
 
         boolean marketChanged =
                 !expectedPrice.getMarket().getId()
@@ -179,8 +177,7 @@ public class ExpectedPriceServiceImpl
     @Override
     public void deleteExpectedPrice(Long id) {
 
-        ExpectedPrice expectedPrice =
-                findExpectedPrice(id);
+        ExpectedPrice expectedPrice = findExpectedPrice(id);
 
         expectedPrice.setActive(false);
 
@@ -200,9 +197,7 @@ public class ExpectedPriceServiceImpl
         return expectedPriceRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Expected price not found with id: "
-                                        + id
-                        ));
+                        new ResourceNotFoundException("Expected price not found with id: " + id));
     }
 
     private Market findMarket(Long id) {
@@ -210,9 +205,7 @@ public class ExpectedPriceServiceImpl
         return marketRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Market not found with id: "
-                                        + id
-                        ));
+                        new ResourceNotFoundException("Market not found with id: " + id));
     }
 
     private void validateDateRange( LocalDate startDate, LocalDate endDate) {
@@ -230,11 +223,9 @@ public class ExpectedPriceServiceImpl
 
     private ExpectedPriceResponseDto mapToResponse( ExpectedPrice expectedPrice) {
 
-        Market market =
-                expectedPrice.getMarket();
+        Market market = expectedPrice.getMarket();
 
-        City city =
-                market.getCity();
+        City city = market.getCity();
 
         return ExpectedPriceResponseDto.builder()
                 .id(expectedPrice.getId())

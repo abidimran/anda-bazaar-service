@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.andabazaar.entity.Market;
+import com.andabazaar.repository.entity.Market;
 
 public interface MarketRepository
         extends JpaRepository<Market, Long> {

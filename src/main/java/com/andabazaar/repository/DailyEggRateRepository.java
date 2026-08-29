@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.andabazaar.entity.DailyEggRate;
+import com.andabazaar.repository.entity.DailyEggRate;
 
 public interface DailyEggRateRepository extends JpaRepository<DailyEggRate, Long> {
 

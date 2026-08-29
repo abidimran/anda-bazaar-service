@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.andabazaar.entity.State;
+import com.andabazaar.repository.entity.State;
 
 public interface StateRepository
         extends JpaRepository<State, Long> {

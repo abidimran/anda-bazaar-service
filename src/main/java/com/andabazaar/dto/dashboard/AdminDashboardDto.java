@@ -20,10 +20,6 @@ public class AdminDashboardDto {
     private long activeUsers;
     private long inactiveUsers;
 
-    // Markets
-    private long totalMarkets;
-    private long activeMarkets;
-
     // Egg Prices
     private long todayPriceCount;
     private long yesterdayPriceCount;
@@ -38,15 +34,4 @@ public class AdminDashboardDto {
 
     // Notifications
     private long unreadNotifications;
-
-    // Price Reports
-    private long pendingPriceReports;
-
-    // Support Tickets
-    private long openSupportTickets;
-    private long closedSupportTickets;
-
-    // Coupons
-    private long activeCoupons;
-    private long expiredCoupons;
 }

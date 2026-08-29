@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.andabazaar.entity.Notification;
+import com.andabazaar.repository.entity.Notification;
 
 public interface NotificationRepository
         extends JpaRepository<Notification, Long> {

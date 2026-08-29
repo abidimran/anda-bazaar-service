@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.andabazaar.entity.EggPrice;
+import com.andabazaar.repository.entity.EggPrice;
 
 public interface EggPriceRepository
         extends JpaRepository<EggPrice, Long> {

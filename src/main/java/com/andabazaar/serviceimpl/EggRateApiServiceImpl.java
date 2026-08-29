@@ -27,8 +27,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
 
             log.info("Fetching all egg rates for city={}, state={}", city, state);
 
-            EggRateApiResponseDto response =
-                    eggRateApiClient.getEggRates( city.trim(), state.trim());
+            EggRateApiResponseDto response = eggRateApiClient.getEggRates( city.trim(), state.trim());
 
             log.info("All egg rates fetched successfully for city={}", city);
 
@@ -38,8 +37,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
 
             log.error("Failed to fetch egg rates for city={}, state={}: {}", city, state, e.getMessage());
 
-            throw new BadRequestException("Failed to fetch egg rates: "
-                            + e.getMessage());
+            throw new BadRequestException("Failed to fetch egg rates: " + e.getMessage());
         }
     }
 
@@ -52,8 +50,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
 
             log.info("Fetching today's egg rate for city={}, state={}", city, state);
 
-            EggRateSingleResponseDto response =
-                    eggRateApiClient.getTodayRate( city.trim(), state.trim());
+            EggRateSingleResponseDto response = eggRateApiClient.getTodayRate( city.trim(), state.trim());
 
             log.info("Today's egg rate fetched successfully for city={}", city);
 
@@ -63,8 +60,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
 
             log.error("Failed to fetch today's egg rate for city={}, state={}: {}", city, state, e.getMessage());
 
-            throw new BadRequestException("Failed to fetch today's egg rate: "
-                            + e.getMessage());
+            throw new BadRequestException("Failed to fetch today's egg rate: " + e.getMessage());
         }
     }
 
@@ -77,8 +73,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
 
             log.info("Fetching yesterday's egg rate for city={}, state={}", city, state);
 
-            EggRateSingleResponseDto response =
-                    eggRateApiClient.getYesterdayRate( city.trim(), state.trim());
+            EggRateSingleResponseDto response = eggRateApiClient.getYesterdayRate( city.trim(), state.trim());
 
             log.info("Yesterday's egg rate fetched successfully for city={}", city);
 
@@ -88,8 +83,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
 
             log.error("Failed to fetch yesterday's egg rate for city={}, state={}: {}", city, state, e.getMessage());
 
-            throw new BadRequestException("Failed to fetch yesterday's egg rate: "
-                            + e.getMessage());
+            throw new BadRequestException("Failed to fetch yesterday's egg rate: " + e.getMessage());
         }
     }
 

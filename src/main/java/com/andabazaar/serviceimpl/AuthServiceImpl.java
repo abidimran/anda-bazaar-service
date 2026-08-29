@@ -11,7 +11,7 @@ import com.andabazaar.dto.auth.LoginResponseDto;
 import com.andabazaar.dto.auth.RegisterRequestDto;
 import com.andabazaar.dto.notification.NotificationRequestDto;
 import com.andabazaar.dto.user.UserResponseDto;
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 import com.andabazaar.enums.NotificationType;
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
@@ -97,8 +97,7 @@ public class AuthServiceImpl implements AuthService {
 
                 .build();
 
-        User savedUser =
-                userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         System.out.println("USER SAVED SUCCESSFULLY");
 
@@ -139,8 +138,7 @@ public class AuthServiceImpl implements AuthService {
              */
         }
 
-        UserResponseDto response =
-                mapToResponse(savedUser);
+        UserResponseDto response = mapToResponse(savedUser);
 
         System.out.println("REGISTER RESPONSE READY");
 
@@ -177,8 +175,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("User account is not active");
         }
 
-        String token =
-                jwtService.generateToken(user);
+        String token = jwtService.generateToken(user);
 
         System.out.println("JWT TOKEN GENERATED");
 

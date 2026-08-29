@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.notification.NotificationRequestDto;
 import com.andabazaar.dto.notification.NotificationResponseDto;
-import com.andabazaar.entity.Notification;
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.Notification;
+import com.andabazaar.repository.entity.User;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.NotificationRepository;
 import com.andabazaar.repository.UserRepository;
@@ -109,8 +109,7 @@ public class NotificationServiceImpl
                 notificationRepository
                     .findByUserIdAndReadFalseOrderByCreatedAtDesc( userId);
 
-        LocalDateTime now =
-                LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
 
         for (Notification notification : notifications) {
 

@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.user.UserRequestDto;
 import com.andabazaar.dto.user.UserResponseDto;
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
@@ -56,8 +56,7 @@ public class AdminServiceImpl implements AdminService {
                 .notificationEnabled( request.getNotificationEnabled() == null || request.getNotificationEnabled())
                 .build();
 
-        User savedAdmin =
-                userRepository.save(admin);
+        User savedAdmin = userRepository.save(admin);
 
         return mapToResponse(savedAdmin);
     }
@@ -88,8 +87,7 @@ public class AdminServiceImpl implements AdminService {
 
         try {
 
-            UserStatus newStatus =
-                    UserStatus.valueOf( status.toUpperCase());
+            UserStatus newStatus = UserStatus.valueOf( status.toUpperCase());
 
             user.setStatus(newStatus);
 
@@ -114,8 +112,7 @@ public class AdminServiceImpl implements AdminService {
 
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id: "
-                                        + id));
+                        new ResourceNotFoundException("User not found with id: " + id));
     }
 
     private UserResponseDto mapToResponse( User user) {

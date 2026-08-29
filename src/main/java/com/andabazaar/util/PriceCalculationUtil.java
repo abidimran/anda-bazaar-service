@@ -28,8 +28,7 @@ public final class PriceCalculationUtil {
             return "NO_CHANGE";
         }
 
-        int result =
-                currentPrice.compareTo(previousPrice);
+        int result = currentPrice.compareTo(previousPrice);
 
         if (result > 0) {
             return "INCREASE";

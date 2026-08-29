@@ -7,9 +7,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.andabazaar.entity.Notification;
-import com.andabazaar.entity.User;
-import com.andabazaar.entity.UserSubscription;
+import com.andabazaar.repository.entity.Notification;
+import com.andabazaar.repository.entity.User;
+import com.andabazaar.repository.entity.UserSubscription;
 import com.andabazaar.enums.NotificationType;
 import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.repository.NotificationRepository;
@@ -46,8 +46,7 @@ public class NotificationScheduler {
                 continue;
             }
 
-            LocalDate endDate =
-                    subscription.getEndDate();
+            LocalDate endDate = subscription.getEndDate();
 
             if (endDate.equals(today)) {
 
@@ -55,9 +54,7 @@ public class NotificationScheduler {
                         subscription.getUser(),
                         NotificationType.SUBSCRIPTION_EXPIRING,
                         "Subscription Expiring Today",
-                        "Your "
-                                + getPlanName(subscription)
-                                + " subscription expires today.");
+                        "Your " + getPlanName(subscription) + " subscription expires today.");
             }
 
             else if (endDate.equals(tomorrow)) {
@@ -66,9 +63,7 @@ public class NotificationScheduler {
                         subscription.getUser(),
                         NotificationType.SUBSCRIPTION_EXPIRING,
                         "Subscription Expiring Tomorrow",
-                        "Your "
-                                + getPlanName(subscription)
-                                + " subscription will expire tomorrow.");
+                        "Your " + getPlanName(subscription) + " subscription will expire tomorrow.");
             }
         }
     }

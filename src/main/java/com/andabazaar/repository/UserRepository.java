@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.andabazaar.dto.payment.PaymentResponseDto;
-import com.andabazaar.entity.Payment;
+import com.andabazaar.repository.entity.Payment;
 
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {

@@ -19,7 +19,7 @@ import com.andabazaar.dto.auth.LoginRequestDto;
 import com.andabazaar.dto.auth.LoginResponseDto;
 import com.andabazaar.dto.auth.RegisterRequestDto;
 import com.andabazaar.dto.user.UserResponseDto;
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;

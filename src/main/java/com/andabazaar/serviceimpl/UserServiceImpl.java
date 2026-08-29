@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.andabazaar.dto.user.UserProfileDto;
 import com.andabazaar.dto.user.UserRequestDto;
 import com.andabazaar.dto.user.UserResponseDto;
-import com.andabazaar.entity.User;
+import com.andabazaar.repository.entity.User;
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
@@ -100,8 +100,7 @@ public class UserServiceImpl implements UserService {
         // SAVE USER
         // -----------------------------------------------------
 
-        User savedUser =
-                userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         // -----------------------------------------------------
         // RESPONSE
@@ -230,8 +229,7 @@ public class UserServiceImpl implements UserService {
         // SAVE
         // -----------------------------------------------------
 
-        User updatedUser =
-                userRepository.save(user);
+        User updatedUser = userRepository.save(user);
 
         return mapToResponse(updatedUser);
     }
@@ -299,8 +297,7 @@ public class UserServiceImpl implements UserService {
 
         try {
 
-            UserStatus newStatus =
-                    UserStatus.valueOf( status.trim().toUpperCase());
+            UserStatus newStatus = UserStatus.valueOf( status.trim().toUpperCase());
 
             user.setStatus(newStatus);
 
@@ -309,8 +306,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Invalid user status: " + status);
         }
 
-        User updatedUser =
-                userRepository.save(user);
+        User updatedUser = userRepository.save(user);
 
         return mapToResponse(updatedUser);
     }
@@ -325,9 +321,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
 
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id: "
-                                        + id
-                        ));
+                        new ResourceNotFoundException("User not found with id: " + id));
     }
 
     private UserResponseDto mapToResponse( User user) {
