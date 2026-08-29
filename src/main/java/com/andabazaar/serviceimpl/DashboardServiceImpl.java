@@ -3,7 +3,6 @@ package com.andabazaar.serviceimpl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,15 +12,12 @@ import com.andabazaar.dto.dashboard.AdminDashboardDto;
 import com.andabazaar.dto.dashboard.UserDashboardDto;
 import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.User;
-import com.andabazaar.repository.entity.UserSubscription;
-import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.EggPriceRepository;
 import com.andabazaar.repository.NotificationRepository;
 import com.andabazaar.repository.PaymentRepository;
 import com.andabazaar.repository.UserRepository;
-import com.andabazaar.repository.UserSubscriptionRepository;
 import com.andabazaar.service.DashboardService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +29,6 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final UserRepository userRepository;
     private final EggPriceRepository eggPriceRepository;
-    private final UserSubscriptionRepository subscriptionRepository;
     private final PaymentRepository paymentRepository;
     private final NotificationRepository notificationRepository;
 
@@ -55,9 +50,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .findByPriceDateOrderByPriceDateDesc(yesterday)
                 .size();
 
-        long activeSubscriptions = subscriptionRepository.countByStatus(SubscriptionStatus.ACTIVE);
-        long expiredSubscriptions = subscriptionRepository.countByStatus(SubscriptionStatus.EXPIRED);
-
         long totalPayments = paymentRepository.count();
         BigDecimal totalRevenue = calculateTotalRevenue();
 
@@ -73,8 +65,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .inactiveUsers(inactiveUsers)
                 .todayPriceCount(todayPriceCount)
                 .yesterdayPriceCount(yesterdayPriceCount)
-                .activeSubscriptions(activeSubscriptions)
-                .expiredSubscriptions(expiredSubscriptions)
                 .totalPayments(totalPayments)
                 .totalRevenue(totalRevenue)
                 .unreadNotifications(unreadNotifications)
@@ -89,31 +79,6 @@ public class DashboardServiceImpl implements DashboardService {
                         new ResourceNotFoundException("User not found with id: " + userId));
 
         LocalDate today = LocalDate.now();
-
-        UserSubscription subscription = subscriptionRepository
-                .findFirstByUserIdAndStatusOrderByEndDateDesc(userId, SubscriptionStatus.ACTIVE)
-                .orElse(null);
-
-        boolean hasActiveSubscription = false;
-        String subscriptionPlanName = null;
-        LocalDate subscriptionStartDate = null;
-        LocalDate subscriptionEndDate = null;
-        long subscriptionDaysRemaining = 0;
-
-        if (subscription != null
-                && subscription.getEndDate() != null
-                && !subscription.getEndDate().isBefore(today)) {
-
-            hasActiveSubscription = true;
-
-            if (subscription.getPlan() != null) {
-                subscriptionPlanName = subscription.getPlan().getName();
-            }
-
-            subscriptionStartDate = subscription.getStartDate();
-            subscriptionEndDate = subscription.getEndDate();
-            subscriptionDaysRemaining = ChronoUnit.DAYS.between(today, subscriptionEndDate);
-        }
 
         long unreadNotifications = notificationRepository
                 .findByUserIdOrderByCreatedAtDesc(userId)
@@ -133,11 +98,6 @@ public class DashboardServiceImpl implements DashboardService {
         return UserDashboardDto.builder()
                 .userId(user.getId())
                 .userName(userName)
-                .hasActiveSubscription(hasActiveSubscription)
-                .subscriptionPlanName(subscriptionPlanName)
-                .subscriptionStartDate(subscriptionStartDate)
-                .subscriptionEndDate(subscriptionEndDate)
-                .subscriptionDaysRemaining(subscriptionDaysRemaining)
                 .unreadNotifications(unreadNotifications)
                 .lowestEggPrice(lowestEggPrice)
                 .highestEggPrice(highestEggPrice)

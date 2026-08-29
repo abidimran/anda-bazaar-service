@@ -28,7 +28,7 @@ public class PaymentController {
     public ResponseEntity<PaymentResponseDto> createPayment(@PathVariable Long userId,
             @Valid @RequestBody PaymentRequestDto request) {
 
- return ResponseEntity.ok(paymentService.createPayment(userId, request.getPlanId()));
+ return ResponseEntity.ok(paymentService.createPayment(userId, request.getAmount()));
     }
 
     @Operation(summary = "Verify Payment")

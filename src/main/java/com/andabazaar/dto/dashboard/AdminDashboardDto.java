@@ -24,10 +24,6 @@ public class AdminDashboardDto {
     private long todayPriceCount;
     private long yesterdayPriceCount;
 
-    // Subscriptions
-    private long activeSubscriptions;
-    private long expiredSubscriptions;
-
     // Payments
     private long totalPayments;
     private BigDecimal totalRevenue;

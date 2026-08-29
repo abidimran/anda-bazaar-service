@@ -25,13 +25,10 @@ import com.andabazaar.repository.entity.City;
 import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.Market;
 import com.andabazaar.repository.entity.State;
-import com.andabazaar.repository.entity.UserSubscription;
-import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.EggPriceRepository;
 import com.andabazaar.repository.MarketRepository;
-import com.andabazaar.repository.UserSubscriptionRepository;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("EggPriceServiceImpl Tests")
@@ -42,9 +39,6 @@ class EggPriceServiceImplTest {
 
     @Mock
     private MarketRepository marketRepository;
-
-    @Mock
-    private UserSubscriptionRepository userSubscriptionRepository;
 
     @InjectMocks
     private EggPriceServiceImpl eggPriceService;
@@ -331,13 +325,8 @@ class EggPriceServiceImplTest {
     class GetUserPrices {
 
         @Test
-        @DisplayName("should return all prices for subscribed user")
-        void shouldReturnAllPricesForSubscribedUser() {
-            UserSubscription subscription = UserSubscription.builder()
-                    .id(1L).status(SubscriptionStatus.ACTIVE).endDate(LocalDate.now().plusDays(30)).build();
-
-            when(userSubscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.of(subscription));
+        @DisplayName("should return all prices for any user")
+        void shouldReturnAllPricesForAnyUser() {
             when(eggPriceRepository.findAll()).thenReturn(List.of(eggPrice));
 
             List<EggPriceResponseDto> result = eggPriceService.getUserPrices(1L);
@@ -346,22 +335,18 @@ class EggPriceServiceImplTest {
         }
 
         @Test
-        @DisplayName("should filter recent prices for non-subscribed user")
-        void shouldFilterRecentPricesForNonSubscribedUser() {
-            when(userSubscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
+        @DisplayName("should return empty when no active prices")
+        void shouldReturnEmptyWhenNoActivePrices() {
+            EggPrice inactive = EggPrice.builder()
+                    .id(2L).market(market).priceDate(LocalDate.now())
+                    .pricePerEgg(new BigDecimal("5.00")).pricePerTray(new BigDecimal("150.00"))
+                    .active(false).build();
 
-            EggPrice oldPrice = EggPrice.builder()
-                    .id(3L).market(market).priceDate(LocalDate.now().minusDays(5))
-                    .pricePerEgg(new BigDecimal("4.50")).pricePerTray(new BigDecimal("135.00"))
-                    .active(true).build();
-
-            when(eggPriceRepository.findAll()).thenReturn(List.of(eggPrice, oldPrice));
+            when(eggPriceRepository.findAll()).thenReturn(List.of(inactive));
 
             List<EggPriceResponseDto> result = eggPriceService.getUserPrices(1L);
 
-            assertThat(result).hasSize(1);
-            assertThat(result.get(0).getPricePerEgg()).isEqualByComparingTo(new BigDecimal("4.50"));
+            assertThat(result).isEmpty();
         }
     }
 
@@ -370,16 +355,11 @@ class EggPriceServiceImplTest {
     class GetUserPriceHistory {
 
         @Test
-        @DisplayName("should return history for subscribed user")
-        void shouldReturnHistoryForSubscribedUser() {
-            UserSubscription subscription = UserSubscription.builder()
-                    .id(1L).status(SubscriptionStatus.ACTIVE).endDate(LocalDate.now().plusDays(30)).build();
-
+        @DisplayName("should return history for any user")
+        void shouldReturnHistoryForAnyUser() {
             LocalDate start = LocalDate.now().minusDays(7);
             LocalDate end = LocalDate.now();
 
-            when(userSubscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.of(subscription));
             when(eggPriceRepository.findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(1L, start, end))
                     .thenReturn(List.of(eggPrice));
 
@@ -397,53 +377,6 @@ class EggPriceServiceImplTest {
             assertThatThrownBy(() -> eggPriceService.getUserPriceHistory(1L, 1L, start, end))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Start date cannot be after end date");
-        }
-
-        @Test
-        @DisplayName("should throw when non-subscribed user requests recent prices")
-        void shouldThrowWhenNonSubscribedUserRequestsRecentPrices() {
-            when(userSubscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
-
-            LocalDate start = LocalDate.now().minusDays(1);
-            LocalDate end = LocalDate.now();
-
-            assertThatThrownBy(() -> eggPriceService.getUserPriceHistory(1L, 1L, start, end))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("Active subscription is required");
-        }
-
-        @Test
-        @DisplayName("should throw when non-subscribed user requests recent end date")
-        void shouldThrowWhenNonSubscribedUserRequestsRecentEndDate() {
-            when(userSubscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
-
-            // Both start and end are within the 2-day restriction window
-            LocalDate start = LocalDate.now().minusDays(1);
-            LocalDate end = LocalDate.now();
-
-            assertThatThrownBy(() -> eggPriceService.getUserPriceHistory(1L, 1L, start, end))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessageContaining("Active subscription is required");
-        }
-
-        @Test
-        @DisplayName("should clamp end date for non-subscribed user with valid older range")
-        void shouldClampEndDateForNonSubscribedUser() {
-            when(userSubscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
-
-            LocalDate start = LocalDate.now().minusDays(10);
-            LocalDate end = LocalDate.now().minusDays(3);
-
-            when(eggPriceRepository.findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(
-                    eq(1L), eq(start), any(LocalDate.class)))
-                    .thenReturn(List.of(eggPrice));
-
-            List<EggPriceResponseDto> result = eggPriceService.getUserPriceHistory(1L, 1L, start, end);
-
-            assertThat(result).isNotNull();
         }
     }
 

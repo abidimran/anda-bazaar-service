@@ -12,12 +12,10 @@ import com.andabazaar.dto.eggprice.EggPriceResponseDto;
 import com.andabazaar.repository.entity.City;
 import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.Market;
-import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.EggPriceRepository;
 import com.andabazaar.repository.MarketRepository;
-import com.andabazaar.repository.UserSubscriptionRepository;
 import com.andabazaar.service.EggPriceService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +27,6 @@ public class EggPriceServiceImpl implements EggPriceService {
 
     private final EggPriceRepository eggPriceRepository;
     private final MarketRepository marketRepository;
-    private final UserSubscriptionRepository userSubscriptionRepository;
 
     @Override
     public EggPriceResponseDto createPrice(EggPriceRequestDto request) {
@@ -167,20 +164,10 @@ public class EggPriceServiceImpl implements EggPriceService {
     @Transactional(readOnly = true)
     public List<EggPriceResponseDto> getUserPrices(Long userId) {
 
-        boolean subscribed = hasActiveSubscription(userId);
-
-        LocalDate today = LocalDate.now();
-
         return eggPriceRepository
                 .findAll()
                 .stream()
                 .filter(EggPrice::getActive)
-                .filter(price -> {
-                    if (subscribed) {
-                        return true;
-                    }
-                    return !price.getPriceDate().isAfter(today.minusDays(2));
-                })
                 .map(this::mapToResponse)
                 .toList();
     }
@@ -191,24 +178,6 @@ public class EggPriceServiceImpl implements EggPriceService {
 
         if (startDate.isAfter(endDate)) {
             throw new BadRequestException("Start date cannot be after end date");
-        }
-
-        boolean subscribed = hasActiveSubscription(userId);
-
-        LocalDate today = LocalDate.now();
-
-        if (!subscribed) {
-            LocalDate maximumAllowedDate = today.minusDays(2);
-
-            if (endDate.isAfter(maximumAllowedDate)) {
-                throw new BadRequestException("Active subscription is required to view today and yesterday prices");
-            }
-
-            if (startDate.isAfter(maximumAllowedDate)) {
-                throw new BadRequestException("Active subscription is required to view recent prices");
-            }
-
-            endDate = maximumAllowedDate;
         }
 
         return eggPriceRepository
@@ -225,13 +194,6 @@ public class EggPriceServiceImpl implements EggPriceService {
         EggPrice eggPrice = findPrice(id);
         eggPrice.setActive(false);
         eggPriceRepository.save(eggPrice);
-    }
-
-    private boolean hasActiveSubscription(Long userId) {
-        return userSubscriptionRepository
-                .findFirstByUserIdAndStatusOrderByEndDateDesc(userId, SubscriptionStatus.ACTIVE)
-                .filter(sub -> sub.getEndDate() != null && !sub.getEndDate().isBefore(LocalDate.now()))
-                .isPresent();
     }
 
     private EggPrice findPrice(Long id) {

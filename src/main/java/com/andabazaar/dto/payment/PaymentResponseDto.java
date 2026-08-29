@@ -19,10 +19,6 @@ public class PaymentResponseDto {
 
     private Long userId;
 
-    private Long planId;
-
-    private String planName;
-
     private BigDecimal amount;
 
     private String currency;
@@ -47,4 +43,3 @@ public class PaymentResponseDto {
 
     private LocalDateTime createdAt;
 }
-

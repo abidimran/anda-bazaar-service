@@ -10,7 +10,5 @@ import com.andabazaar.repository.entity.Payment;
 public interface PaymentMapper {
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "subscriptionPlan.id", target = "planId")
-    @Mapping(source = "subscriptionPlan.name", target = "planName")
     PaymentResponseDto toDto(Payment payment);
 }

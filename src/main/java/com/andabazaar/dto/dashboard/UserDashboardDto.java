@@ -1,7 +1,6 @@
 package com.andabazaar.dto.dashboard;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,13 +18,6 @@ public class UserDashboardDto {
     // User
     private Long userId;
     private String userName;
-
-    // Subscription
-    private boolean hasActiveSubscription;
-    private String subscriptionPlanName;
-    private LocalDate subscriptionStartDate;
-    private LocalDate subscriptionEndDate;
-    private long subscriptionDaysRemaining;
 
     // Notifications
     private long unreadNotifications;

@@ -42,13 +42,6 @@ public class Payment {
     )
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-        name = "subscriptionPlanId",
-        nullable = false
-    )
-    private SubscriptionPlan subscriptionPlan;
-
     @Column(
         nullable = false,
         precision = 10,

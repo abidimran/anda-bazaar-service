@@ -26,19 +26,15 @@ import com.andabazaar.repository.entity.Market;
 import com.andabazaar.repository.entity.Notification;
 import com.andabazaar.repository.entity.Payment;
 import com.andabazaar.repository.entity.State;
-import com.andabazaar.repository.entity.SubscriptionPlan;
 import com.andabazaar.repository.entity.User;
-import com.andabazaar.repository.entity.UserSubscription;
 import com.andabazaar.enums.NotificationType;
 import com.andabazaar.enums.RoleType;
-import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.repository.EggPriceRepository;
 import com.andabazaar.repository.NotificationRepository;
 import com.andabazaar.repository.PaymentRepository;
 import com.andabazaar.repository.UserRepository;
-import com.andabazaar.repository.UserSubscriptionRepository;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("DashboardServiceImpl Tests")
@@ -46,7 +42,6 @@ class DashboardServiceImplTest {
 
     @Mock private UserRepository userRepository;
     @Mock private EggPriceRepository eggPriceRepository;
-    @Mock private UserSubscriptionRepository subscriptionRepository;
     @Mock private PaymentRepository paymentRepository;
     @Mock private NotificationRepository notificationRepository;
 
@@ -88,8 +83,6 @@ class DashboardServiceImplTest {
             when(userRepository.countByStatus(UserStatus.INACTIVE)).thenReturn(20L);
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
                     .thenReturn(List.of(eggPrice));
-            when(subscriptionRepository.countByStatus(SubscriptionStatus.ACTIVE)).thenReturn(50L);
-            when(subscriptionRepository.countByStatus(SubscriptionStatus.EXPIRED)).thenReturn(10L);
             when(paymentRepository.count()).thenReturn(200L);
 
             Payment payment = Payment.builder().id(1L).amount(new BigDecimal("199.00")).build();
@@ -106,7 +99,6 @@ class DashboardServiceImplTest {
             assertThat(result.getActiveUsers()).isEqualTo(80L);
             assertThat(result.getInactiveUsers()).isEqualTo(20L);
             assertThat(result.getTodayPriceCount()).isEqualTo(1L);
-            assertThat(result.getActiveSubscriptions()).isEqualTo(50L);
             assertThat(result.getTotalPayments()).isEqualTo(200L);
             assertThat(result.getTotalRevenue()).isEqualByComparingTo(new BigDecimal("199.00"));
             assertThat(result.getUnreadNotifications()).isEqualTo(1L);
@@ -119,7 +111,6 @@ class DashboardServiceImplTest {
             when(userRepository.countByStatus(any())).thenReturn(0L);
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
                     .thenReturn(Collections.emptyList());
-            when(subscriptionRepository.countByStatus(any())).thenReturn(0L);
             when(paymentRepository.count()).thenReturn(0L);
             when(paymentRepository.findAll()).thenReturn(Collections.emptyList());
             when(notificationRepository.findAll()).thenReturn(Collections.emptyList());
@@ -137,7 +128,6 @@ class DashboardServiceImplTest {
             when(userRepository.countByStatus(any())).thenReturn(0L);
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
                     .thenReturn(Collections.emptyList());
-            when(subscriptionRepository.countByStatus(any())).thenReturn(0L);
             when(paymentRepository.count()).thenReturn(1L);
 
             Payment payment = Payment.builder().id(1L).amount(null).build();
@@ -155,16 +145,9 @@ class DashboardServiceImplTest {
     class GetUserDashboard {
 
         @Test
-        @DisplayName("should return user dashboard with active subscription")
-        void shouldReturnDashboardWithSubscription() {
-            SubscriptionPlan plan = SubscriptionPlan.builder().id(1L).name("Premium").build();
-            UserSubscription subscription = UserSubscription.builder()
-                    .id(1L).user(user).plan(plan).status(SubscriptionStatus.ACTIVE)
-                    .startDate(LocalDate.now().minusDays(10)).endDate(LocalDate.now().plusDays(20)).build();
-
+        @DisplayName("should return user dashboard with prices")
+        void shouldReturnDashboardWithPrices() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.of(subscription));
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
                     .thenReturn(Collections.emptyList());
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
@@ -173,17 +156,14 @@ class DashboardServiceImplTest {
             UserDashboardDto result = dashboardService.getUserDashboard(1L);
 
             assertThat(result).isNotNull();
-            assertThat(result.isHasActiveSubscription()).isTrue();
-            assertThat(result.getSubscriptionPlanName()).isEqualTo("Premium");
-            assertThat(result.getSubscriptionDaysRemaining()).isEqualTo(20L);
+            assertThat(result.getUserId()).isEqualTo(1L);
+            assertThat(result.getUserName()).isEqualTo("John Doe");
         }
 
         @Test
-        @DisplayName("should return user dashboard without active subscription")
-        void shouldReturnDashboardWithoutSubscription() {
+        @DisplayName("should return user dashboard with no prices")
+        void shouldReturnDashboardWithNoPrices() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
                     .thenReturn(Collections.emptyList());
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
@@ -192,30 +172,9 @@ class DashboardServiceImplTest {
             UserDashboardDto result = dashboardService.getUserDashboard(1L);
 
             assertThat(result).isNotNull();
-            assertThat(result.isHasActiveSubscription()).isFalse();
             assertThat(result.getLowestEggPrice()).isEqualByComparingTo(BigDecimal.ZERO);
             assertThat(result.getHighestEggPrice()).isEqualByComparingTo(BigDecimal.ZERO);
             assertThat(result.getAverageEggPrice()).isEqualByComparingTo(BigDecimal.ZERO);
-        }
-
-        @Test
-        @DisplayName("should return user dashboard with expired subscription")
-        void shouldReturnDashboardWithExpiredSubscription() {
-            UserSubscription expired = UserSubscription.builder()
-                    .id(1L).user(user).status(SubscriptionStatus.ACTIVE)
-                    .startDate(LocalDate.now().minusDays(40)).endDate(LocalDate.now().minusDays(10)).build();
-
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.of(expired));
-            when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
-                    .thenReturn(Collections.emptyList());
-            when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
-                    .thenReturn(Collections.emptyList());
-
-            UserDashboardDto result = dashboardService.getUserDashboard(1L);
-
-            assertThat(result.isHasActiveSubscription()).isFalse();
         }
 
         @Test
@@ -236,8 +195,6 @@ class DashboardServiceImplTest {
                     .active(true).build();
 
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
                     .thenReturn(Collections.emptyList());
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
@@ -254,8 +211,6 @@ class DashboardServiceImplTest {
         @DisplayName("should build username correctly with both names")
         void shouldBuildUsernameCorrectly() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
                     .thenReturn(Collections.emptyList());
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
@@ -275,8 +230,6 @@ class DashboardServiceImplTest {
                     .password("enc").role(RoleType.USER).status(UserStatus.ACTIVE).build();
 
             when(userRepository.findById(2L)).thenReturn(Optional.of(noNameUser));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(2L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(2L))
                     .thenReturn(Collections.emptyList());
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
@@ -298,8 +251,6 @@ class DashboardServiceImplTest {
                     .title("t2").message("m2").read(true).sent(false).build();
 
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.empty());
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
                     .thenReturn(List.of(unread, readNotif));
             when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
@@ -308,27 +259,6 @@ class DashboardServiceImplTest {
             UserDashboardDto result = dashboardService.getUserDashboard(1L);
 
             assertThat(result.getUnreadNotifications()).isEqualTo(1L);
-        }
-
-        @Test
-        @DisplayName("should handle subscription with null plan")
-        void shouldHandleSubscriptionWithNullPlan() {
-            UserSubscription subscription = UserSubscription.builder()
-                    .id(1L).user(user).plan(null).status(SubscriptionStatus.ACTIVE)
-                    .startDate(LocalDate.now().minusDays(5)).endDate(LocalDate.now().plusDays(25)).build();
-
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(subscriptionRepository.findFirstByUserIdAndStatusOrderByEndDateDesc(1L, SubscriptionStatus.ACTIVE))
-                    .thenReturn(Optional.of(subscription));
-            when(notificationRepository.findByUserIdOrderByCreatedAtDesc(1L))
-                    .thenReturn(Collections.emptyList());
-            when(eggPriceRepository.findByPriceDateOrderByPriceDateDesc(any(LocalDate.class)))
-                    .thenReturn(Collections.emptyList());
-
-            UserDashboardDto result = dashboardService.getUserDashboard(1L);
-
-            assertThat(result.isHasActiveSubscription()).isTrue();
-            assertThat(result.getSubscriptionPlanName()).isNull();
         }
     }
 }

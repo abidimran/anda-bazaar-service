@@ -20,21 +20,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.andabazaar.dto.payment.PaymentResponseDto;
 import com.andabazaar.dto.payment.PaymentVerificationDto;
 import com.andabazaar.repository.entity.Payment;
-import com.andabazaar.repository.entity.SubscriptionPlan;
 import com.andabazaar.repository.entity.User;
-import com.andabazaar.repository.entity.UserSubscription;
 import com.andabazaar.enums.PaymentStatus;
 import com.andabazaar.enums.RoleType;
-import com.andabazaar.enums.SubscriptionStatus;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.mapper.PaymentMapper;
 import com.andabazaar.payment.RazorpayService;
 import com.andabazaar.repository.PaymentRepository;
-import com.andabazaar.repository.SubscriptionPlanRepository;
 import com.andabazaar.repository.UserRepository;
-import com.andabazaar.repository.UserSubscriptionRepository;
 import com.razorpay.Order;
 import com.razorpay.RazorpayException;
 
@@ -44,8 +39,6 @@ class PaymentServiceImplTest {
 
     @Mock private PaymentRepository paymentRepository;
     @Mock private UserRepository userRepository;
-    @Mock private SubscriptionPlanRepository planRepository;
-    @Mock private UserSubscriptionRepository subscriptionRepository;
     @Mock private RazorpayService razorpayService;
     @Mock private PaymentMapper paymentMapper;
 
@@ -53,7 +46,6 @@ class PaymentServiceImplTest {
     private PaymentServiceImpl paymentService;
 
     private User user;
-    private SubscriptionPlan plan;
     private Payment payment;
     private PaymentResponseDto responseDto;
 
@@ -64,17 +56,13 @@ class PaymentServiceImplTest {
                 .email("john@test.com").phone("1234567890")
                 .password("enc").role(RoleType.USER).status(UserStatus.ACTIVE).build();
 
-        plan = SubscriptionPlan.builder()
-                .id(1L).name("Premium").price(new BigDecimal("199.00"))
-                .durationDays(30).active(true).build();
-
         payment = Payment.builder()
-                .id(1L).user(user).subscriptionPlan(plan)
+                .id(1L).user(user)
                 .amount(new BigDecimal("199.00")).currency("INR")
                 .razorpayOrderId("order_123").status(PaymentStatus.PENDING).build();
 
         responseDto = PaymentResponseDto.builder()
-                .id(1L).userId(1L).planId(1L).amount(new BigDecimal("199.00"))
+                .id(1L).userId(1L).amount(new BigDecimal("199.00"))
                 .currency("INR").status(PaymentStatus.PENDING).build();
     }
 
@@ -89,51 +77,34 @@ class PaymentServiceImplTest {
             when(order.get("id")).thenReturn("order_123");
 
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(planRepository.findById(1L)).thenReturn(Optional.of(plan));
             when(razorpayService.createOrder(any(), eq("INR"), anyString())).thenReturn(order);
             when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
             when(paymentMapper.toDto(any(Payment.class))).thenReturn(responseDto);
 
-            PaymentResponseDto result = paymentService.createPayment(1L, 1L);
+            PaymentResponseDto result = paymentService.createPayment(1L, new BigDecimal("199.00"));
 
             assertThat(result).isNotNull();
             assertThat(result.getAmount()).isEqualByComparingTo(new BigDecimal("199.00"));
         }
 
         @Test
-        @DisplayName("should throw when plan is not active")
-        void shouldThrowWhenPlanNotActive() {
-            plan.setActive(false);
+        @DisplayName("should throw when amount is null")
+        void shouldThrowWhenAmountNull() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(planRepository.findById(1L)).thenReturn(Optional.of(plan));
 
-            assertThatThrownBy(() -> paymentService.createPayment(1L, 1L))
+            assertThatThrownBy(() -> paymentService.createPayment(1L, null))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Subscription plan is not active");
+                    .hasMessage("Amount must be greater than zero");
         }
 
         @Test
-        @DisplayName("should throw when plan price is null")
-        void shouldThrowWhenPriceNull() {
-            plan.setPrice(null);
+        @DisplayName("should throw when amount is zero")
+        void shouldThrowWhenAmountZero() {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(planRepository.findById(1L)).thenReturn(Optional.of(plan));
 
-            assertThatThrownBy(() -> paymentService.createPayment(1L, 1L))
+            assertThatThrownBy(() -> paymentService.createPayment(1L, BigDecimal.ZERO))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Invalid subscription plan price");
-        }
-
-        @Test
-        @DisplayName("should throw when plan price is zero")
-        void shouldThrowWhenPriceZero() {
-            plan.setPrice(BigDecimal.ZERO);
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(planRepository.findById(1L)).thenReturn(Optional.of(plan));
-
-            assertThatThrownBy(() -> paymentService.createPayment(1L, 1L))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Invalid subscription plan price");
+                    .hasMessage("Amount must be greater than zero");
         }
 
         @Test
@@ -143,10 +114,9 @@ class PaymentServiceImplTest {
             when(order.get("id")).thenReturn(null);
 
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(planRepository.findById(1L)).thenReturn(Optional.of(plan));
             when(razorpayService.createOrder(any(), eq("INR"), anyString())).thenReturn(order);
 
-            assertThatThrownBy(() -> paymentService.createPayment(1L, 1L))
+            assertThatThrownBy(() -> paymentService.createPayment(1L, new BigDecimal("199.00")))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Razorpay order ID was not generated");
         }
@@ -155,11 +125,10 @@ class PaymentServiceImplTest {
         @DisplayName("should throw when Razorpay throws exception")
         void shouldThrowWhenRazorpayFails() throws RazorpayException {
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(planRepository.findById(1L)).thenReturn(Optional.of(plan));
             when(razorpayService.createOrder(any(), eq("INR"), anyString()))
                     .thenThrow(new RazorpayException("API error"));
 
-            assertThatThrownBy(() -> paymentService.createPayment(1L, 1L))
+            assertThatThrownBy(() -> paymentService.createPayment(1L, new BigDecimal("199.00")))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("Unable to create Razorpay order");
         }
@@ -169,26 +138,16 @@ class PaymentServiceImplTest {
         void shouldThrowWhenUserNotFound() {
             when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> paymentService.createPayment(99L, 1L))
+            assertThatThrownBy(() -> paymentService.createPayment(99L, new BigDecimal("199.00")))
                     .isInstanceOf(ResourceNotFoundException.class);
         }
 
         @Test
         @DisplayName("should throw when user ID is null")
         void shouldThrowWhenUserIdNull() {
-            assertThatThrownBy(() -> paymentService.createPayment(null, 1L))
+            assertThatThrownBy(() -> paymentService.createPayment(null, new BigDecimal("199.00")))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("User ID is required");
-        }
-
-        @Test
-        @DisplayName("should throw when plan ID is null")
-        void shouldThrowWhenPlanIdNull() {
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-            assertThatThrownBy(() -> paymentService.createPayment(1L, null))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Plan ID is required");
         }
     }
 
@@ -207,8 +166,6 @@ class PaymentServiceImplTest {
             when(paymentRepository.findByRazorpayOrderId("order_123")).thenReturn(Optional.of(payment));
             when(razorpayService.verifySignature("order_123", "pay_123", "sig_123")).thenReturn(true);
             when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
-            when(subscriptionRepository.findByUserIdAndPlanId(1L, 1L)).thenReturn(Optional.empty());
-            when(subscriptionRepository.save(any(UserSubscription.class))).thenReturn(null);
             when(paymentMapper.toDto(any(Payment.class))).thenReturn(responseDto);
 
             PaymentResponseDto result = paymentService.verifyPayment(1L, verification);
@@ -267,7 +224,7 @@ class PaymentServiceImplTest {
         void shouldThrowWhenPaymentNotBelongsToUser() {
             User otherUser = User.builder().id(99L).build();
             Payment otherPayment = Payment.builder()
-                    .id(2L).user(otherUser).subscriptionPlan(plan)
+                    .id(2L).user(otherUser)
                     .amount(new BigDecimal("199.00")).status(PaymentStatus.PENDING)
                     .razorpayOrderId("order_456").build();
 
@@ -329,36 +286,6 @@ class PaymentServiceImplTest {
 
             assertThatThrownBy(() -> paymentService.verifyPayment(1L, v))
                     .isInstanceOf(BadRequestException.class);
-        }
-
-        @Test
-        @DisplayName("should throw when plan is null on payment")
-        void shouldThrowWhenPlanNull() {
-            payment.setSubscriptionPlan(null);
-            PaymentVerificationDto v = PaymentVerificationDto.builder()
-                    .razorpayOrderId("order_123").razorpayPaymentId("pay").razorpaySignature("sig").build();
-
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(paymentRepository.findByRazorpayOrderId("order_123")).thenReturn(Optional.of(payment));
-
-            assertThatThrownBy(() -> paymentService.verifyPayment(1L, v))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Subscription plan not found for payment");
-        }
-
-        @Test
-        @DisplayName("should throw when plan is not active during verification")
-        void shouldThrowWhenPlanNotActive() {
-            plan.setActive(false);
-            PaymentVerificationDto v = PaymentVerificationDto.builder()
-                    .razorpayOrderId("order_123").razorpayPaymentId("pay").razorpaySignature("sig").build();
-
-            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(paymentRepository.findByRazorpayOrderId("order_123")).thenReturn(Optional.of(payment));
-
-            assertThatThrownBy(() -> paymentService.verifyPayment(1L, v))
-                    .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Subscription plan is not active");
         }
     }
 
@@ -474,8 +401,6 @@ class PaymentServiceImplTest {
 
             when(paymentRepository.findByRazorpayOrderId("order_123")).thenReturn(Optional.of(payment));
             when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
-            when(subscriptionRepository.findByUserIdAndPlanId(1L, 1L)).thenReturn(Optional.empty());
-            when(subscriptionRepository.save(any(UserSubscription.class))).thenReturn(null);
 
             paymentService.processRazorpayWebhook(payload);
 
