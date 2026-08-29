@@ -26,6 +26,7 @@ import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.Market;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.EggPriceMapper;
 import com.andabazaar.repository.EggPriceRepository;
 import com.andabazaar.repository.MarketRepository;
 
@@ -38,6 +39,9 @@ class EggPriceServiceImplTest {
 
     @Mock
     private MarketRepository marketRepository;
+
+    @Mock
+    private EggPriceMapper eggPriceMapper;
 
     @InjectMocks
     private EggPriceServiceImpl eggPriceService;
@@ -72,6 +76,20 @@ class EggPriceServiceImplTest {
                 .pricePerTray(new BigDecimal("165.00"))
                 .remarks("Test")
                 .build();
+
+        lenient().when(eggPriceMapper.toResponseDto(any(EggPrice.class))).thenAnswer(inv -> {
+            EggPrice p = inv.getArgument(0);
+            Market m = p.getMarket();
+            City c = m != null ? m.getCity() : null;
+            return EggPriceResponseDto.builder()
+                    .id(p.getId()).marketId(m != null ? m.getId() : null)
+                    .marketName(m != null ? m.getName() : null)
+                    .cityId(c != null ? c.getId() : null).cityName(c != null ? c.getName() : null)
+                    .priceDate(p.getPriceDate()).pricePerEgg(p.getPricePerEgg())
+                    .pricePerTray(p.getPricePerTray()).previousPrice(p.getPreviousPrice())
+                    .priceChangeType(p.getPriceChangeType()).priceChangeAmount(p.getPriceChangeAmount())
+                    .remarks(p.getRemarks()).active(p.getActive()).build();
+        });
     }
 
     @Nested

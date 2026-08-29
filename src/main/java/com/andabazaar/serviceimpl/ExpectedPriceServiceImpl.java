@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.expectedprice.ExpectedPriceRequestDto;
 import com.andabazaar.dto.expectedprice.ExpectedPriceResponseDto;
-import com.andabazaar.repository.entity.City;
 import com.andabazaar.repository.entity.ExpectedPrice;
 import com.andabazaar.repository.entity.Market;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.ExpectedPriceMapper;
 import com.andabazaar.repository.ExpectedPriceRepository;
 import com.andabazaar.repository.MarketRepository;
 import com.andabazaar.service.ExpectedPriceService;
@@ -27,6 +27,7 @@ public class ExpectedPriceServiceImpl
 
     private final ExpectedPriceRepository expectedPriceRepository;
     private final MarketRepository marketRepository;
+    private final ExpectedPriceMapper expectedPriceMapper;
 
     @Override
     public ExpectedPriceResponseDto createExpectedPrice( ExpectedPriceRequestDto request) {
@@ -47,7 +48,7 @@ public class ExpectedPriceServiceImpl
                 .active(true)
                 .build();
 
-        return mapToResponse(
+        return expectedPriceMapper.toResponseDto(
                 expectedPriceRepository.save(expectedPrice));
     }
 
@@ -80,7 +81,7 @@ public class ExpectedPriceServiceImpl
         expectedPrice.setExpectedPrice( request.getExpectedPrice());
         expectedPrice.setReason( request.getReason());
 
-        return mapToResponse(
+        return expectedPriceMapper.toResponseDto(
                 expectedPriceRepository.save(expectedPrice));
     }
 
@@ -88,7 +89,7 @@ public class ExpectedPriceServiceImpl
     @Transactional(readOnly = true)
     public ExpectedPriceResponseDto getExpectedPriceById( Long id) {
 
-        return mapToResponse(
+        return expectedPriceMapper.toResponseDto(
                 findExpectedPrice(id));
     }
 
@@ -105,7 +106,7 @@ public class ExpectedPriceServiceImpl
                 .findByMarketIdOrderByExpectedDateDesc( marketId )
                 .stream()
                 .filter(ExpectedPrice::getActive)
-                .map(this::mapToResponse)
+                .map(expectedPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -125,7 +126,7 @@ public class ExpectedPriceServiceImpl
             throw new ResourceNotFoundException("Expected price is not active");
         }
 
-        return mapToResponse(expectedPrice);
+        return expectedPriceMapper.toResponseDto(expectedPrice);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class ExpectedPriceServiceImpl
         return expectedPriceRepository
                 .findByActiveTrueOrderByExpectedDateDesc()
                 .stream()
-                .map(this::mapToResponse)
+                .map(expectedPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -150,7 +151,7 @@ public class ExpectedPriceServiceImpl
                 .findByExpectedDateBetweenOrderByExpectedDateDesc( startDate, endDate )
                 .stream()
                 .filter(ExpectedPrice::getActive)
-                .map(this::mapToResponse)
+                .map(expectedPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -170,7 +171,7 @@ public class ExpectedPriceServiceImpl
                 .findByMarketIdAndExpectedDateBetweenOrderByExpectedDateDesc( marketId, startDate, endDate )
                 .stream()
                 .filter(ExpectedPrice::getActive)
-                .map(this::mapToResponse)
+                .map(expectedPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -219,42 +220,5 @@ public class ExpectedPriceServiceImpl
 
             throw new BadRequestException("Start date cannot be after end date");
         }
-    }
-
-    private ExpectedPriceResponseDto mapToResponse( ExpectedPrice expectedPrice) {
-
-        Market market = expectedPrice.getMarket();
-
-        City city = market.getCity();
-
-        return ExpectedPriceResponseDto.builder()
-                .id(expectedPrice.getId())
-
-                .marketId(market.getId())
-                .marketName(market.getName())
-
-                .cityName( city != null ? city.getName()
-                                : null
-                )
-
-                .expectedPrice( expectedPrice.getExpectedPrice()
-                )
-
-                .expectedDate( expectedPrice.getExpectedDate()
-                )
-
-                .reason( expectedPrice.getReason()
-                )
-
-                .active( expectedPrice.getActive()
-                )
-
-                .createdAt( expectedPrice.getCreatedAt()
-                )
-
-                .updatedAt( expectedPrice.getUpdatedAt()
-                )
-
-                .build();
     }
 }

@@ -9,6 +9,7 @@ import com.andabazaar.dto.location.LocationRequestDto;
 import com.andabazaar.dto.location.LocationResponseDto;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.LocationMapper;
 import com.andabazaar.repository.CityRepository;
 import com.andabazaar.repository.CountryRepository;
 import com.andabazaar.repository.LocationRepository;
@@ -30,6 +31,7 @@ public class LocationServiceImpl implements LocationService {
     private final CountryRepository countryRepository;
     private final StateRepository stateRepository;
     private final CityRepository cityRepository;
+    private final LocationMapper locationMapper;
 
     @Override
     public LocationResponseDto createLocation(LocationRequestDto request) {
@@ -46,19 +48,19 @@ public class LocationServiceImpl implements LocationService {
                 .rapidEnabled(request.isRapidEnabled())
                 .build();
 
-        return mapToResponse(locationRepository.save(location));
+        return locationMapper.toResponseDto(locationRepository.save(location));
     }
 
     @Override
     @Transactional(readOnly = true)
     public LocationResponseDto getLocationById(Long id) {
-        return mapToResponse(findLocation(id));
+        return locationMapper.toResponseDto(findLocation(id));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LocationResponseDto> getAllLocations() {
-        return locationRepository.findAll().stream().map(this::mapToResponse).toList();
+        return locationRepository.findAll().stream().map(locationMapper::toResponseDto).toList();
     }
 
     @Override
@@ -76,7 +78,7 @@ public class LocationServiceImpl implements LocationService {
         location.setLongitude(request.getLongitude());
         location.setRapidEnabled(request.isRapidEnabled());
 
-        return mapToResponse(locationRepository.save(location));
+        return locationMapper.toResponseDto(locationRepository.save(location));
     }
 
     @Override
@@ -88,7 +90,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @Transactional(readOnly = true)
     public List<LocationResponseDto> getRapidEnabledLocations() {
-        return locationRepository.findByRapidEnabledTrue().stream().map(this::mapToResponse).toList();
+        return locationRepository.findByRapidEnabledTrue().stream().map(locationMapper::toResponseDto).toList();
     }
 
     private Country findOrCreateCountry(String name) {
@@ -115,19 +117,5 @@ public class LocationServiceImpl implements LocationService {
     private Location findLocation(Long id) {
         return locationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Location not found with id: " + id));
-    }
-
-    private LocationResponseDto mapToResponse(Location location) {
-        return LocationResponseDto.builder()
-                .id(location.getId())
-                .countryName(location.getCountry().getName())
-                .stateName(location.getState().getName())
-                .cityName(location.getCity().getName())
-                .latitude(location.getLatitude())
-                .longitude(location.getLongitude())
-                .rapidEnabled(location.isRapidEnabled())
-                .createdDate(location.getCreatedDate())
-                .updatedDate(location.getUpdatedDate())
-                .build();
     }
 }

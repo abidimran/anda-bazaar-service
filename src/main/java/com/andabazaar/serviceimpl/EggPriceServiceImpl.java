@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.andabazaar.dto.eggprice.EggPriceRequestDto;
 import com.andabazaar.dto.eggprice.EggPriceResponseDto;
-import com.andabazaar.repository.entity.City;
 import com.andabazaar.repository.entity.EggPrice;
 import com.andabazaar.repository.entity.Market;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.EggPriceMapper;
 import com.andabazaar.repository.EggPriceRepository;
 import com.andabazaar.repository.MarketRepository;
 import com.andabazaar.service.EggPriceService;
@@ -27,6 +27,7 @@ public class EggPriceServiceImpl implements EggPriceService {
 
     private final EggPriceRepository eggPriceRepository;
     private final MarketRepository marketRepository;
+    private final EggPriceMapper eggPriceMapper;
 
     @Override
     public EggPriceResponseDto createPrice(EggPriceRequestDto request) {
@@ -58,7 +59,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .active(true)
                 .build();
 
-        return mapToResponse(eggPriceRepository.save(eggPrice));
+        return eggPriceMapper.toResponseDto(eggPriceRepository.save(eggPrice));
     }
 
     @Override
@@ -93,13 +94,13 @@ public class EggPriceServiceImpl implements EggPriceService {
         eggPrice.setPriceChangeAmount(priceChangeAmount);
         eggPrice.setRemarks(request.getRemarks());
 
-        return mapToResponse(eggPriceRepository.save(eggPrice));
+        return eggPriceMapper.toResponseDto(eggPriceRepository.save(eggPrice));
     }
 
     @Override
     @Transactional(readOnly = true)
     public EggPriceResponseDto getPriceById(Long id) {
-        return mapToResponse(findPrice(id));
+        return eggPriceMapper.toResponseDto(findPrice(id));
     }
 
     @Override
@@ -111,7 +112,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Egg price not found for market and date"));
 
-        return mapToResponse(price);
+        return eggPriceMapper.toResponseDto(price);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .stream()
                 .filter(EggPrice::getActive)
                 .filter(price -> price.getPriceDate().equals(today))
-                .map(this::mapToResponse)
+                .map(eggPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -140,7 +141,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .stream()
                 .filter(EggPrice::getActive)
                 .filter(price -> price.getPriceDate().equals(yesterday))
-                .map(this::mapToResponse)
+                .map(eggPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -156,7 +157,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(marketId, startDate, endDate)
                 .stream()
                 .filter(EggPrice::getActive)
-                .map(this::mapToResponse)
+                .map(eggPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -168,7 +169,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .findAll()
                 .stream()
                 .filter(EggPrice::getActive)
-                .map(this::mapToResponse)
+                .map(eggPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -184,7 +185,7 @@ public class EggPriceServiceImpl implements EggPriceService {
                 .findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(marketId, startDate, endDate)
                 .stream()
                 .filter(EggPrice::getActive)
-                .map(this::mapToResponse)
+                .map(eggPriceMapper::toResponseDto)
                 .toList();
     }
 
@@ -234,27 +235,5 @@ public class EggPriceServiceImpl implements EggPriceService {
             return BigDecimal.ZERO;
         }
         return currentPrice.subtract(previousPrice);
-    }
-
-    private EggPriceResponseDto mapToResponse(EggPrice price) {
-
-        Market market = price.getMarket();
-        City city = market.getCity();
-
-        return EggPriceResponseDto.builder()
-                .id(price.getId())
-                .marketId(market.getId())
-                .marketName(market.getName())
-                .cityId(city != null ? city.getId() : null)
-                .cityName(city != null ? city.getName() : null)
-                .priceDate(price.getPriceDate())
-                .pricePerEgg(price.getPricePerEgg())
-                .pricePerTray(price.getPricePerTray())
-                .previousPrice(price.getPreviousPrice())
-                .priceChangeType(price.getPriceChangeType())
-                .priceChangeAmount(price.getPriceChangeAmount())
-                .remarks(price.getRemarks())
-                .active(price.getActive())
-                .build();
     }
 }

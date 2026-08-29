@@ -21,6 +21,7 @@ import com.andabazaar.dto.location.CityResponseDto;
 import com.andabazaar.repository.entity.City;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.CityMapper;
 import com.andabazaar.repository.CityRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +30,9 @@ class CityServiceImplTest {
 
     @Mock
     private CityRepository cityRepository;
+
+    @Mock
+    private CityMapper cityMapper;
 
     @InjectMocks
     private CityServiceImpl cityService;
@@ -43,6 +47,11 @@ class CityServiceImplTest {
         requestDto = CityRequestDto.builder()
                 .name("Bangalore")
                 .build();
+
+        lenient().when(cityMapper.toResponseDto(any(City.class))).thenAnswer(inv -> {
+            City c = inv.getArgument(0);
+            return CityResponseDto.builder().id(c.getId()).name(c.getName()).build();
+        });
     }
 
     @Nested

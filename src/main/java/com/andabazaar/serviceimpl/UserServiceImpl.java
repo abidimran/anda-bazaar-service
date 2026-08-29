@@ -14,6 +14,7 @@ import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.UserMapper;
 import com.andabazaar.repository.UserRepository;
 import com.andabazaar.service.UserService;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponseDto createUser(UserRequestDto request) {
@@ -106,7 +108,7 @@ public class UserServiceImpl implements UserService {
         // RESPONSE
         // -----------------------------------------------------
 
-        return mapToResponse(savedUser);
+        return userMapper.toResponseDto(savedUser);
     }
 
     @Override
@@ -115,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
         User user = findUser(id);
 
-        return mapToResponse(user);
+        return userMapper.toResponseDto(user);
     }
 
     @Override
@@ -124,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findAll()
                 .stream()
-                .map(this::mapToResponse)
+                .map(userMapper::toResponseDto)
                 .toList();
     }
 
@@ -231,7 +233,7 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(user);
 
-        return mapToResponse(updatedUser);
+        return userMapper.toResponseDto(updatedUser);
     }
 
     @Override
@@ -248,41 +250,7 @@ public class UserServiceImpl implements UserService {
 
         User user = findUser(id);
 
-        return UserProfileDto.builder()
-
-                .id(user.getId())
-
-                .firstName( user.getFirstName()
-                )
-
-                .lastName( user.getLastName()
-                )
-
-                .email( user.getEmail()
-                )
-
-                .phone( user.getPhone()
-                )
-
-                .role( user.getRole()
-                )
-
-                .status( user.getStatus()
-                )
-
-                .profileImage( user.getProfileImage()
-                )
-
-                .preferredLanguage( user.getPreferredLanguage()
-                )
-
-                .preferredCity( user.getPreferredCity()
-                )
-
-                .notificationEnabled( user.getNotificationEnabled()
-                )
-
-                .build();
+        return userMapper.toProfileDto(user);
     }
 
     @Override
@@ -308,7 +276,7 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(user);
 
-        return mapToResponse(updatedUser);
+        return userMapper.toResponseDto(updatedUser);
     }
 
     private User findUser(Long id) {
@@ -322,51 +290,5 @@ public class UserServiceImpl implements UserService {
 
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found with id: " + id));
-    }
-
-    private UserResponseDto mapToResponse( User user) {
-
-        return UserResponseDto.builder()
-
-                .id( user.getId()
-                )
-
-                .firstName( user.getFirstName()
-                )
-
-                .lastName( user.getLastName()
-                )
-
-                .email( user.getEmail()
-                )
-
-                .phone( user.getPhone()
-                )
-
-                .role( user.getRole()
-                )
-
-                .status( user.getStatus()
-                )
-
-                .profileImage( user.getProfileImage()
-                )
-
-                .preferredLanguage( user.getPreferredLanguage()
-                )
-
-                .preferredCity( user.getPreferredCity()
-                )
-
-                .notificationEnabled( user.getNotificationEnabled()
-                )
-
-                .createdAt( user.getCreatedAt()
-                )
-
-                .updatedAt( user.getUpdatedAt()
-                )
-
-                .build();
     }
 }

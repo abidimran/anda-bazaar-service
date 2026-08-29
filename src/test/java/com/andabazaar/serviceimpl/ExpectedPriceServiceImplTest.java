@@ -26,6 +26,7 @@ import com.andabazaar.repository.entity.ExpectedPrice;
 import com.andabazaar.repository.entity.Market;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.ExpectedPriceMapper;
 import com.andabazaar.repository.ExpectedPriceRepository;
 import com.andabazaar.repository.MarketRepository;
 
@@ -35,6 +36,7 @@ class ExpectedPriceServiceImplTest {
 
     @Mock private ExpectedPriceRepository expectedPriceRepository;
     @Mock private MarketRepository marketRepository;
+    @Mock private ExpectedPriceMapper expectedPriceMapper;
 
     @InjectMocks
     private ExpectedPriceServiceImpl expectedPriceService;
@@ -57,6 +59,19 @@ class ExpectedPriceServiceImplTest {
         requestDto = ExpectedPriceRequestDto.builder()
                 .marketId(1L).expectedDate(LocalDate.now().plusDays(1))
                 .expectedPrice(new BigDecimal("6.00")).reason("Demand increase").build();
+
+        lenient().when(expectedPriceMapper.toResponseDto(any(ExpectedPrice.class))).thenAnswer(inv -> {
+            ExpectedPrice ep = inv.getArgument(0);
+            Market m = ep.getMarket();
+            City c = m != null ? m.getCity() : null;
+            return ExpectedPriceResponseDto.builder()
+                    .id(ep.getId()).marketId(m != null ? m.getId() : null)
+                    .marketName(m != null ? m.getName() : null)
+                    .cityName(c != null ? c.getName() : null)
+                    .expectedPrice(ep.getExpectedPrice()).expectedDate(ep.getExpectedDate())
+                    .reason(ep.getReason()).active(ep.getActive())
+                    .createdAt(ep.getCreatedAt()).updatedAt(ep.getUpdatedAt()).build();
+        });
     }
 
     @Nested

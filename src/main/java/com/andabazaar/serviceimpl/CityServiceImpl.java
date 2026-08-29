@@ -10,6 +10,7 @@ import com.andabazaar.dto.location.CityResponseDto;
 import com.andabazaar.repository.entity.City;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.CityMapper;
 import com.andabazaar.repository.CityRepository;
 import com.andabazaar.service.CityService;
 
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
+    private final CityMapper cityMapper;
 
     @Override
     public CityResponseDto createCity(CityRequestDto request) {
@@ -33,13 +35,13 @@ public class CityServiceImpl implements CityService {
                 .name(request.getName().trim())
                 .build();
 
-        return mapToResponse(cityRepository.save(city));
+        return cityMapper.toResponseDto(cityRepository.save(city));
     }
 
     @Override
     @Transactional(readOnly = true)
     public CityResponseDto getCityById(Long id) {
-        return mapToResponse(findCity(id));
+        return cityMapper.toResponseDto(findCity(id));
     }
 
     @Override
@@ -47,7 +49,7 @@ public class CityServiceImpl implements CityService {
     public List<CityResponseDto> getAllCities() {
         return cityRepository.findAllByOrderByNameAsc()
                 .stream()
-                .map(this::mapToResponse)
+                .map(cityMapper::toResponseDto)
                 .toList();
     }
 
@@ -64,7 +66,7 @@ public class CityServiceImpl implements CityService {
 
         city.setName(request.getName().trim());
 
-        return mapToResponse(cityRepository.save(city));
+        return cityMapper.toResponseDto(cityRepository.save(city));
     }
 
     @Override
@@ -77,12 +79,5 @@ public class CityServiceImpl implements CityService {
         return cityRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("City not found with id: " + id));
-    }
-
-    private CityResponseDto mapToResponse(City city) {
-        return CityResponseDto.builder()
-                .id(city.getId())
-                .name(city.getName())
-                .build();
     }
 }

@@ -24,6 +24,7 @@ import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.UserMapper;
 import com.andabazaar.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,9 @@ class AdminServiceImplTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private UserMapper userMapper;
 
     @InjectMocks
     private AdminServiceImpl adminService;
@@ -57,6 +61,17 @@ class AdminServiceImplTest {
                 .preferredCity("Mumbai")
                 .notificationEnabled(true)
                 .build();
+
+        lenient().when(userMapper.toResponseDto(any(User.class))).thenAnswer(inv -> {
+            User u = inv.getArgument(0);
+            return UserResponseDto.builder()
+                    .id(u.getId()).firstName(u.getFirstName()).lastName(u.getLastName())
+                    .email(u.getEmail()).phone(u.getPhone()).role(u.getRole())
+                    .status(u.getStatus()).profileImage(u.getProfileImage())
+                    .preferredLanguage(u.getPreferredLanguage()).preferredCity(u.getPreferredCity())
+                    .notificationEnabled(u.getNotificationEnabled())
+                    .createdAt(u.getCreatedAt()).updatedAt(u.getUpdatedAt()).build();
+        });
 
         requestDto = UserRequestDto.builder()
                 .firstName("Admin")

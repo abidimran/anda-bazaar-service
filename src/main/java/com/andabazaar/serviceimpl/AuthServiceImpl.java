@@ -16,6 +16,7 @@ import com.andabazaar.enums.NotificationType;
 import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
+import com.andabazaar.mapper.UserMapper;
 import com.andabazaar.repository.UserRepository;
 import com.andabazaar.security.JwtService;
 import com.andabazaar.service.AuthService;
@@ -37,6 +38,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
 
     private final NotificationService notificationService;
+
+    private final UserMapper userMapper;
 
     @Override
     public UserResponseDto register(RegisterRequestDto request) {
@@ -138,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
              */
         }
 
-        UserResponseDto response = mapToResponse(savedUser);
+        UserResponseDto response = userMapper.toResponseDto(savedUser);
 
         System.out.println("REGISTER RESPONSE READY");
 
@@ -213,55 +216,6 @@ public class AuthServiceImpl implements AuthService {
         return response;
     }
 
-    private UserResponseDto mapToResponse( User user) {
-
-        return UserResponseDto.builder()
-
-                .id( user.getId()
-                )
-
-                .firstName( user.getFirstName()
-                )
-
-                .lastName( user.getLastName()
-                )
-
-                .email( user.getEmail()
-                )
-
-                .phone( user.getPhone()
-                )
-
-                .role( user.getRole()
-                )
-
-                .status( user.getStatus()
-                )
-
-                .profileImage( user.getProfileImage()
-                )
-
-                .preferredLanguage( user.getPreferredLanguage()
-                )
-
-                .preferredCity( user.getPreferredCity()
-                )
-
-                .notificationEnabled( user.getNotificationEnabled()
-                )
-
-                .createdAt( user.getCreatedAt()
-                )
-
-                .updatedAt( user.getUpdatedAt()
-                )
-
-                .build();
-    }
-    
-    
-    
-
  @Override
  public UserResponseDto getCurrentUser(String email) {
 
@@ -285,6 +239,6 @@ public class AuthServiceImpl implements AuthService {
 
      System.out.println("CURRENT USER ROLE = " + user.getRole());
 
-     return mapToResponse(user);
+     return userMapper.toResponseDto(user);
  }
 }

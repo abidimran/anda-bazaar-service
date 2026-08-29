@@ -13,6 +13,7 @@ import com.andabazaar.enums.RoleType;
 import com.andabazaar.enums.UserStatus;
 import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
+import com.andabazaar.mapper.UserMapper;
 import com.andabazaar.repository.UserRepository;
 import com.andabazaar.service.AdminService;
 
@@ -25,6 +26,7 @@ public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponseDto createAdmin( UserRequestDto request) {
@@ -58,7 +60,7 @@ public class AdminServiceImpl implements AdminService {
 
         User savedAdmin = userRepository.save(admin);
 
-        return mapToResponse(savedAdmin);
+        return userMapper.toResponseDto(savedAdmin);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class AdminServiceImpl implements AdminService {
 
         return userRepository.findAll()
                 .stream()
-                .map(this::mapToResponse)
+                .map(userMapper::toResponseDto)
                 .toList();
     }
 
@@ -77,7 +79,7 @@ public class AdminServiceImpl implements AdminService {
 
         User user = findUser(id);
 
-        return mapToResponse(user);
+        return userMapper.toResponseDto(user);
     }
 
     @Override
@@ -96,7 +98,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Invalid user status: " + status);
         }
 
-        return mapToResponse(
+        return userMapper.toResponseDto(
                 userRepository.save(user));
     }
 
@@ -113,24 +115,5 @@ public class AdminServiceImpl implements AdminService {
         return userRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found with id: " + id));
-    }
-
-    private UserResponseDto mapToResponse( User user) {
-
-        return UserResponseDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .role(user.getRole())
-                .status(user.getStatus())
-                .profileImage(user.getProfileImage())
-                .preferredLanguage( user.getPreferredLanguage())
-                .preferredCity( user.getPreferredCity())
-                .notificationEnabled( user.getNotificationEnabled())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .build();
     }
 }
