@@ -38,10 +38,13 @@ public class SecurityConfig {
 
         http
             .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
 
                 .requestMatchers("/api/auth/register", "/api/auth/login", "/actuator/health").permitAll()
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/v3/api-docs/**").permitAll()
 
                 .requestMatchers(HttpMethod.POST, "/api/egg-prices").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/egg-prices/**").hasRole("ADMIN")
