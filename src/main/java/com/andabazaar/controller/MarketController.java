@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.market.MarketRequestDto;
 import com.andabazaar.dto.market.MarketResponseDto;
 import com.andabazaar.service.MarketService;
@@ -33,18 +34,19 @@ public class MarketController {
 
     @Operation(summary = "Get All Markets")
     @GetMapping
-    public ResponseEntity<List<MarketResponseDto>>
-            getAllMarkets() {
+    public ResponseEntity<PagedResponse<MarketResponseDto>>
+            getAllMarkets(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(marketService.getAllMarkets());
+ return ResponseEntity.ok(PagedResponse.fromList(marketService.getAllMarkets(), page, size));
     }
 
     @Operation(summary = "Get Markets By City")
     @GetMapping("/city/{cityId}")
-    public ResponseEntity<List<MarketResponseDto>>
-            getMarketsByCity(@PathVariable Long cityId) {
+    public ResponseEntity<PagedResponse<MarketResponseDto>>
+            getMarketsByCity(@PathVariable Long cityId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(marketService.getMarketsByCity(cityId));
+ return ResponseEntity.ok(PagedResponse.fromList(marketService.getMarketsByCity(cityId), page, size));
     }
 
     @Operation(summary = "Get Market")

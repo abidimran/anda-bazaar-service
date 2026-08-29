@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.dashboard.AdminDashboardDto;
 import com.andabazaar.dto.user.UserRequestDto;
 import com.andabazaar.dto.user.UserResponseDto;
@@ -44,10 +45,10 @@ public class AdminController {
 
     @Operation(summary = "Get All Users")
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponseDto>>
-            getAllUsers() {
+    public ResponseEntity<PagedResponse<UserResponseDto>>
+            getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(adminService.getAllUsers());
+ return ResponseEntity.ok(PagedResponse.fromList(adminService.getAllUsers(), page, size));
     }
 
     @Operation(summary = "Get User")

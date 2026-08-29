@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.user.UserProfileDto;
 import com.andabazaar.dto.user.UserRequestDto;
 import com.andabazaar.dto.user.UserResponseDto;
@@ -43,9 +44,10 @@ public class UserController {
 
     @Operation(summary = "Get All Users")
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+    public ResponseEntity<PagedResponse<UserResponseDto>>
+            getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(userService.getAllUsers());
+ return ResponseEntity.ok(PagedResponse.fromList(userService.getAllUsers(), page, size));
     }
 
     @Operation(summary = "Update User")

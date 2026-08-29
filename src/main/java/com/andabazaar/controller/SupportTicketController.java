@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.support.SupportReplyDto;
 import com.andabazaar.dto.support.SupportTicketRequestDto;
 import com.andabazaar.dto.support.SupportTicketResponseDto;
@@ -52,25 +53,30 @@ public class SupportTicketController {
     // Get all tickets
     @Operation(summary = "Get All Tickets")
     @GetMapping
-    public ResponseEntity<List<SupportTicketResponseDto>> getAllTickets() {
+    public ResponseEntity<PagedResponse<SupportTicketResponseDto>>
+            getAllTickets(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(supportTicketService.getAllTickets());
+ return ResponseEntity.ok(PagedResponse.fromList(supportTicketService.getAllTickets(), page, size));
     }
 
     // Get user's tickets
     @Operation(summary = "Get User Tickets")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<SupportTicketResponseDto>> getUserTickets(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<SupportTicketResponseDto>>
+            getUserTickets(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(supportTicketService.getUserTickets(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(supportTicketService.getUserTickets(userId), page, size));
     }
 
     // Get tickets by status
     @Operation(summary = "Get Tickets By Status")
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<SupportTicketResponseDto>> getTicketsByStatus(@PathVariable String status) {
+    public ResponseEntity<PagedResponse<SupportTicketResponseDto>>
+            getTicketsByStatus(@PathVariable String status,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(supportTicketService.getTicketsByStatus(status));
+ return ResponseEntity.ok(PagedResponse.fromList(supportTicketService.getTicketsByStatus(status), page, size));
     }
 
     // Update ticket

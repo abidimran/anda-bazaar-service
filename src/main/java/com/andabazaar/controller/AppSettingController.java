@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andabazaar.dto.appsetting.AppSettingRequestDto;
 import com.andabazaar.dto.appsetting.AppSettingResponseDto;
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.service.AppSettingService;
 
 import jakarta.validation.Valid;
@@ -65,18 +67,18 @@ public class AppSettingController {
 
     @Operation(summary = "Get All Settings")
     @GetMapping
-    public ResponseEntity<List<AppSettingResponseDto>>
-            getAllSettings() {
+    public ResponseEntity<PagedResponse<AppSettingResponseDto>>
+            getAllSettings(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(appSettingService.getAllSettings());
+ return ResponseEntity.ok(PagedResponse.fromList(appSettingService.getAllSettings(), page, size));
     }
 
     @Operation(summary = "Get Active Settings")
     @GetMapping("/active")
-    public ResponseEntity<List<AppSettingResponseDto>>
-            getActiveSettings() {
+    public ResponseEntity<PagedResponse<AppSettingResponseDto>>
+            getActiveSettings(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(appSettingService.getActiveSettings());
+ return ResponseEntity.ok(PagedResponse.fromList(appSettingService.getActiveSettings(), page, size));
     }
 
     @Operation(summary = "Deactivate Setting")

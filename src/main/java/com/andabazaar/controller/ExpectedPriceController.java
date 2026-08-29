@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.expectedprice.ExpectedPriceRequestDto;
 import com.andabazaar.dto.expectedprice.ExpectedPriceResponseDto;
 import com.andabazaar.service.ExpectedPriceService;
@@ -50,10 +51,11 @@ public class ExpectedPriceController {
 
     @Operation(summary = "Get By Market")
     @GetMapping("/market/{marketId}")
-    public ResponseEntity<List<ExpectedPriceResponseDto>>
-            getByMarket(@PathVariable Long marketId) {
+    public ResponseEntity<PagedResponse<ExpectedPriceResponseDto>>
+            getByMarket(@PathVariable Long marketId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(expectedPriceService.getByMarket(marketId));
+ return ResponseEntity.ok(PagedResponse.fromList(expectedPriceService.getByMarket(marketId), page, size));
     }
 
     @Operation(summary = "Get By Market And Date")
@@ -71,15 +73,15 @@ public class ExpectedPriceController {
 
     @Operation(summary = "Get Active Expected Prices")
     @GetMapping
-    public ResponseEntity<List<ExpectedPriceResponseDto>>
-            getActiveExpectedPrices() {
+    public ResponseEntity<PagedResponse<ExpectedPriceResponseDto>>
+            getActiveExpectedPrices(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(expectedPriceService.getActiveExpectedPrices());
+ return ResponseEntity.ok(PagedResponse.fromList(expectedPriceService.getActiveExpectedPrices(), page, size));
     }
 
     @Operation(summary = "Get By Date Range")
     @GetMapping("/date-range")
-    public ResponseEntity<List<ExpectedPriceResponseDto>>
+    public ResponseEntity<PagedResponse<ExpectedPriceResponseDto>>
             getByDateRange(@RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
                     LocalDate startDate,
 
@@ -87,14 +89,15 @@ public class ExpectedPriceController {
                     @DateTimeFormat(
                             iso = DateTimeFormat.ISO.DATE
                     )
-                    LocalDate endDate) {
+                    LocalDate endDate,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(expectedPriceService.getByDateRange(startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(expectedPriceService.getByDateRange(startDate, endDate), page, size));
     }
 
     @Operation(summary = "Get Market Date Range")
     @GetMapping("/market/{marketId}/date-range")
-    public ResponseEntity<List<ExpectedPriceResponseDto>>
+    public ResponseEntity<PagedResponse<ExpectedPriceResponseDto>>
             getMarketDateRange(@PathVariable Long marketId,
 
                     @RequestParam
@@ -107,9 +110,10 @@ public class ExpectedPriceController {
                     @DateTimeFormat(
                             iso = DateTimeFormat.ISO.DATE
                     )
-                    LocalDate endDate) {
+                    LocalDate endDate,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(expectedPriceService.getMarketDateRange(marketId, startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(expectedPriceService.getMarketDateRange(marketId, startDate, endDate), page, size));
     }
 
     @Operation(summary = "Delete Expected Price")

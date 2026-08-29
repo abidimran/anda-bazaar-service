@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.andabazaar.dto.audit.AuditLogRequestDto;
 import com.andabazaar.dto.audit.AuditLogResponseDto;
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.service.AuditLogService;
 
 import jakarta.validation.Valid;
@@ -48,42 +49,46 @@ public class AuditLogController {
 
     @Operation(summary = "Get All Logs")
     @GetMapping
-    public ResponseEntity<List<AuditLogResponseDto>>
-            getAllLogs() {
+    public ResponseEntity<PagedResponse<AuditLogResponseDto>>
+            getAllLogs(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(auditLogService.getAllLogs());
+ return ResponseEntity.ok(PagedResponse.fromList(auditLogService.getAllLogs(), page, size));
     }
 
     @Operation(summary = "Get User Logs")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<AuditLogResponseDto>>
-            getUserLogs(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<AuditLogResponseDto>>
+            getUserLogs(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(auditLogService.getUserLogs(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(auditLogService.getUserLogs(userId), page, size));
     }
 
     @Operation(summary = "Get Logs By Action")
     @GetMapping("/action/{action}")
-    public ResponseEntity<List<AuditLogResponseDto>>
-            getLogsByAction(@PathVariable String action) {
+    public ResponseEntity<PagedResponse<AuditLogResponseDto>>
+            getLogsByAction(@PathVariable String action,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(auditLogService.getLogsByAction(action));
+ return ResponseEntity.ok(PagedResponse.fromList(auditLogService.getLogsByAction(action), page, size));
     }
 
     @Operation(summary = "Get Entity Logs")
     @GetMapping("/entity")
-    public ResponseEntity<List<AuditLogResponseDto>>
-            getEntityLogs(@RequestParam String entityType, @RequestParam String entityId) {
+    public ResponseEntity<PagedResponse<AuditLogResponseDto>>
+            getEntityLogs(@RequestParam String entityType, @RequestParam String entityId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(auditLogService.getEntityLogs(entityType, entityId));
+ return ResponseEntity.ok(PagedResponse.fromList(auditLogService.getEntityLogs(entityType, entityId), page, size));
     }
 
     @Operation(summary = "Get Logs Between")
     @GetMapping("/between")
-    public ResponseEntity<List<AuditLogResponseDto>>
-            getLogsBetween(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
+    public ResponseEntity<PagedResponse<AuditLogResponseDto>>
+            getLogsBetween(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(auditLogService.getLogsBetween(startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(auditLogService.getLogsBetween(startDate, endDate), page, size));
     }
 
     @Operation(summary = "Delete Log")

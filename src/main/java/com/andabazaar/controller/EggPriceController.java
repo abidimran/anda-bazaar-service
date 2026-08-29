@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.eggprice.EggPriceRequestDto;
 import com.andabazaar.dto.eggprice.EggPriceResponseDto;
 import com.andabazaar.service.EggPriceService;
@@ -66,30 +67,31 @@ public class EggPriceController {
 
     @Operation(summary = "Get Today Prices")
     @GetMapping("/today")
-    public ResponseEntity<List<EggPriceResponseDto>>
-            getTodayPrices() {
+    public ResponseEntity<PagedResponse<EggPriceResponseDto>>
+            getTodayPrices(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(eggPriceService.getTodayPrices());
+ return ResponseEntity.ok(PagedResponse.fromList(eggPriceService.getTodayPrices(), page, size));
     }
 
     // GET YESTERDAY PRICES
 
     @Operation(summary = "Get Yesterday Prices")
     @GetMapping("/yesterday")
-    public ResponseEntity<List<EggPriceResponseDto>>
-            getYesterdayPrices() {
+    public ResponseEntity<PagedResponse<EggPriceResponseDto>>
+            getYesterdayPrices(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(eggPriceService.getYesterdayPrices());
+ return ResponseEntity.ok(PagedResponse.fromList(eggPriceService.getYesterdayPrices(), page, size));
     }
 
     // GET PRICE HISTORY
 
     @Operation(summary = "Get Price History")
     @GetMapping("/history/{marketId}")
-    public ResponseEntity<List<EggPriceResponseDto>>
-            getPriceHistory(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+    public ResponseEntity<PagedResponse<EggPriceResponseDto>>
+            getPriceHistory(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(eggPriceService.getPriceHistory(marketId, startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(eggPriceService.getPriceHistory(marketId, startDate, endDate), page, size));
     }
 
     // USER - GET PRICES
@@ -103,10 +105,11 @@ public class EggPriceController {
 
     @Operation(summary = "Get User Prices")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<EggPriceResponseDto>>
-            getUserPrices(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<EggPriceResponseDto>>
+            getUserPrices(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(eggPriceService.getUserPrices(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(eggPriceService.getUserPrices(userId), page, size));
     }
 
     // USER - GET PRICE HISTORY
@@ -120,13 +123,14 @@ public class EggPriceController {
 
     @Operation(summary = "Get User Price History")
     @GetMapping("/user/{userId}/history/{marketId}")
-    public ResponseEntity<List<EggPriceResponseDto>>
+    public ResponseEntity<PagedResponse<EggPriceResponseDto>>
             getUserPriceHistory(@PathVariable Long userId,
                     @PathVariable Long marketId,
                     @RequestParam LocalDate startDate,
-                    @RequestParam LocalDate endDate) {
+                    @RequestParam LocalDate endDate,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(eggPriceService.getUserPriceHistory(userId, marketId, startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(eggPriceService.getUserPriceHistory(userId, marketId, startDate, endDate), page, size));
     }
 
     // ADMIN - DELETE PRICE

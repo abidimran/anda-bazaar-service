@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.report.PriceReportRequestDto;
 import com.andabazaar.dto.report.PriceReportResponseDto;
 import com.andabazaar.service.PriceReportService;
@@ -51,46 +52,49 @@ public class PriceReportController {
     // Get all reports
     @Operation(summary = "Get All Reports")
     @GetMapping
-    public ResponseEntity<List<PriceReportResponseDto>>
-            getAllReports() {
+    public ResponseEntity<PagedResponse<PriceReportResponseDto>>
+            getAllReports(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceReportService.getAllReports());
+ return ResponseEntity.ok(PagedResponse.fromList(priceReportService.getAllReports(), page, size));
     }
 
     // Get reports by user
     @Operation(summary = "Get User Reports")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PriceReportResponseDto>>
-            getUserReports(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<PriceReportResponseDto>>
+            getUserReports(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceReportService.getUserReports(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(priceReportService.getUserReports(userId), page, size));
     }
 
     // Get reports by market
     @Operation(summary = "Get Market Reports")
     @GetMapping("/market/{marketId}")
-    public ResponseEntity<List<PriceReportResponseDto>>
-            getMarketReports(@PathVariable Long marketId) {
+    public ResponseEntity<PagedResponse<PriceReportResponseDto>>
+            getMarketReports(@PathVariable Long marketId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceReportService.getMarketReports(marketId));
+ return ResponseEntity.ok(PagedResponse.fromList(priceReportService.getMarketReports(marketId), page, size));
     }
 
     // Get reports by status
     @Operation(summary = "Get Reports By Status")
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<PriceReportResponseDto>>
-            getReportsByStatus(@PathVariable String status) {
+    public ResponseEntity<PagedResponse<PriceReportResponseDto>>
+            getReportsByStatus(@PathVariable String status,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceReportService.getReportsByStatus(status));
+ return ResponseEntity.ok(PagedResponse.fromList(priceReportService.getReportsByStatus(status), page, size));
     }
 
     // Get pending reports
     @Operation(summary = "Get Pending Reports")
     @GetMapping("/pending")
-    public ResponseEntity<List<PriceReportResponseDto>>
-            getPendingReports() {
+    public ResponseEntity<PagedResponse<PriceReportResponseDto>>
+            getPendingReports(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceReportService.getPendingReports());
+ return ResponseEntity.ok(PagedResponse.fromList(priceReportService.getPendingReports(), page, size));
     }
 
     // Review report

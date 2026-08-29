@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.news.NewsRequestDto;
 import com.andabazaar.dto.news.NewsResponseDto;
 import com.andabazaar.service.NewsService;
@@ -47,25 +48,26 @@ public class NewsController {
 
     @Operation(summary = "Get All News")
     @GetMapping
-    public ResponseEntity<List<NewsResponseDto>> getAllNews() {
+    public ResponseEntity<PagedResponse<NewsResponseDto>>
+            getAllNews(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(newsService.getAllNews());
+ return ResponseEntity.ok(PagedResponse.fromList(newsService.getAllNews(), page, size));
     }
 
     @Operation(summary = "Get Published News")
     @GetMapping("/published")
-    public ResponseEntity<List<NewsResponseDto>>
-            getPublishedNews() {
+    public ResponseEntity<PagedResponse<NewsResponseDto>>
+            getPublishedNews(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(newsService.getPublishedNews());
+ return ResponseEntity.ok(PagedResponse.fromList(newsService.getPublishedNews(), page, size));
     }
 
     @Operation(summary = "Get Active News")
     @GetMapping("/active")
-    public ResponseEntity<List<NewsResponseDto>>
-            getActiveNews() {
+    public ResponseEntity<PagedResponse<NewsResponseDto>>
+            getActiveNews(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(newsService.getActiveNews());
+ return ResponseEntity.ok(PagedResponse.fromList(newsService.getActiveNews(), page, size));
     }
 
     @Operation(summary = "Publish News")

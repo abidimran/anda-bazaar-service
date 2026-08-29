@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.andabazaar.dto.alert.PriceAlertRequestDto;
 import com.andabazaar.dto.alert.PriceAlertResponseDto;
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.service.PriceAlertService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,9 +39,11 @@ public class PriceAlertController {
 
     @Operation(summary = "Get User Alerts")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PriceAlertResponseDto>> getUserAlerts(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<PriceAlertResponseDto>>
+            getUserAlerts(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceAlertService.getUserAlerts(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(priceAlertService.getUserAlerts(userId), page, size));
     }
 
     @Operation(summary = "Update Alert")

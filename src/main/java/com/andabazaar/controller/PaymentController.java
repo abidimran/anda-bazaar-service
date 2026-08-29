@@ -1,4 +1,3 @@
-
 package com.andabazaar.controller;
 
 import java.util.List;
@@ -9,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.payment.PaymentRequestDto;
 import com.andabazaar.dto.payment.PaymentResponseDto;
 import com.andabazaar.dto.payment.PaymentVerificationDto;
@@ -50,9 +50,11 @@ public class PaymentController {
 
     @Operation(summary = "Get User Payments")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PaymentResponseDto>> getUserPayments(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<PaymentResponseDto>>
+            getUserPayments(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(paymentService.getUserPayments(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(paymentService.getUserPayments(userId), page, size));
     }
 
     @Operation(summary = "Get Payment By Transaction")
@@ -62,4 +64,3 @@ public class PaymentController {
  return ResponseEntity.ok(paymentService.getPaymentByTransactionId(transactionId));
     }
 }
-

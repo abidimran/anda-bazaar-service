@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.entity.PriceHistory;
 import com.andabazaar.service.PriceHistoryService;
 
@@ -40,26 +41,29 @@ public class PriceHistoryController {
 
     @Operation(summary = "Get By Market")
     @GetMapping("/market/{marketId}")
-    public ResponseEntity<List<PriceHistory>>
-    getByMarket(@PathVariable Long marketId) {
+    public ResponseEntity<PagedResponse<PriceHistory>>
+    getByMarket(@PathVariable Long marketId,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceHistoryService.getByMarket(marketId));
+ return ResponseEntity.ok(PagedResponse.fromList(priceHistoryService.getByMarket(marketId), page, size));
     }
 
     @Operation(summary = "Get By Date Range")
     @GetMapping("/market/{marketId}/range")
-    public ResponseEntity<List<PriceHistory>>
-    getByDateRange(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+    public ResponseEntity<PagedResponse<PriceHistory>>
+    getByDateRange(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceHistoryService.getByMarketAndDateRange(marketId, startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(priceHistoryService.getByMarketAndDateRange(marketId, startDate, endDate), page, size));
     }
 
     @Operation(summary = "Get By Date")
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<PriceHistory>>
-    getByDate(@PathVariable LocalDate date) {
+    public ResponseEntity<PagedResponse<PriceHistory>>
+    getByDate(@PathVariable LocalDate date,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceHistoryService.getByDate(date));
+ return ResponseEntity.ok(PagedResponse.fromList(priceHistoryService.getByDate(date), page, size));
     }
 
     @Operation(summary = "Delete")

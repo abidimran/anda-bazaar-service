@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.notification.NotificationRequestDto;
 import com.andabazaar.dto.notification.NotificationResponseDto;
 import com.andabazaar.service.NotificationService;
@@ -33,20 +34,20 @@ public class NotificationController {
 
     @Operation(summary = "Get User Notifications")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<
-            List<NotificationResponseDto>>
-            getUserNotifications(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<NotificationResponseDto>>
+            getUserNotifications(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(notificationService.getUserNotifications(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(notificationService.getUserNotifications(userId), page, size));
     }
 
     @Operation(summary = "Get Unread Notifications")
     @GetMapping("/user/{userId}/unread")
-    public ResponseEntity<
-            List<NotificationResponseDto>>
-            getUnreadNotifications(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<NotificationResponseDto>>
+            getUnreadNotifications(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(notificationService.getUnreadNotifications(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(notificationService.getUnreadNotifications(userId), page, size));
     }
 
     @Operation(summary = "Get Unread Count")

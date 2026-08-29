@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.comparison.MarketComparisonResponseDto;
 import com.andabazaar.service.MarketComparisonService;
 
@@ -23,10 +24,10 @@ public class MarketComparisonController {
 
     @Operation(summary = "Compare Markets")
     @GetMapping
-    public ResponseEntity<List<MarketComparisonResponseDto>>
-            compareMarkets() {
+    public ResponseEntity<PagedResponse<MarketComparisonResponseDto>>
+            compareMarkets(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(marketComparisonService.compareMarkets());
+ return ResponseEntity.ok(PagedResponse.fromList(marketComparisonService.compareMarkets(), page, size));
     }
 
     @Operation(summary = "Compare Market")

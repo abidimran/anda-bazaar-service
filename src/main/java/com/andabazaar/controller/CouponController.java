@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.coupon.CouponRequestDto;
 import com.andabazaar.dto.coupon.CouponResponseDto;
 import com.andabazaar.service.CouponService;
@@ -55,16 +56,18 @@ public class CouponController {
 
     @Operation(summary = "Get All Coupons")
     @GetMapping
-    public ResponseEntity<List<CouponResponseDto>> getAllCoupons() {
+    public ResponseEntity<PagedResponse<CouponResponseDto>>
+            getAllCoupons(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(couponService.getAllCoupons());
+ return ResponseEntity.ok(PagedResponse.fromList(couponService.getAllCoupons(), page, size));
     }
 
     @Operation(summary = "Get Active Coupons")
     @GetMapping("/active")
-    public ResponseEntity<List<CouponResponseDto>> getActiveCoupons() {
+    public ResponseEntity<PagedResponse<CouponResponseDto>>
+            getActiveCoupons(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(couponService.getActiveCoupons());
+ return ResponseEntity.ok(PagedResponse.fromList(couponService.getActiveCoupons(), page, size));
     }
 
     @Operation(summary = "Apply Coupon")

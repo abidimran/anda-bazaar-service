@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.location.StateRequestDto;
 import com.andabazaar.dto.location.StateResponseDto;
 import com.andabazaar.service.StateService;
@@ -33,18 +34,18 @@ public class StateController {
 
     @Operation(summary = "Get All States")
     @GetMapping
-    public ResponseEntity<List<StateResponseDto>>
-            getAllStates() {
+    public ResponseEntity<PagedResponse<StateResponseDto>>
+            getAllStates(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(stateService.getAllStates());
+ return ResponseEntity.ok(PagedResponse.fromList(stateService.getAllStates(), page, size));
     }
 
     @Operation(summary = "Get Active States")
     @GetMapping("/active")
-    public ResponseEntity<List<StateResponseDto>>
-            getActiveStates() {
+    public ResponseEntity<PagedResponse<StateResponseDto>>
+            getActiveStates(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(stateService.getActiveStates());
+ return ResponseEntity.ok(PagedResponse.fromList(stateService.getActiveStates(), page, size));
     }
 
     @Operation(summary = "Get State")

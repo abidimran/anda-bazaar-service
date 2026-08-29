@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.andabazaar.dto.analytics.MarketStatisticsDto;
 import com.andabazaar.dto.analytics.PriceAnalyticsResponseDto;
 import com.andabazaar.dto.analytics.PriceTrendResponseDto;
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.service.PriceAnalyticsService;
 
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class PriceAnalyticsController {
 
     @Operation(summary = "Get Price Trend")
     @GetMapping("/market/{marketId}/trend")
-    public ResponseEntity<List<PriceTrendResponseDto>>
+    public ResponseEntity<PagedResponse<PriceTrendResponseDto>>
     getPriceTrend(@PathVariable Long marketId, @RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
             LocalDate startDate,
 
@@ -58,16 +59,17 @@ public class PriceAnalyticsController {
             @DateTimeFormat(
                     iso = DateTimeFormat.ISO.DATE
             )
-            LocalDate endDate) {
+            LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceAnalyticsService.getPriceTrend(marketId, startDate, endDate));
+ return ResponseEntity.ok(PagedResponse.fromList(priceAnalyticsService.getPriceTrend(marketId, startDate, endDate), page, size));
     }
 
     @Operation(summary = "Get All Market Statistics")
     @GetMapping("/markets")
-    public ResponseEntity<List<MarketStatisticsDto>>
-    getAllMarketStatistics() {
+    public ResponseEntity<PagedResponse<MarketStatisticsDto>>
+    getAllMarketStatistics(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(priceAnalyticsService.getAllMarketStatistics());
+ return ResponseEntity.ok(PagedResponse.fromList(priceAnalyticsService.getAllMarketStatistics(), page, size));
     }
 }

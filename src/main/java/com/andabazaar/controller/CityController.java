@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.dto.location.CityRequestDto;
 import com.andabazaar.dto.location.CityResponseDto;
 import com.andabazaar.service.CityService;
@@ -33,18 +34,19 @@ public class CityController {
 
     @Operation(summary = "Get All Cities")
     @GetMapping
-    public ResponseEntity<List<CityResponseDto>>
-            getAllCities() {
+    public ResponseEntity<PagedResponse<CityResponseDto>>
+            getAllCities(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(cityService.getAllCities());
+ return ResponseEntity.ok(PagedResponse.fromList(cityService.getAllCities(), page, size));
     }
 
     @Operation(summary = "Get Cities By State")
     @GetMapping("/state/{stateId}")
-    public ResponseEntity<List<CityResponseDto>>
-            getCitiesByState(@PathVariable Long stateId) {
+    public ResponseEntity<PagedResponse<CityResponseDto>>
+            getCitiesByState(@PathVariable Long stateId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(cityService.getCitiesByState(stateId));
+ return ResponseEntity.ok(PagedResponse.fromList(cityService.getCitiesByState(stateId), page, size));
     }
 
     @Operation(summary = "Get City")

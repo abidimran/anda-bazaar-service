@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.andabazaar.dto.common.PagedResponse;
 import com.andabazaar.entity.FavoriteMarket;
 import com.andabazaar.service.FavoriteMarketService;
 
@@ -43,9 +44,11 @@ public class FavoriteMarketController {
     // Get user's favorite markets
     @Operation(summary = "Get User Favorites")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<FavoriteMarket>> getUserFavorites(@PathVariable Long userId) {
+    public ResponseEntity<PagedResponse<FavoriteMarket>>
+            getUserFavorites(@PathVariable Long userId,
+                    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
 
- return ResponseEntity.ok(favoriteMarketService.getUserFavorites(userId));
+ return ResponseEntity.ok(PagedResponse.fromList(favoriteMarketService.getUserFavorites(userId), page, size));
     }
 
     // Check favorite
