@@ -15,13 +15,13 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_payment_user",
-            columnList = "user_id"),
+            columnList = "userId"),
         @Index(
             name = "idx_payment_transaction",
-            columnList = "transaction_id"),
+            columnList = "transactionId"),
         @Index(
             name = "idx_payment_razorpay_order",
-            columnList = "razorpay_order_id")
+            columnList = "razorpayOrderId")
     }
 )
 @Getter
@@ -37,14 +37,14 @@ public class Payment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "user_id",
+        name = "userId",
         nullable = false
     )
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "subscription_plan_id",
+        name = "subscriptionPlanId",
         nullable = false
     )
     private SubscriptionPlan subscriptionPlan;
@@ -63,40 +63,40 @@ public class Payment {
     private String currency;
 
     @Column(
-        name = "transaction_id",
+        name = "transactionId",
         unique = true,
         length = 200
     )
     private String transactionId;
 
     @Column(
-        name = "order_id",
+        name = "orderId",
         length = 200
     )
     private String orderId;
 
     @Column(
-        name = "razorpay_order_id",
+        name = "razorpayOrderId",
         unique = true,
         length = 200
     )
     private String razorpayOrderId;
 
     @Column(
-        name = "razorpay_payment_id",
+        name = "razorpayPaymentId",
         unique = true,
         length = 200
     )
     private String razorpayPaymentId;
 
     @Column(
-        name = "razorpay_signature",
+        name = "razorpaySignature",
         length = 500
     )
     private String razorpaySignature;
 
     @Column(
-        name = "product_id",
+        name = "productId",
         length = 200
     )
     private String productId;

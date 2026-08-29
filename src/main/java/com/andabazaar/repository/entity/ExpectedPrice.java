@@ -9,10 +9,10 @@ import lombok.*;
 
 @Entity
 @Table(
-    name = "expected_prices",
+    name = "expectedPrices",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {"market_id", "expected_date"}
+            columnNames = {"marketId", "expectedDate"}
         )
     }
 )
@@ -29,13 +29,13 @@ public class ExpectedPrice {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "market_id",
+        name = "marketId",
         nullable = false
     )
     private Market market;
 
     @Column(
-        name = "expected_date",
+        name = "expectedDate",
         nullable = false
     )
     private LocalDate expectedDate;

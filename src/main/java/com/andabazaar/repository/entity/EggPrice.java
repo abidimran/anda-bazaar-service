@@ -9,16 +9,16 @@ import lombok.*;
 
 @Entity
 @Table(
-    name = "egg_prices",
+    name = "eggPrices",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {"market_id", "price_date"}
+            columnNames = {"marketId", "priceDate"}
         )
     },
     indexes = {
         @Index(
             name = "idx_egg_price_market_date",
-            columnList = "market_id, price_date")
+            columnList = "marketId, priceDate")
     }
 )
 @Getter
@@ -34,13 +34,13 @@ public class EggPrice {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "market_id",
+        name = "marketId",
         nullable = false
     )
     private Market market;
 
     @Column(
-        name = "price_date",
+        name = "priceDate",
         nullable = false
     )
     private LocalDate priceDate;
@@ -78,7 +78,7 @@ public class EggPrice {
     private String remarks;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "updated_by")
+    @JoinColumn(name = "updatedBy")
     private User updatedBy;
 
     @Builder.Default

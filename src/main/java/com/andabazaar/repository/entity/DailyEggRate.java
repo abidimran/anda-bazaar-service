@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "daily_egg_rates", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"city_id", "rate_date"})
+@Table(name = "dailyEggRates", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"cityId", "rateDate"})
 })
 @Getter
 @Setter
@@ -23,14 +23,14 @@ public class DailyEggRate {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "cityId", nullable = false)
     private City city;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "state_id", nullable = false)
+    @JoinColumn(name = "stateId", nullable = false)
     private State state;
 
-    @Column(name = "rate_date", nullable = false)
+    @Column(name = "rateDate", nullable = false)
     private LocalDate rateDate;
 
     @Column(nullable = false, precision = 10, scale = 2)

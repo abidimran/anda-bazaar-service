@@ -23,7 +23,7 @@ public class Market {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "city_id",
+        name = "cityId",
         nullable = false
     )
     private City city;

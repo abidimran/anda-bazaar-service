@@ -10,14 +10,14 @@ import lombok.*;
 
 @Entity
 @Table(
-    name = "user_subscriptions",
+    name = "userSubscriptions",
     indexes = {
         @Index(
             name = "idx_user_subscription_user",
-            columnList = "user_id"),
+            columnList = "userId"),
         @Index(
             name = "idx_user_subscription_expiry",
-            columnList = "end_date")
+            columnList = "endDate")
     }
 )
 @Getter
@@ -33,14 +33,14 @@ public class UserSubscription {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "user_id",
+        name = "userId",
         nullable = false
     )
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "plan_id",
+        name = "planId",
         nullable = false
     )
     private SubscriptionPlan plan;

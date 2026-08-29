@@ -13,10 +13,10 @@ import lombok.*;
     indexes = {
         @Index(
             name = "idx_notification_user",
-            columnList = "user_id"),
+            columnList = "userId"),
         @Index(
             name = "idx_notification_created",
-            columnList = "created_at")
+            columnList = "createdAt")
     }
 )
 @Getter
@@ -32,7 +32,7 @@ public class Notification {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "user_id",
+        name = "userId",
         nullable = false
     )
     private User user;
@@ -56,7 +56,7 @@ public class Notification {
     private String message;
 
     // CHANGED
-    @Column(name = "is_read", nullable = false)
+    @Column(name = "isRead", nullable = false)
     @Builder.Default
     private Boolean read = false;
 
@@ -64,7 +64,7 @@ public class Notification {
     @Builder.Default
     private Boolean sent = false;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;
 
     private LocalDateTime readAt;

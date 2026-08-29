@@ -10,7 +10,7 @@ import lombok.*;
     name = "cities",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {"name", "state_id"}
+            columnNames = {"name", "stateId"}
         )
     }
 )
@@ -30,7 +30,7 @@ public class City {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "state_id",
+        name = "stateId",
         nullable = false
     )
     private State state;

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "notification_preferences")
+@Table(name = "notificationPreferences")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class NotificationPreference {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "user_id",
+        name = "userId",
         nullable = false,
         unique = true
     )
