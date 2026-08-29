@@ -2,6 +2,9 @@ package com.andabazaar.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +24,7 @@ import com.andabazaar.service.PriceReportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Price Reports", description = "User-submitted price reports")
 @RestController
 @RequestMapping("/api/price-reports")
 @RequiredArgsConstructor
@@ -29,6 +33,7 @@ public class PriceReportController {
     private final PriceReportService priceReportService;
 
     // Create price report
+    @Operation(summary = "Create Report")
     @PostMapping
     public ResponseEntity<PriceReportResponseDto> createReport(@Valid @RequestBody PriceReportRequestDto request) {
 
@@ -36,6 +41,7 @@ public class PriceReportController {
     }
 
     // Get report by ID
+    @Operation(summary = "Get Report By Id")
     @GetMapping("/{id}")
     public ResponseEntity<PriceReportResponseDto> getReportById(@PathVariable Long id) {
 
@@ -43,6 +49,7 @@ public class PriceReportController {
     }
 
     // Get all reports
+    @Operation(summary = "Get All Reports")
     @GetMapping
     public ResponseEntity<List<PriceReportResponseDto>>
             getAllReports() {
@@ -51,6 +58,7 @@ public class PriceReportController {
     }
 
     // Get reports by user
+    @Operation(summary = "Get User Reports")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PriceReportResponseDto>>
             getUserReports(@PathVariable Long userId) {
@@ -59,6 +67,7 @@ public class PriceReportController {
     }
 
     // Get reports by market
+    @Operation(summary = "Get Market Reports")
     @GetMapping("/market/{marketId}")
     public ResponseEntity<List<PriceReportResponseDto>>
             getMarketReports(@PathVariable Long marketId) {
@@ -67,6 +76,7 @@ public class PriceReportController {
     }
 
     // Get reports by status
+    @Operation(summary = "Get Reports By Status")
     @GetMapping("/status/{status}")
     public ResponseEntity<List<PriceReportResponseDto>>
             getReportsByStatus(@PathVariable String status) {
@@ -75,6 +85,7 @@ public class PriceReportController {
     }
 
     // Get pending reports
+    @Operation(summary = "Get Pending Reports")
     @GetMapping("/pending")
     public ResponseEntity<List<PriceReportResponseDto>>
             getPendingReports() {
@@ -83,6 +94,7 @@ public class PriceReportController {
     }
 
     // Review report
+    @Operation(summary = "Review Report")
     @PutMapping("/{id}/review")
     public ResponseEntity<PriceReportResponseDto> reviewReport(@PathVariable Long id,
             @RequestParam String status,
@@ -92,6 +104,7 @@ public class PriceReportController {
     }
 
     // Count reports by status
+    @Operation(summary = "Count By Status")
     @GetMapping("/count/{status}")
     public ResponseEntity<Long> countByStatus(@PathVariable String status) {
 
@@ -99,6 +112,7 @@ public class PriceReportController {
     }
 
     // Delete report
+    @Operation(summary = "Delete Report")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
 

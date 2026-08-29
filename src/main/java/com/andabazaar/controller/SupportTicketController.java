@@ -2,6 +2,9 @@ package com.andabazaar.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,7 @@ import com.andabazaar.service.SupportTicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Support Tickets", description = "Customer support ticket management")
 @RestController
 @RequestMapping("/api/support-tickets")
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class SupportTicketController {
     private final SupportTicketService supportTicketService;
 
     // Create ticket
+    @Operation(summary = "Create Ticket")
     @PostMapping
     public ResponseEntity<SupportTicketResponseDto> createTicket(@Valid @RequestBody SupportTicketRequestDto request) {
 
@@ -29,6 +34,7 @@ public class SupportTicketController {
     }
 
     // Get ticket by ID
+    @Operation(summary = "Get Ticket By Id")
     @GetMapping("/{id}")
     public ResponseEntity<SupportTicketResponseDto> getTicketById(@PathVariable Long id) {
 
@@ -36,6 +42,7 @@ public class SupportTicketController {
     }
 
     // Get ticket by ticket number
+    @Operation(summary = "Get Ticket By Number")
     @GetMapping("/number/{ticketNumber}")
     public ResponseEntity<SupportTicketResponseDto> getTicketByNumber(@PathVariable String ticketNumber) {
 
@@ -43,6 +50,7 @@ public class SupportTicketController {
     }
 
     // Get all tickets
+    @Operation(summary = "Get All Tickets")
     @GetMapping
     public ResponseEntity<List<SupportTicketResponseDto>> getAllTickets() {
 
@@ -50,6 +58,7 @@ public class SupportTicketController {
     }
 
     // Get user's tickets
+    @Operation(summary = "Get User Tickets")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<SupportTicketResponseDto>> getUserTickets(@PathVariable Long userId) {
 
@@ -57,6 +66,7 @@ public class SupportTicketController {
     }
 
     // Get tickets by status
+    @Operation(summary = "Get Tickets By Status")
     @GetMapping("/status/{status}")
     public ResponseEntity<List<SupportTicketResponseDto>> getTicketsByStatus(@PathVariable String status) {
 
@@ -64,6 +74,7 @@ public class SupportTicketController {
     }
 
     // Update ticket
+    @Operation(summary = "Update Ticket")
     @PutMapping("/{id}")
     public ResponseEntity<SupportTicketResponseDto> updateTicket(@PathVariable Long id,
             @Valid @RequestBody SupportTicketRequestDto request) {
@@ -72,6 +83,7 @@ public class SupportTicketController {
     }
 
     // Close ticket
+    @Operation(summary = "Close Ticket")
     @PutMapping("/{id}/close")
     public ResponseEntity<Void> closeTicket(@PathVariable Long id, @RequestParam String resolution) {
 
@@ -81,6 +93,7 @@ public class SupportTicketController {
     }
 
     // Reopen ticket
+    @Operation(summary = "Reopen Ticket")
     @PutMapping("/{id}/reopen")
     public ResponseEntity<Void> reopenTicket(@PathVariable Long id) {
 
@@ -90,6 +103,7 @@ public class SupportTicketController {
     }
 
     // Add reply
+    @Operation(summary = "Add Reply")
     @PostMapping("/{ticketId}/replies")
     public ResponseEntity<Void> addReply(@PathVariable Long ticketId, @Valid @RequestBody SupportReplyDto request) {
 
@@ -99,13 +113,15 @@ public class SupportTicketController {
     }
 
     // Count tickets by status
-    @GetMapping("/count/status/{status}")
+    @Operation(summary = "Count By Status")
+    @GetMapping("/count/{status}")
     public ResponseEntity<Long> countByStatus(@PathVariable String status) {
 
  return ResponseEntity.ok(supportTicketService.countByStatus(status));
     }
 
     // Delete ticket
+    @Operation(summary = "Delete Ticket")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
 

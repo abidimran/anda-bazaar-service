@@ -2,6 +2,9 @@ package com.andabazaar.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import com.andabazaar.service.SubscriptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Subscriptions", description = "Subscription plans and user subscriptions")
 @RestController
 @RequestMapping("/api/subscriptions")
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
+    @Operation(summary = "Get Active Plans")
     @GetMapping("/plans")
     public ResponseEntity<
             List<SubscriptionPlanResponseDto>>
@@ -30,6 +35,7 @@ public class SubscriptionController {
  return ResponseEntity.ok(subscriptionService.getActivePlans());
     }
 
+    @Operation(summary = "Get Plan")
     @GetMapping("/plans/{id}")
     public ResponseEntity<
             SubscriptionPlanResponseDto>
@@ -38,6 +44,7 @@ public class SubscriptionController {
  return ResponseEntity.ok(subscriptionService.getPlanById(id));
     }
 
+    @Operation(summary = "Subscribe")
     @PostMapping("/user/{userId}")
     public ResponseEntity<SubscriptionResponseDto>
             subscribe(@PathVariable Long userId, @Valid @RequestBody SubscribeRequestDto request) {
@@ -45,6 +52,7 @@ public class SubscriptionController {
  return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionService.subscribe(userId, request));
     }
 
+    @Operation(summary = "Get Current Subscription")
     @GetMapping("/user/{userId}/current")
     public ResponseEntity<SubscriptionResponseDto>
             getCurrentSubscription(@PathVariable Long userId) {
@@ -52,6 +60,7 @@ public class SubscriptionController {
  return ResponseEntity.ok(subscriptionService.getCurrentSubscription(userId));
     }
 
+    @Operation(summary = "Get Subscription History")
     @GetMapping("/user/{userId}/history")
     public ResponseEntity<
             List<SubscriptionResponseDto>>
@@ -60,6 +69,7 @@ public class SubscriptionController {
  return ResponseEntity.ok(subscriptionService.getSubscriptionHistory(userId));
     }
 
+    @Operation(summary = "Create Plan")
     @PostMapping("/admin/plans")
     public ResponseEntity<
             SubscriptionPlanResponseDto>
@@ -68,6 +78,7 @@ public class SubscriptionController {
  return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionService.createPlan(request));
     }
 
+    @Operation(summary = "Update Plan")
     @PutMapping("/admin/plans/{id}")
     public ResponseEntity<
             SubscriptionPlanResponseDto>
@@ -76,6 +87,7 @@ public class SubscriptionController {
  return ResponseEntity.ok(subscriptionService.updatePlan(id, request));
     }
 
+    @Operation(summary = "Deactivate Plan")
     @DeleteMapping("/admin/plans/{id}")
     public ResponseEntity<Void>
             deactivatePlan(@PathVariable Long id) {

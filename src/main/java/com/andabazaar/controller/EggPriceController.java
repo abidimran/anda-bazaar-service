@@ -3,6 +3,9 @@ package com.andabazaar.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,7 @@ import com.andabazaar.service.EggPriceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Egg Prices", description = "Egg price CRUD and user price access")
 @RestController
 @RequestMapping("/api/egg-prices")
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class EggPriceController {
 
     // ADMIN - CREATE PRICE
 
+    @Operation(summary = "Create Price")
     @PostMapping
     public ResponseEntity<EggPriceResponseDto> createPrice(@Valid @RequestBody EggPriceRequestDto request) {
 
@@ -31,6 +36,7 @@ public class EggPriceController {
 
     // ADMIN - UPDATE PRICE
 
+    @Operation(summary = "Update Price")
     @PutMapping("/{id}")
     public ResponseEntity<EggPriceResponseDto> updatePrice(@PathVariable Long id,
             @Valid @RequestBody EggPriceRequestDto request) {
@@ -40,6 +46,7 @@ public class EggPriceController {
 
     // GET PRICE BY ID
 
+    @Operation(summary = "Get Price")
     @GetMapping("/{id}")
     public ResponseEntity<EggPriceResponseDto> getPrice(@PathVariable Long id) {
 
@@ -48,6 +55,7 @@ public class EggPriceController {
 
     // GET MARKET PRICE BY DATE
 
+    @Operation(summary = "Get Market Price")
     @GetMapping("/market/{marketId}")
     public ResponseEntity<EggPriceResponseDto> getMarketPrice(@PathVariable Long marketId, @RequestParam LocalDate date) {
 
@@ -56,6 +64,7 @@ public class EggPriceController {
 
     // GET TODAY PRICES
 
+    @Operation(summary = "Get Today Prices")
     @GetMapping("/today")
     public ResponseEntity<List<EggPriceResponseDto>>
             getTodayPrices() {
@@ -65,6 +74,7 @@ public class EggPriceController {
 
     // GET YESTERDAY PRICES
 
+    @Operation(summary = "Get Yesterday Prices")
     @GetMapping("/yesterday")
     public ResponseEntity<List<EggPriceResponseDto>>
             getYesterdayPrices() {
@@ -74,6 +84,7 @@ public class EggPriceController {
 
     // GET PRICE HISTORY
 
+    @Operation(summary = "Get Price History")
     @GetMapping("/history/{marketId}")
     public ResponseEntity<List<EggPriceResponseDto>>
             getPriceHistory(@PathVariable Long marketId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
@@ -90,6 +101,7 @@ public class EggPriceController {
     // 2 DAYS OLD + OLDER
     //
 
+    @Operation(summary = "Get User Prices")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<EggPriceResponseDto>>
             getUserPrices(@PathVariable Long userId) {
@@ -106,6 +118,7 @@ public class EggPriceController {
     // /api/egg-prices/user/1/history/5
     // ?startDate=2026-08-01
 
+    @Operation(summary = "Get User Price History")
     @GetMapping("/user/{userId}/history/{marketId}")
     public ResponseEntity<List<EggPriceResponseDto>>
             getUserPriceHistory(@PathVariable Long userId,
@@ -118,6 +131,7 @@ public class EggPriceController {
 
     // ADMIN - DELETE PRICE
 
+    @Operation(summary = "Delete Price")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrice(@PathVariable Long id) {
 

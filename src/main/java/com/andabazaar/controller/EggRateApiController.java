@@ -1,5 +1,8 @@
 package com.andabazaar.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,7 @@ import com.andabazaar.service.EggRateApiService;
 
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "External Egg Rates", description = "Fetch egg rates from external RapidAPI")
 @RestController
 @RequestMapping("/api/egg-rates-external")
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class EggRateApiController {
     // GET ALL EGG RATES
     //
 
+    @Operation(summary = "Get Egg Rates")
     @GetMapping
     public ResponseEntity<EggRateApiResponseDto> getEggRates(@RequestParam String city, @RequestParam String state) {
 
@@ -31,6 +36,7 @@ public class EggRateApiController {
     // GET TODAY'S EGG RATE
     //
 
+    @Operation(summary = "Get Today Rate")
     @GetMapping("/today")
     public ResponseEntity<EggRateSingleResponseDto> getTodayRate(@RequestParam String city, @RequestParam String state) {
 
@@ -40,6 +46,7 @@ public class EggRateApiController {
     // GET YESTERDAY'S EGG RATE
     //
 
+    @Operation(summary = "Get Yesterday Rate")
     @GetMapping("/yesterday")
     public ResponseEntity<EggRateSingleResponseDto> getYesterdayRate(@RequestParam String city, @RequestParam String state) {
 

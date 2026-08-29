@@ -2,6 +2,9 @@ package com.andabazaar.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +23,7 @@ import com.andabazaar.service.AppSettingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "App Settings", description = "Application settings management")
 @RestController
 @RequestMapping("/api/app-settings")
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class AppSettingController {
 
     private final AppSettingService appSettingService;
 
+    @Operation(summary = "Create Setting")
     @PostMapping
     public ResponseEntity<AppSettingResponseDto>
             createSetting(@Valid @RequestBody AppSettingRequestDto request) {
@@ -34,6 +39,7 @@ public class AppSettingController {
  return ResponseEntity.status(HttpStatus.CREATED).body(appSettingService.createSetting(request));
     }
 
+    @Operation(summary = "Update Setting")
     @PutMapping("/{id}")
     public ResponseEntity<AppSettingResponseDto>
             updateSetting(@PathVariable Long id, @Valid @RequestBody AppSettingRequestDto request) {
@@ -41,6 +47,7 @@ public class AppSettingController {
  return ResponseEntity.ok(appSettingService.updateSetting(id, request));
     }
 
+    @Operation(summary = "Get Setting By Id")
     @GetMapping("/{id}")
     public ResponseEntity<AppSettingResponseDto>
             getSettingById(@PathVariable Long id) {
@@ -48,6 +55,7 @@ public class AppSettingController {
  return ResponseEntity.ok(appSettingService.getSettingById(id));
     }
 
+    @Operation(summary = "Get Setting By Key")
     @GetMapping("/key/{key}")
     public ResponseEntity<AppSettingResponseDto>
             getSettingByKey(@PathVariable String key) {
@@ -55,6 +63,7 @@ public class AppSettingController {
  return ResponseEntity.ok(appSettingService.getSettingByKey(key));
     }
 
+    @Operation(summary = "Get All Settings")
     @GetMapping
     public ResponseEntity<List<AppSettingResponseDto>>
             getAllSettings() {
@@ -62,6 +71,7 @@ public class AppSettingController {
  return ResponseEntity.ok(appSettingService.getAllSettings());
     }
 
+    @Operation(summary = "Get Active Settings")
     @GetMapping("/active")
     public ResponseEntity<List<AppSettingResponseDto>>
             getActiveSettings() {
@@ -69,6 +79,7 @@ public class AppSettingController {
  return ResponseEntity.ok(appSettingService.getActiveSettings());
     }
 
+    @Operation(summary = "Deactivate Setting")
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Void>
             deactivateSetting(@PathVariable Long id) {
@@ -78,6 +89,7 @@ public class AppSettingController {
  return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Delete Setting")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
             deleteSetting(@PathVariable Long id) {

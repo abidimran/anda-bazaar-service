@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/egg-prices/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/egg-prices/**").authenticated()
 
-                .requestMatchers(HttpMethod.POST, "/api/location-sync").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/locations/sync").hasRole("ADMIN")
 
                 .requestMatchers("/api/egg-rates-external/**").authenticated()
                 .requestMatchers("/api/auth/me").authenticated()
