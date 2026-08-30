@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Expected Prices", description = "Expected price predictions")
 @RestController
-@RequestMapping("/api/expected-prices")
+@RequestMapping("/api/expectedPrices")
 @RequiredArgsConstructor
 public class ExpectedPriceController {
     private final ExpectedPriceService expectedPriceService;
@@ -70,7 +70,7 @@ public class ExpectedPriceController {
     }
 
     @Operation(summary = "Get By Date Range")
-    @GetMapping("/date-range")
+    @GetMapping("/dateRange")
     public ResponseEntity<PagedResponse<ExpectedPriceResponseDto>>
             getByDateRange(@RequestParam @DateTimeFormat( iso = DateTimeFormat.ISO.DATE )
                     LocalDate startDate,

@@ -59,7 +59,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "Mark All As Read")
-    @PutMapping("/user/{userId}/read-status")
+    @PutMapping("/user/{userId}/readStatus")
     public ResponseEntity<Void>
             markAllAsRead(@PathVariable Long userId) {
         notificationService

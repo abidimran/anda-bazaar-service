@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Egg Prices", description = "Egg price CRUD and user price access")
 @RestController
-@RequestMapping("/api/egg-prices")
+@RequestMapping("/api/eggPrices")
 @RequiredArgsConstructor
 public class EggPriceController {
     private final EggPriceService eggPriceService;

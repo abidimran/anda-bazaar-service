@@ -54,7 +54,7 @@ public class LocationController {
     }
 
     @Operation(summary = "Get RapidAPI-enabled locations")
-    @GetMapping("/rapid-enabled")
+    @GetMapping("/rapidEnabled")
     public ResponseEntity<PagedResponse<LocationResponseDto>> getRapidEnabledLocations(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(PagedResponse.fromList(locationService.getRapidEnabledLocations(), page, size));
