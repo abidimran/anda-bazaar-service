@@ -63,7 +63,7 @@ class AuthServiceImplTest {
                 .firstName("Imran")
                 .lastName("Abid")
                 .email("imran@example.com")
-                .phone("9876543210")
+                .mobileNumber("9876543210")
                 .password("encoded_password")
                 .role(RoleType.USER)
                 .status(UserStatus.ACTIVE)
@@ -75,7 +75,7 @@ class AuthServiceImplTest {
             User u = inv.getArgument(0);
             return UserResponseDto.builder()
                     .id(u.getId()).firstName(u.getFirstName()).lastName(u.getLastName())
-                    .email(u.getEmail()).phone(u.getPhone()).role(u.getRole())
+                    .email(u.getEmail()).mobileNumber(u.getMobileNumber()).role(u.getRole())
                     .status(u.getStatus()).profileImage(u.getProfileImage())
                     .preferredLanguage(u.getPreferredLanguage()).preferredCity(u.getPreferredCity())
                     .notificationEnabled(u.getNotificationEnabled())
@@ -96,7 +96,7 @@ class AuthServiceImplTest {
                     .firstName("Imran")
                     .lastName("Abid")
                     .email("  Imran@Example.COM  ")
-                    .phone("9876543210")
+                    .mobileNumber("9876543210")
                     .password("password123")
                     .preferredLanguage("en")
                     .preferredCity("Mumbai")
@@ -108,7 +108,7 @@ class AuthServiceImplTest {
         void registersSuccessfully() {
             when(userRepository.existsByEmail( "imran@example.com"))
                     .thenReturn(false);
-            when(userRepository.existsByPhone( "9876543210"))
+            when(userRepository.existsByMobileNumber( "9876543210"))
                     .thenReturn(false);
             when(passwordEncoder.encode("password123"))
                     .thenReturn("encoded_password");
@@ -132,7 +132,7 @@ class AuthServiceImplTest {
         void normalizesEmail() {
             when(userRepository.existsByEmail( "imran@example.com"))
                     .thenReturn(false);
-            when(userRepository.existsByPhone( "9876543210"))
+            when(userRepository.existsByMobileNumber( "9876543210"))
                     .thenReturn(false);
             when(passwordEncoder.encode(anyString()))
                     .thenReturn("encoded_password");
@@ -160,11 +160,11 @@ class AuthServiceImplTest {
         void throwsForDuplicatePhone() {
             when(userRepository.existsByEmail( "imran@example.com"))
                     .thenReturn(false);
-            when(userRepository.existsByPhone( "9876543210"))
+            when(userRepository.existsByMobileNumber( "9876543210"))
                     .thenReturn(true);
             BadRequestException exception =
                     assertThrows(BadRequestException.class, () -> authService.register( registerRequest));
-            assertEquals( "Phone number already registered", exception.getMessage());
+            assertEquals( "Mobile number already registered", exception.getMessage());
             verify(userRepository, never())
                     .save(any(User.class));
         }
@@ -174,7 +174,7 @@ class AuthServiceImplTest {
         void succeedsEvenIfNotificationFails() {
             when(userRepository.existsByEmail( "imran@example.com"))
                     .thenReturn(false);
-            when(userRepository.existsByPhone( "9876543210"))
+            when(userRepository.existsByMobileNumber( "9876543210"))
                     .thenReturn(false);
             when(passwordEncoder.encode(anyString()))
                     .thenReturn("encoded_password");

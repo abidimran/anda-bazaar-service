@@ -57,7 +57,7 @@ class DashboardServiceImplTest {
     void setUp() {
         user = User.builder()
                 .id(1L).firstName("John").lastName("Doe")
-                .email("john@test.com").phone("1234567890")
+                .email("john@test.com").mobileNumber("1234567890")
                 .password("enc").role(RoleType.USER).status(UserStatus.ACTIVE).build();
         city = City.builder().id(1L).name("Bangalore").build();
         market = Market.builder().id(1L).name("Market").city(city).active(true).build();
@@ -201,7 +201,7 @@ class DashboardServiceImplTest {
         void shouldHandleNullNames() {
             User noNameUser = User.builder()
                     .id(2L).firstName(null).lastName(null)
-                    .email("noname@test.com").phone("0000000000")
+                    .email("noname@test.com").mobileNumber("0000000000")
                     .password("enc").role(RoleType.USER).status(UserStatus.ACTIVE).build();
             when(userRepository.findById(2L)).thenReturn(Optional.of(noNameUser));
             when(notificationRepository.findByUserIdOrderByCreatedAtDesc(2L))

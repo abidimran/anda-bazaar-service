@@ -23,11 +23,11 @@ public class RegisterRequestDto {
     @Email(message = "Enter a valid email")
     private String email;
 
-    @NotBlank(message = "Phone is required")
+    @NotBlank(message = "Mobile number is required")
     @Pattern(
         regexp = "^[0-9]{10,15}$",
-        message = "Phone must contain 10 to 15 digits")
-    private String phone;
+        message = "Mobile number must contain 10 to 15 digits")
+    private String mobileNumber;
 
     @NotBlank(message = "Password is required")
     @Size(

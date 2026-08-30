@@ -52,7 +52,7 @@ class UserServiceImplTest {
                 .firstName("John")
                 .lastName("Doe")
                 .email("john@example.com")
-                .phone("1234567890")
+                .mobileNumber("1234567890")
                 .password("encodedPassword")
                 .role(RoleType.USER)
                 .status(UserStatus.ACTIVE)
@@ -64,7 +64,7 @@ class UserServiceImplTest {
             User u = inv.getArgument(0);
             return UserResponseDto.builder()
                     .id(u.getId()).firstName(u.getFirstName()).lastName(u.getLastName())
-                    .email(u.getEmail()).phone(u.getPhone()).role(u.getRole())
+                    .email(u.getEmail()).mobileNumber(u.getMobileNumber()).role(u.getRole())
                     .status(u.getStatus()).profileImage(u.getProfileImage())
                     .preferredLanguage(u.getPreferredLanguage()).preferredCity(u.getPreferredCity())
                     .notificationEnabled(u.getNotificationEnabled())
@@ -74,7 +74,7 @@ class UserServiceImplTest {
             User u = inv.getArgument(0);
             return UserProfileDto.builder()
                     .id(u.getId()).firstName(u.getFirstName()).lastName(u.getLastName())
-                    .email(u.getEmail()).phone(u.getPhone()).role(u.getRole())
+                    .email(u.getEmail()).mobileNumber(u.getMobileNumber()).role(u.getRole())
                     .status(u.getStatus()).profileImage(u.getProfileImage())
                     .preferredLanguage(u.getPreferredLanguage()).preferredCity(u.getPreferredCity())
                     .notificationEnabled(u.getNotificationEnabled()).build();
@@ -83,7 +83,7 @@ class UserServiceImplTest {
                 .firstName("John")
                 .lastName("Doe")
                 .email("john@example.com")
-                .phone("1234567890")
+                .mobileNumber("1234567890")
                 .password("password123")
                 .preferredLanguage("en")
                 .preferredCity("Bangalore")
@@ -98,7 +98,7 @@ class UserServiceImplTest {
         @DisplayName("should create user successfully")
         void shouldCreateUserSuccessfully() {
             when(userRepository.existsByEmail("john@example.com")).thenReturn(false);
-            when(userRepository.existsByPhone("1234567890")).thenReturn(false);
+            when(userRepository.existsByMobileNumber("1234567890")).thenReturn(false);
             when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(user);
             UserResponseDto result = userService.createUser(requestDto);
@@ -113,7 +113,7 @@ class UserServiceImplTest {
         void shouldCreateUserWithNullNotificationEnabled() {
             requestDto.setNotificationEnabled(null);
             when(userRepository.existsByEmail("john@example.com")).thenReturn(false);
-            when(userRepository.existsByPhone("1234567890")).thenReturn(false);
+            when(userRepository.existsByMobileNumber("1234567890")).thenReturn(false);
             when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(user);
             UserResponseDto result = userService.createUser(requestDto);
@@ -133,10 +133,10 @@ class UserServiceImplTest {
         @DisplayName("should throw when phone already registered")
         void shouldThrowWhenPhoneAlreadyRegistered() {
             when(userRepository.existsByEmail("john@example.com")).thenReturn(false);
-            when(userRepository.existsByPhone("1234567890")).thenReturn(true);
+            when(userRepository.existsByMobileNumber("1234567890")).thenReturn(true);
             assertThatThrownBy(() -> userService.createUser(requestDto))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Phone number already registered");
+                    .hasMessage("Mobile number already registered");
         }
     }
 
@@ -246,12 +246,12 @@ class UserServiceImplTest {
         @Test
         @DisplayName("should throw when phone duplicate on update")
         void shouldThrowWhenPhoneDuplicate() {
-            requestDto.setPhone("9999999999");
+            requestDto.setMobileNumber("9999999999");
             when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-            when(userRepository.existsByPhone("9999999999")).thenReturn(true);
+            when(userRepository.existsByMobileNumber("9999999999")).thenReturn(true);
             assertThatThrownBy(() -> userService.updateUser(1L, requestDto))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Phone number already registered");
+                    .hasMessage("Mobile number already registered");
         }
 
         @Test

@@ -21,7 +21,7 @@ class CustomUserDetailsTest {
                 .firstName("John")
                 .lastName("Doe")
                 .email("john@example.com")
-                .phone("1234567890")
+                .mobileNumber("1234567890")
                 .password("encodedPassword")
                 .role(RoleType.USER)
                 .status(UserStatus.ACTIVE)

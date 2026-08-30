@@ -35,7 +35,7 @@ class CustomUserDetailsServiceTest {
     void setUp() {
         user = User.builder()
                 .id(1L).firstName("John").lastName("Doe")
-                .email("john@example.com").phone("1234567890")
+                .email("john@example.com").mobileNumber("1234567890")
                 .password("encodedPassword").role(RoleType.USER)
                 .status(UserStatus.ACTIVE).build();
     }

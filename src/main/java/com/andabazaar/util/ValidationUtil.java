@@ -23,9 +23,9 @@ public final class ValidationUtil {
                         .matches();
     }
 
-    public static boolean isValidPhone(String phone) {
-        return phone != null
-                && PHONE_PATTERN.matcher(phone)
+    public static boolean isValidPhone(String mobileNumber) {
+        return mobileNumber != null
+                && PHONE_PATTERN.matcher(mobileNumber)
                         .matches();
     }
 

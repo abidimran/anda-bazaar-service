@@ -33,16 +33,16 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Email already registered");
         }
 
-        if (userRepository.existsByPhone(
-                request.getPhone())) {
-            throw new BadRequestException("Phone number already registered");
+        if (userRepository.existsByMobileNumber(
+                request.getMobileNumber())) {
+            throw new BadRequestException("Mobile number already registered");
         }
 
         User admin = User.builder()
                 .firstName(request.getFirstName().trim())
                 .lastName(request.getLastName().trim())
                 .email(request.getEmail() .trim() .toLowerCase())
-                .phone(request.getPhone().trim())
+                .mobileNumber(request.getMobileNumber().trim())
                 .password( passwordEncoder.encode( request.getPassword()))
                 .role(RoleType.ADMIN)
                 .status(UserStatus.ACTIVE)

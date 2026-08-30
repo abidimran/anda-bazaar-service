@@ -54,7 +54,7 @@ class PaymentServiceImplTest {
     void setUp() {
         user = User.builder()
                 .id(1L).firstName("John").lastName("Doe")
-                .email("john@test.com").phone("1234567890")
+                .email("john@test.com").mobileNumber("1234567890")
                 .password("enc").role(RoleType.USER).status(UserStatus.ACTIVE).build();
         payment = Payment.builder()
                 .id(1L).user(user)

@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
         // -----------------------------------------------------
         // CHECK PHONE
         // -----------------------------------------------------
-        String phone = request.getPhone().trim();
-        if (userRepository.existsByPhone(phone)) {
-            throw new BadRequestException("Phone number already registered");
+        String mobileNumber = request.getMobileNumber().trim();
+        if (userRepository.existsByMobileNumber(mobileNumber)) {
+            throw new BadRequestException("Mobile number already registered");
         }
 
         // -----------------------------------------------------
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
                 .firstName( request.getFirstName().trim() )
                 .lastName( request.getLastName().trim() )
                 .email(email)
-                .phone(phone)
+                .mobileNumber(mobileNumber)
                 .password( passwordEncoder.encode( request.getPassword() ) )
                 .role(RoleType.USER)
                 .status(UserStatus.ACTIVE)
@@ -115,13 +115,13 @@ public class UserServiceImpl implements UserService {
         // -----------------------------------------------------
         // NORMALIZE PHONE
         // -----------------------------------------------------
-        String phone = request.getPhone().trim();
+        String mobileNumber = request.getMobileNumber().trim();
         // -----------------------------------------------------
         // CHECK PHONE DUPLICATE
         // -----------------------------------------------------
-        if (!user.getPhone().equals(phone)
-                && userRepository.existsByPhone(phone)) {
-            throw new BadRequestException("Phone number already registered");
+        if (!user.getMobileNumber().equals(mobileNumber)
+                && userRepository.existsByMobileNumber(mobileNumber)) {
+            throw new BadRequestException("Mobile number already registered");
         }
 
         // -----------------------------------------------------
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName( request.getFirstName().trim());
         user.setLastName( request.getLastName().trim());
         user.setEmail(email);
-        user.setPhone(phone);
+        user.setMobileNumber(mobileNumber);
         // -----------------------------------------------------
         // UPDATE PASSWORD
         // -----------------------------------------------------

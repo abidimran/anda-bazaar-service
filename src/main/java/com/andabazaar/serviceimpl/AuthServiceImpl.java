@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("========================================");
         System.out.println("REGISTER START");
         System.out.println("EMAIL = " + request.getEmail());
-        System.out.println("PHONE = " + request.getPhone());
+        System.out.println("MOBILE = " + request.getMobileNumber());
         System.out.println("========================================");
         String email = request.getEmail()
                 .trim()
@@ -54,17 +54,17 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Email already registered");
         }
 
-        if (userRepository.existsByPhone(
-                request.getPhone())) {
-            System.out.println("REGISTER FAILED: PHONE ALREADY EXISTS");
-            throw new BadRequestException("Phone number already registered");
+        if (userRepository.existsByMobileNumber(
+                request.getMobileNumber())) {
+            System.out.println("REGISTER FAILED: MOBILE ALREADY EXISTS");
+            throw new BadRequestException("Mobile number already registered");
         }
 
         User user = User.builder()
                 .firstName( request.getFirstName().trim() )
                 .lastName( request.getLastName().trim() )
                 .email(email)
-                .phone( request.getPhone().trim() )
+                .mobileNumber( request.getMobileNumber().trim() )
                 .password( passwordEncoder.encode( request.getPassword() ) )
                 .role(RoleType.USER)
                 .status(UserStatus.ACTIVE)

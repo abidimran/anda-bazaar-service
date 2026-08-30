@@ -13,7 +13,7 @@ import lombok.*;
     name = "users",
     uniqueConstraints = {
         @UniqueConstraint(columnNames = "email"),
-        @UniqueConstraint(columnNames = "phone")
+        @UniqueConstraint(columnNames = "mobileNumber")
     }
 )
 @Getter
@@ -36,7 +36,7 @@ public class User {
     private String email;
 
     @Column(nullable = false, unique = true, length = 15)
-    private String phone;
+    private String mobileNumber;
 
     @Column(nullable = false)
     private String password;

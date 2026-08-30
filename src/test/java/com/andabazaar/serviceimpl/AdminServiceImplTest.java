@@ -51,7 +51,7 @@ class AdminServiceImplTest {
                 .firstName("Admin")
                 .lastName("User")
                 .email("admin@example.com")
-                .phone("9876543210")
+                .mobileNumber("9876543210")
                 .password("encodedPassword")
                 .role(RoleType.ADMIN)
                 .status(UserStatus.ACTIVE)
@@ -63,7 +63,7 @@ class AdminServiceImplTest {
             User u = inv.getArgument(0);
             return UserResponseDto.builder()
                     .id(u.getId()).firstName(u.getFirstName()).lastName(u.getLastName())
-                    .email(u.getEmail()).phone(u.getPhone()).role(u.getRole())
+                    .email(u.getEmail()).mobileNumber(u.getMobileNumber()).role(u.getRole())
                     .status(u.getStatus()).profileImage(u.getProfileImage())
                     .preferredLanguage(u.getPreferredLanguage()).preferredCity(u.getPreferredCity())
                     .notificationEnabled(u.getNotificationEnabled())
@@ -73,7 +73,7 @@ class AdminServiceImplTest {
                 .firstName("Admin")
                 .lastName("User")
                 .email("admin@example.com")
-                .phone("9876543210")
+                .mobileNumber("9876543210")
                 .password("admin123")
                 .preferredLanguage("en")
                 .preferredCity("Mumbai")
@@ -88,7 +88,7 @@ class AdminServiceImplTest {
         @DisplayName("should create admin successfully")
         void shouldCreateAdminSuccessfully() {
             when(userRepository.existsByEmail("admin@example.com")).thenReturn(false);
-            when(userRepository.existsByPhone("9876543210")).thenReturn(false);
+            when(userRepository.existsByMobileNumber("9876543210")).thenReturn(false);
             when(passwordEncoder.encode("admin123")).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(admin);
             UserResponseDto result = adminService.createAdmin(requestDto);
@@ -102,7 +102,7 @@ class AdminServiceImplTest {
         void shouldDefaultNotificationEnabled() {
             requestDto.setNotificationEnabled(null);
             when(userRepository.existsByEmail(anyString())).thenReturn(false);
-            when(userRepository.existsByPhone(anyString())).thenReturn(false);
+            when(userRepository.existsByMobileNumber(anyString())).thenReturn(false);
             when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(admin);
             adminService.createAdmin(requestDto);
@@ -114,7 +114,7 @@ class AdminServiceImplTest {
         void shouldRespectNotificationEnabledFalse() {
             requestDto.setNotificationEnabled(false);
             when(userRepository.existsByEmail(anyString())).thenReturn(false);
-            when(userRepository.existsByPhone(anyString())).thenReturn(false);
+            when(userRepository.existsByMobileNumber(anyString())).thenReturn(false);
             when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
             when(userRepository.save(any(User.class))).thenReturn(admin);
             adminService.createAdmin(requestDto);
@@ -134,10 +134,10 @@ class AdminServiceImplTest {
         @DisplayName("should throw when phone already registered")
         void shouldThrowWhenPhoneExists() {
             when(userRepository.existsByEmail("admin@example.com")).thenReturn(false);
-            when(userRepository.existsByPhone("9876543210")).thenReturn(true);
+            when(userRepository.existsByMobileNumber("9876543210")).thenReturn(true);
             assertThatThrownBy(() -> adminService.createAdmin(requestDto))
                     .isInstanceOf(BadRequestException.class)
-                    .hasMessage("Phone number already registered");
+                    .hasMessage("Mobile number already registered");
         }
     }
 
