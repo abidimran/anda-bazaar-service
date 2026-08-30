@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "External Egg Rates", description = "Fetch egg rates from external RapidAPI")
 @RestController
-@RequestMapping("/api/eggRatesExternal")
+@RequestMapping("/api/egg-rates-external")
 @RequiredArgsConstructor
 public class EggRateApiController {
     private final EggRateApiService eggRateApiService;
