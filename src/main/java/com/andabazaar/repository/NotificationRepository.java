@@ -13,6 +13,4 @@ public interface NotificationRepository
     List<Notification> findByUserIdAndReadFalseOrderByCreatedAtDesc(Long userId);
 
     long countByUserIdAndReadFalse(Long userId);
-
-    long countByReadFalse();
 }

@@ -18,15 +18,9 @@ public interface ExpectedPriceRepository
 
     List<ExpectedPrice> findByActiveTrueOrderByExpectedDateDesc();
 
-    List<ExpectedPrice> findByMarketIdAndActiveTrueOrderByExpectedDateDesc(Long marketId);
-
     List<ExpectedPrice> findByExpectedDateBetweenOrderByExpectedDateDesc(LocalDate startDate, LocalDate endDate);
 
     List<ExpectedPrice> findByMarketIdAndExpectedDateBetweenOrderByExpectedDateDesc(Long marketId, LocalDate startDate, LocalDate endDate);
 
-    long countByMarketId(Long marketId);
-
     long countByActiveTrue();
-
-    long countByExpectedDate(LocalDate expectedDate);
 }
