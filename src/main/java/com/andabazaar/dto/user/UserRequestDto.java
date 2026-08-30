@@ -2,9 +2,16 @@ package com.andabazaar.dto.user;
 
 import com.andabazaar.enums.RoleType;
 
+import com.andabazaar.validation.ValidMobileNumber;
+
 import jakarta.validation.constraints.Email;
+import com.andabazaar.validation.ValidMobileNumber;
+
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import com.andabazaar.validation.ValidMobileNumber;
+
+import com.andabazaar.validation.ValidMobileNumber;
+
 import jakarta.validation.constraints.Size;
 
 import lombok.*;
@@ -28,9 +35,7 @@ public class UserRequestDto {
     private String email;
 
     @NotBlank(message = "Mobile number is required")
-    @Pattern(
-        regexp = "^[0-9]{10,15}$",
-        message = "Mobile number must contain 10 to 15 digits")
+    @ValidMobileNumber
     private String mobileNumber;
 
     @NotBlank(message = "Password is required")
