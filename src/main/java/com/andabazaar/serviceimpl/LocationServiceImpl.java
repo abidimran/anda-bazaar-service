@@ -2,7 +2,6 @@ package com.andabazaar.serviceimpl;
 
 import com.andabazaar.dto.location.LocationRequestDto;
 import com.andabazaar.dto.location.LocationResponseDto;
-import com.andabazaar.exception.BadRequestException;
 import com.andabazaar.exception.ResourceNotFoundException;
 import com.andabazaar.mapper.LocationMapper;
 import com.andabazaar.repository.CityRepository;
@@ -14,9 +13,7 @@ import com.andabazaar.repository.entity.Country;
 import com.andabazaar.repository.entity.Location;
 import com.andabazaar.repository.entity.State;
 import com.andabazaar.service.LocationService;
-
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
