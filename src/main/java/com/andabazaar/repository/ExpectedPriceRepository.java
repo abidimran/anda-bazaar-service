@@ -8,8 +8,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ExpectedPriceRepository
-        extends JpaRepository<ExpectedPrice, Long> {
+public interface ExpectedPriceRepository extends JpaRepository<ExpectedPrice, Long> {
     List<ExpectedPrice> findByMarketIdOrderByExpectedDateDesc(Long marketId);
 
     Optional<ExpectedPrice> findByMarketIdAndExpectedDate(Long marketId, LocalDate expectedDate);

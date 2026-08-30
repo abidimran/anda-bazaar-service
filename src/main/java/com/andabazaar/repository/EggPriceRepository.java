@@ -8,8 +8,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EggPriceRepository
-        extends JpaRepository<EggPrice, Long> {
+public interface EggPriceRepository extends JpaRepository<EggPrice, Long> {
     List<EggPrice> findByPriceDateOrderByPriceDateDesc(LocalDate priceDate);
 
     List<EggPrice> findByMarketIdOrderByPriceDateDesc(Long marketId);

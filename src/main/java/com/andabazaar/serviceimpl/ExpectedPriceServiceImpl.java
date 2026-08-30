@@ -21,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ExpectedPriceServiceImpl
-        implements ExpectedPriceService {
+public class ExpectedPriceServiceImpl implements ExpectedPriceService {
     private final ExpectedPriceRepository expectedPriceRepository;
     private final MarketRepository marketRepository;
     private final ExpectedPriceMapper expectedPriceMapper;
