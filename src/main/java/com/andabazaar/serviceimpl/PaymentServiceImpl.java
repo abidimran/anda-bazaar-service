@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentMapper paymentMapper;
 
     @Override
-    public PaymentResponseDto createPayment( Long userId, BigDecimal amount) {
+    public PaymentResponseDto createPayment(Long userId, BigDecimal amount) {
         User user = findUser(userId);
         if (amount == null ||
                 amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -61,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
                             .currency("INR")
                             .razorpayOrderId( razorpayOrderId )
                             .orderId( razorpayOrderId )
-                            .status( PaymentStatus.PENDING )
+                            .status(PaymentStatus.PENDING )
                             .build();
             Payment savedPayment = paymentRepository.save(payment);
             return paymentMapper.toDto( savedPayment);
@@ -71,7 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponseDto verifyPayment( Long userId, PaymentVerificationDto request) {
+    public PaymentResponseDto verifyPayment(Long userId, PaymentVerificationDto request) {
         User user = findUser(userId);
         if (request == null) {
             throw new BadRequestException("Payment verification data is required");
@@ -119,13 +119,13 @@ public class PaymentServiceImpl implements PaymentService {
                             request.getRazorpayPaymentId(),
                             request.getRazorpaySignature());
             if (!verified) {
-                payment.setStatus( PaymentStatus.FAILED);
+                payment.setStatus(PaymentStatus.FAILED);
                 payment.setFailureReason("Invalid Razorpay payment signature");
                 paymentRepository.save(payment);
                 throw new BadRequestException("Payment verification failed");
             }
         } catch (RazorpayException e) {
-            payment.setStatus( PaymentStatus.FAILED);
+            payment.setStatus(PaymentStatus.FAILED);
             payment.setFailureReason("Razorpay signature verification error");
             paymentRepository.save(payment);
             throw new BadRequestException("Payment verification failed");
@@ -137,15 +137,15 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setRazorpayPaymentId( request.getRazorpayPaymentId());
         payment.setRazorpaySignature( request.getRazorpaySignature());
         payment.setTransactionId( request.getRazorpayPaymentId());
-        payment.setStatus( PaymentStatus.SUCCESS);
-        payment.setPaidAt( LocalDateTime.now());
+        payment.setStatus(PaymentStatus.SUCCESS);
+        payment.setPaidAt(LocalDateTime.now());
         payment.setFailureReason(null);
         Payment savedPayment = paymentRepository.save(payment);
         return paymentMapper.toDto( savedPayment);
     }
 
     @Override
-    public void processRazorpayWebhook( String payload) {
+    public void processRazorpayWebhook(String payload) {
         if (payload == null ||
                 payload.isBlank()) {
             return;
@@ -190,8 +190,8 @@ public class PaymentServiceImpl implements PaymentService {
                     payment.setRazorpayPaymentId( razorpayPaymentId);
                     payment.setTransactionId( razorpayPaymentId);
                 }
-                payment.setStatus( PaymentStatus.SUCCESS);
-                payment.setPaidAt( LocalDateTime.now());
+                payment.setStatus(PaymentStatus.SUCCESS);
+                payment.setPaidAt(LocalDateTime.now());
                 payment.setFailureReason(null);
                 paymentRepository.save(payment);
                 return;
@@ -206,7 +206,7 @@ public class PaymentServiceImpl implements PaymentService {
                         !razorpayPaymentId.isBlank()) {
                     payment.setRazorpayPaymentId( razorpayPaymentId);
                 }
-                payment.setStatus( PaymentStatus.FAILED);
+                payment.setStatus(PaymentStatus.FAILED);
                 payment.setFailureReason( errorDescription);
                 paymentRepository.save(payment);
             }
@@ -217,7 +217,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentResponseDto getPaymentById( Long id) {
+    public PaymentResponseDto getPaymentById(Long id) {
         Payment payment =
                 paymentRepository
                         .findById(id)
@@ -227,7 +227,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PaymentResponseDto> getUserPayments( Long userId) {
+    public List<PaymentResponseDto> getUserPayments(Long userId) {
         findUser(userId);
         return paymentRepository
                 .findByUserIdOrderByCreatedAtDesc( userId )
@@ -238,7 +238,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentResponseDto getPaymentByTransactionId( String transactionId) {
+    public PaymentResponseDto getPaymentByTransactionId(String transactionId) {
         if (transactionId == null ||
                 transactionId.isBlank()) {
             throw new BadRequestException("Transaction ID is required");

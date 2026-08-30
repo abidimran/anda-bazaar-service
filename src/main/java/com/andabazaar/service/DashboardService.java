@@ -5,5 +5,6 @@ import com.andabazaar.dto.dashboard.UserDashboardDto;
 
 public interface DashboardService {
     AdminDashboardDto getAdminDashboard();
+
     UserDashboardDto getUserDashboard(Long userId);
 }

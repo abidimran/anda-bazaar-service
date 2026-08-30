@@ -80,9 +80,9 @@ public class AuthServiceImpl implements AuthService {
          * registration response.
          */
         try {
-            notificationService.createNotification( NotificationRequestDto.builder()
+            notificationService.createNotification(NotificationRequestDto.builder()
                             .userId( savedUser.getId() )
-                            .type( NotificationType.SYSTEM )
+                            .type(NotificationType.SYSTEM )
                             .title("Welcome to Anda Bazaar")
                             .message("Welcome to Anda Bazaar! " + "Your account has been " + "created successfully.")
                             .build());
@@ -105,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponseDto login( LoginRequestDto request) {
+    public LoginResponseDto login(LoginRequestDto request) {
         System.out.println("========================================");
         System.out.println("LOGIN START");
         System.out.println("EMAIL = " + request.getEmail());

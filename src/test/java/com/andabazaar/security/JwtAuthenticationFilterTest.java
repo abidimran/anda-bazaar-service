@@ -26,9 +26,13 @@ import static org.mockito.Mockito.*;
 @DisplayName("JwtAuthenticationFilter Tests")
 class JwtAuthenticationFilterTest {
     @Mock private JwtService jwtService;
+
     @Mock private CustomUserDetailsService userDetailsService;
+
     @Mock private HttpServletRequest request;
+
     @Mock private HttpServletResponse response;
+
     @Mock private FilterChain filterChain;
 
     @InjectMocks

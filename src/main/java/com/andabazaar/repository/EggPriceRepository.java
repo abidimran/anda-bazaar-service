@@ -10,13 +10,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EggPriceRepository
         extends JpaRepository<EggPrice, Long> {
-    List<EggPrice> findByPriceDateOrderByPriceDateDesc( LocalDate priceDate);
-    long countByPriceDate( LocalDate priceDate);
-    List<EggPrice> findByMarketIdOrderByPriceDateDesc( Long marketId);
-    Optional<EggPrice> findByMarketIdAndPriceDate( Long marketId, LocalDate priceDate);
-    List<EggPrice>
-    findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc( Long marketId, LocalDate startDate, LocalDate endDate);
-    boolean existsByMarketIdAndPriceDate( Long marketId, LocalDate priceDate);
-    List<EggPrice>
-    findByPriceDateBetweenOrderByPriceDateDesc( LocalDate startDate, LocalDate endDate);
+    List<EggPrice> findByPriceDateOrderByPriceDateDesc(LocalDate priceDate);
+
+    long countByPriceDate(LocalDate priceDate);
+
+    List<EggPrice> findByMarketIdOrderByPriceDateDesc(Long marketId);
+
+    Optional<EggPrice> findByMarketIdAndPriceDate(Long marketId, LocalDate priceDate);
+
+    List<EggPrice> findByMarketIdAndPriceDateBetweenOrderByPriceDateDesc(Long marketId, LocalDate startDate, LocalDate endDate);
+
+    boolean existsByMarketIdAndPriceDate(Long marketId, LocalDate priceDate);
+
+    List<EggPrice> findByPriceDateBetweenOrderByPriceDateDesc(LocalDate startDate, LocalDate endDate);
 }

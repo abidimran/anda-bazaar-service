@@ -16,19 +16,19 @@ class DateTimeUtilTest {
     @Test
     @DisplayName("today() returns current date")
     void todayReturnsCurrentDate() {
-        assertEquals( LocalDate.now(), DateTimeUtil.today());
+        assertEquals(LocalDate.now(), DateTimeUtil.today());
     }
 
     @Test
     @DisplayName("yesterday() returns previous day")
     void yesterdayReturnsPreviousDay() {
-        assertEquals( LocalDate.now().minusDays(1), DateTimeUtil.yesterday());
+        assertEquals(LocalDate.now().minusDays(1), DateTimeUtil.yesterday());
     }
 
     @Test
     @DisplayName("tomorrow() returns next day")
     void tomorrowReturnsNextDay() {
-        assertEquals( LocalDate.now().plusDays(1), DateTimeUtil.tomorrow());
+        assertEquals(LocalDate.now().plusDays(1), DateTimeUtil.tomorrow());
     }
 
     // =============================================================
@@ -86,19 +86,19 @@ class DateTimeUtilTest {
         @Test
         @DisplayName("returns true for today's date")
         void returnsTrueForToday() {
-            assertTrue( DateTimeUtil.isToday( LocalDate.now()));
+            assertTrue(DateTimeUtil.isToday(LocalDate.now()));
         }
 
         @Test
         @DisplayName("returns false for yesterday")
         void returnsFalseForYesterday() {
-            assertFalse( DateTimeUtil.isToday( LocalDate.now() .minusDays(1)));
+            assertFalse(DateTimeUtil.isToday(LocalDate.now() .minusDays(1)));
         }
 
         @Test
         @DisplayName("returns false for tomorrow")
         void returnsFalseForTomorrow() {
-            assertFalse( DateTimeUtil.isToday( LocalDate.now() .plusDays(1)));
+            assertFalse(DateTimeUtil.isToday(LocalDate.now() .plusDays(1)));
         }
     }
 
@@ -111,25 +111,25 @@ class DateTimeUtilTest {
         @Test
         @DisplayName("returns true for past date")
         void returnsTrueForPast() {
-            assertTrue( DateTimeUtil.isPast( LocalDate.now() .minusDays(7)));
+            assertTrue(DateTimeUtil.isPast(LocalDate.now() .minusDays(7)));
         }
 
         @Test
         @DisplayName("returns false for today")
         void returnsFalseForToday() {
-            assertFalse( DateTimeUtil.isPast( LocalDate.now()));
+            assertFalse(DateTimeUtil.isPast(LocalDate.now()));
         }
 
         @Test
         @DisplayName("returns false for future date")
         void returnsFalseForFuture() {
-            assertFalse( DateTimeUtil.isPast( LocalDate.now() .plusDays(1)));
+            assertFalse(DateTimeUtil.isPast(LocalDate.now() .plusDays(1)));
         }
 
         @Test
         @DisplayName("returns false for null")
         void returnsFalseForNull() {
-            assertFalse( DateTimeUtil.isPast(null));
+            assertFalse(DateTimeUtil.isPast(null));
         }
     }
 
@@ -142,25 +142,25 @@ class DateTimeUtilTest {
         @Test
         @DisplayName("returns true for future date")
         void returnsTrueForFuture() {
-            assertTrue( DateTimeUtil.isFuture( LocalDate.now() .plusDays(7)));
+            assertTrue(DateTimeUtil.isFuture(LocalDate.now() .plusDays(7)));
         }
 
         @Test
         @DisplayName("returns false for today")
         void returnsFalseForToday() {
-            assertFalse( DateTimeUtil.isFuture( LocalDate.now()));
+            assertFalse(DateTimeUtil.isFuture(LocalDate.now()));
         }
 
         @Test
         @DisplayName("returns false for past date")
         void returnsFalseForPast() {
-            assertFalse( DateTimeUtil.isFuture( LocalDate.now() .minusDays(1)));
+            assertFalse(DateTimeUtil.isFuture(LocalDate.now() .minusDays(1)));
         }
 
         @Test
         @DisplayName("returns false for null")
         void returnsFalseForNull() {
-            assertFalse( DateTimeUtil.isFuture(null));
+            assertFalse(DateTimeUtil.isFuture(null));
         }
     }
 }

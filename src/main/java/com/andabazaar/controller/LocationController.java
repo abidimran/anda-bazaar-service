@@ -35,8 +35,7 @@ public class LocationController {
 
     @Operation(summary = "Get all locations")
     @GetMapping
-    public ResponseEntity<PagedResponse<LocationResponseDto>> getAllLocations(
-            @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<PagedResponse<LocationResponseDto>> getAllLocations(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(PagedResponse.fromList(locationService.getAllLocations(), page, size));
     }
@@ -56,8 +55,7 @@ public class LocationController {
 
     @Operation(summary = "Get RapidAPI-enabled locations")
     @GetMapping("/rapid-enabled")
-    public ResponseEntity<PagedResponse<LocationResponseDto>> getRapidEnabledLocations(
-            @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<PagedResponse<LocationResponseDto>> getRapidEnabledLocations(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(PagedResponse.fromList(locationService.getRapidEnabledLocations(), page, size));
     }

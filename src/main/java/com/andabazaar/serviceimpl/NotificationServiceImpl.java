@@ -26,7 +26,7 @@ public class NotificationServiceImpl
     private final UserRepository userRepository;
 
     @Override
-    public NotificationResponseDto createNotification( NotificationRequestDto request) {
+    public NotificationResponseDto createNotification(NotificationRequestDto request) {
         User user = userRepository
                 .findById(request.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -72,7 +72,7 @@ public class NotificationServiceImpl
     }
 
     @Override
-    public void markAsRead( Long notificationId, Long userId) {
+    public void markAsRead(Long notificationId, Long userId) {
         Notification notification =
                 notificationRepository
                         .findById(notificationId)
@@ -84,13 +84,12 @@ public class NotificationServiceImpl
         }
 
         notification.setRead(true);
-        notification.setReadAt( LocalDateTime.now());
+        notification.setReadAt(LocalDateTime.now());
     }
 
     @Override
     public void markAllAsRead(Long userId) {
-        List<Notification> notifications =
-                notificationRepository
+        List<Notification> notifications = notificationRepository
                     .findByUserIdAndReadFalseOrderByCreatedAtDesc( userId);
         LocalDateTime now = LocalDateTime.now();
         for (Notification notification : notifications) {
@@ -100,7 +99,7 @@ public class NotificationServiceImpl
     }
 
     @Override
-    public void deleteNotification( Long notificationId, Long userId) {
+    public void deleteNotification(Long notificationId, Long userId) {
         Notification notification =
                 notificationRepository
                     .findById(notificationId)
@@ -115,7 +114,7 @@ public class NotificationServiceImpl
     }
 
     private NotificationResponseDto
-            mapToResponse( Notification notification) {
+            mapToResponse(Notification notification) {
         return NotificationResponseDto.builder()
                 .id(notification.getId())
                 .userId( notification.getUser().getId() )

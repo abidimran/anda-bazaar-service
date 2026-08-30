@@ -72,8 +72,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .stream()
                 .filter(notification -> Boolean.FALSE.equals(notification.getRead()))
                 .count();
-        List<EggPrice> todayPrices = eggPriceRepository
-                .findByPriceDateOrderByPriceDateDesc(today);
+        List<EggPrice> todayPrices = eggPriceRepository .findByPriceDateOrderByPriceDateDesc(today);
         BigDecimal lowestEggPrice = getLowestPrice(todayPrices);
         BigDecimal highestEggPrice = getHighestPrice(todayPrices);
         BigDecimal averageEggPrice = getAveragePrice(todayPrices);
@@ -114,8 +113,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private BigDecimal getAveragePrice(List<EggPrice> prices) {
-        List<BigDecimal> validPrices = prices.stream()
-                .map(EggPrice::getPricePerEgg)
+        List<BigDecimal> validPrices = prices.stream() .map(EggPrice::getPricePerEgg)
                 .filter(price -> price != null)
                 .toList();
         if (validPrices.isEmpty()) {
@@ -124,7 +122,7 @@ public class DashboardServiceImpl implements DashboardService {
 
         BigDecimal total = validPrices.stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return total.divide( BigDecimal.valueOf(validPrices.size()), 2, RoundingMode.HALF_UP);
+        return total.divide(BigDecimal.valueOf(validPrices.size()), 2, RoundingMode.HALF_UP);
     }
 
     private String buildUserName(User user) {

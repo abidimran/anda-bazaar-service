@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto updateUser( Long id, UserRequestDto request) {
+    public UserResponseDto updateUser(Long id, UserRequestDto request) {
         User user = findUser(id);
         // -----------------------------------------------------
         // NORMALIZE EMAIL
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto changeUserStatus( Long id, String status) {
+    public UserResponseDto changeUserStatus(Long id, String status) {
         User user = findUser(id);
         if (status == null || status.isBlank()) {
             throw new BadRequestException("User status is required");

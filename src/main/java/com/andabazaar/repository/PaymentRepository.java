@@ -13,15 +13,23 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PaymentRepository
         extends JpaRepository<Payment, Long> {
-    Optional<Payment> findByTransactionId( String transactionId);
-    Optional<Payment> findByOrderId( String orderId);
-    Optional<Payment> findByRazorpayOrderId( String razorpayOrderId);
-    Optional<Payment> findByRazorpayPaymentId( String razorpayPaymentId);
-    List<Payment> findByUserIdOrderByCreatedAtDesc( Long userId);
-    List<Payment> findByUserIdAndStatusOrderByCreatedAtDesc( Long userId, PaymentStatus status);
-    boolean existsByTransactionId( String transactionId);
-    boolean existsByRazorpayOrderId( String razorpayOrderId);
-    boolean existsByRazorpayPaymentId( String razorpayPaymentId);
+    Optional<Payment> findByTransactionId(String transactionId);
+
+    Optional<Payment> findByOrderId(String orderId);
+
+    Optional<Payment> findByRazorpayOrderId(String razorpayOrderId);
+
+    Optional<Payment> findByRazorpayPaymentId(String razorpayPaymentId);
+
+    List<Payment> findByUserIdOrderByCreatedAtDesc(Long userId);
+
+    List<Payment> findByUserIdAndStatusOrderByCreatedAtDesc(Long userId, PaymentStatus status);
+
+    boolean existsByTransactionId(String transactionId);
+
+    boolean existsByRazorpayOrderId(String razorpayOrderId);
+
+    boolean existsByRazorpayPaymentId(String razorpayPaymentId);
 
     @Query("""
         SELECT COALESCE(SUM(p.amount), 0)

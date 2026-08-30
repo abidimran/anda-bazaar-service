@@ -27,7 +27,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponseDto createAdmin( UserRequestDto request) {
+    public UserResponseDto createAdmin(UserRequestDto request) {
         if (userRepository.existsByEmail(
                 request.getEmail())) {
             throw new BadRequestException("Email already registered");
@@ -71,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public UserResponseDto changeUserStatus( Long id, String status) {
+    public UserResponseDto changeUserStatus(Long id, String status) {
         User user = findUser(id);
         try {
             UserStatus newStatus = UserStatus.valueOf( status.toUpperCase());

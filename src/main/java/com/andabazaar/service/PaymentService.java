@@ -8,10 +8,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface PaymentService {
-    PaymentResponseDto createPayment( Long userId, BigDecimal amount);
-    PaymentResponseDto verifyPayment( Long userId, PaymentVerificationDto request);
-    PaymentResponseDto getPaymentById( Long id);
-    List<PaymentResponseDto> getUserPayments( Long userId);
-    PaymentResponseDto getPaymentByTransactionId( String transactionId);
-    void processRazorpayWebhook( String payload);
+    PaymentResponseDto createPayment(Long userId, BigDecimal amount);
+
+    PaymentResponseDto verifyPayment(Long userId, PaymentVerificationDto request);
+
+    PaymentResponseDto getPaymentById(Long id);
+
+    List<PaymentResponseDto> getUserPayments(Long userId);
+
+    PaymentResponseDto getPaymentByTransactionId(String transactionId);
+
+    void processRazorpayWebhook(String payload);
 }

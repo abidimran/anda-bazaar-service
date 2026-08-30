@@ -17,7 +17,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
     private final EggRateApiClient eggRateApiClient;
 
     @Override
-    public EggRateApiResponseDto getEggRates( String city, String state) {
+    public EggRateApiResponseDto getEggRates(String city, String state) {
         validateCityAndState(city, state);
         try {
             log.info("Fetching all egg rates for city={}, state={}", city, state);
@@ -31,7 +31,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
     }
 
     @Override
-    public EggRateSingleResponseDto getTodayRate( String city, String state) {
+    public EggRateSingleResponseDto getTodayRate(String city, String state) {
         validateCityAndState(city, state);
         try {
             log.info("Fetching today's egg rate for city={}, state={}", city, state);
@@ -45,7 +45,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
     }
 
     @Override
-    public EggRateSingleResponseDto getYesterdayRate( String city, String state) {
+    public EggRateSingleResponseDto getYesterdayRate(String city, String state) {
         validateCityAndState(city, state);
         try {
             log.info("Fetching yesterday's egg rate for city={}, state={}", city, state);
@@ -58,7 +58,7 @@ public class EggRateApiServiceImpl implements EggRateApiService {
         }
     }
 
-    private void validateCityAndState( String city, String state) {
+    private void validateCityAndState(String city, String state) {
         if (city == null || city.isBlank()) {
             throw new BadRequestException("City is required");
         }

@@ -38,8 +38,11 @@ import static org.mockito.Mockito.*;
 @DisplayName("DashboardServiceImpl Tests")
 class DashboardServiceImplTest {
     @Mock private UserRepository userRepository;
+
     @Mock private EggPriceRepository eggPriceRepository;
+
     @Mock private PaymentRepository paymentRepository;
+
     @Mock private NotificationRepository notificationRepository;
 
     @InjectMocks

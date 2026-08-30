@@ -18,7 +18,7 @@ public class RazorpayServiceImpl implements RazorpayService {
     private final RazorpayConfig razorpayConfig;
 
     @Override
-    public Order createOrder( BigDecimal amount, String currency, String receipt ) throws RazorpayException {
+    public Order createOrder(BigDecimal amount, String currency, String receipt ) throws RazorpayException {
         if (amount == null ||
                 amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero");
@@ -39,7 +39,7 @@ public class RazorpayServiceImpl implements RazorpayService {
     }
 
     @Override
-    public boolean verifySignature( String orderId, String paymentId, String signature ) throws RazorpayException {
+    public boolean verifySignature(String orderId, String paymentId, String signature ) throws RazorpayException {
         if (orderId == null ||
                 paymentId == null ||
                 signature == null) {

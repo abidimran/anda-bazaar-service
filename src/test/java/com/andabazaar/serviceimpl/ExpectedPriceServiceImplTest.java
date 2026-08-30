@@ -33,7 +33,9 @@ import static org.mockito.Mockito.*;
 @DisplayName("ExpectedPriceServiceImpl Tests")
 class ExpectedPriceServiceImplTest {
     @Mock private ExpectedPriceRepository expectedPriceRepository;
+
     @Mock private MarketRepository marketRepository;
+
     @Mock private ExpectedPriceMapper expectedPriceMapper;
 
     @InjectMocks

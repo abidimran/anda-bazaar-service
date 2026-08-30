@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class RazorpayWebhookService {
     private final RazorpayConfig razorpayConfig;
 
-    public boolean verifyWebhookSignature( String payload, String signature) {
+    public boolean verifyWebhookSignature(String payload, String signature) {
         if (payload == null || payload.isBlank()) {
             return false;
         }
@@ -33,7 +33,7 @@ public class RazorpayWebhookService {
         return json.optString("event");
     }
 
-    public String getRazorpayOrderId( String payload) {
+    public String getRazorpayOrderId(String payload) {
         JSONObject json = new JSONObject(payload);
         JSONObject payloadObject = json.optJSONObject("payload");
         if (payloadObject == null) {
@@ -63,7 +63,7 @@ public class RazorpayWebhookService {
         return null;
     }
 
-    public String getRazorpayPaymentId( String payload) {
+    public String getRazorpayPaymentId(String payload) {
         JSONObject json = new JSONObject(payload);
         JSONObject payloadObject = json.optJSONObject("payload");
         if (payloadObject == null) {

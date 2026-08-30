@@ -28,7 +28,7 @@ public class ExpectedPriceServiceImpl
     private final ExpectedPriceMapper expectedPriceMapper;
 
     @Override
-    public ExpectedPriceResponseDto createExpectedPrice( ExpectedPriceRequestDto request) {
+    public ExpectedPriceResponseDto createExpectedPrice(ExpectedPriceRequestDto request) {
         Market market = findMarket(request.getMarketId());
         if (expectedPriceRepository
                 .existsByMarketIdAndExpectedDate( request.getMarketId(), request.getExpectedDate())) {
@@ -46,7 +46,7 @@ public class ExpectedPriceServiceImpl
     }
 
     @Override
-    public ExpectedPriceResponseDto updateExpectedPrice( Long id, ExpectedPriceRequestDto request) {
+    public ExpectedPriceResponseDto updateExpectedPrice(Long id, ExpectedPriceRequestDto request) {
         ExpectedPrice expectedPrice = findExpectedPrice(id);
         Market market = findMarket(request.getMarketId());
         boolean marketChanged =
@@ -71,13 +71,13 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public ExpectedPriceResponseDto getExpectedPriceById( Long id) {
+    public ExpectedPriceResponseDto getExpectedPriceById(Long id) {
         return expectedPriceMapper.toResponseDto( findExpectedPrice(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ExpectedPriceResponseDto> getByMarket( Long marketId) {
+    public List<ExpectedPriceResponseDto> getByMarket(Long marketId) {
         if (!marketRepository.existsById(marketId)) {
             throw new ResourceNotFoundException("Market not found with id: " + marketId);
         }
@@ -92,7 +92,7 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public ExpectedPriceResponseDto getByMarketAndDate( Long marketId, LocalDate expectedDate) {
+    public ExpectedPriceResponseDto getByMarketAndDate(Long marketId, LocalDate expectedDate) {
         ExpectedPrice expectedPrice =
                 expectedPriceRepository
                         .findByMarketIdAndExpectedDate( marketId, expectedDate )
@@ -118,7 +118,7 @@ public class ExpectedPriceServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public List<ExpectedPriceResponseDto> getByDateRange( LocalDate startDate, LocalDate endDate) {
+    public List<ExpectedPriceResponseDto> getByDateRange(LocalDate startDate, LocalDate endDate) {
         validateDateRange(startDate, endDate);
         return expectedPriceRepository
                 .findByExpectedDateBetweenOrderByExpectedDateDesc( startDate, endDate )
@@ -131,7 +131,7 @@ public class ExpectedPriceServiceImpl
     @Override
     @Transactional(readOnly = true)
     public List<ExpectedPriceResponseDto>
-            getMarketDateRange( Long marketId, LocalDate startDate, LocalDate endDate) {
+            getMarketDateRange(Long marketId, LocalDate startDate, LocalDate endDate) {
         validateDateRange(startDate, endDate);
         if (!marketRepository.existsById(marketId)) {
             throw new ResourceNotFoundException("Market not found with id: " + marketId);
@@ -159,7 +159,7 @@ public class ExpectedPriceServiceImpl
                 .countByActiveTrue();
     }
 
-    private ExpectedPrice findExpectedPrice( Long id) {
+    private ExpectedPrice findExpectedPrice(Long id) {
         return expectedPriceRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Expected price not found with id: " + id));
@@ -171,7 +171,7 @@ public class ExpectedPriceServiceImpl
                 .orElseThrow(() -> new ResourceNotFoundException("Market not found with id: " + id));
     }
 
-    private void validateDateRange( LocalDate startDate, LocalDate endDate) {
+    private void validateDateRange(LocalDate startDate, LocalDate endDate) {
         if (startDate == null || endDate == null) {
             throw new BadRequestException("Start date and end date are required");
         }

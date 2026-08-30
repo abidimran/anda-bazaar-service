@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface LocationService {
     LocationResponseDto createLocation(LocationRequestDto request);
+
     LocationResponseDto getLocationById(Long id);
+
     List<LocationResponseDto> getAllLocations();
+
     LocationResponseDto updateLocation(Long id, LocationRequestDto request);
+
     void deleteLocation(Long id);
+
     List<LocationResponseDto> getRapidEnabledLocations();
 }

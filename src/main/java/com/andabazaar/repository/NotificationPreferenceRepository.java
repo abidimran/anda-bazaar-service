@@ -10,6 +10,5 @@ public interface NotificationPreferenceRepository
         extends JpaRepository<
                 NotificationPreference,
                 Long> {
-    Optional<NotificationPreference>
-    findByUserId(Long userId);
+    Optional<NotificationPreference> findByUserId(Long userId);
 }

@@ -43,7 +43,7 @@ class PriceCalculationUtilTest {
             BigDecimal price = new BigDecimal("5.00");
             BigDecimal result =
                     PriceCalculationUtil.calculateChange( price, price);
-            assertEquals( BigDecimal.ZERO.setScale(2), result);
+            assertEquals(BigDecimal.ZERO.setScale(2), result);
         }
 
         @Test
@@ -152,7 +152,7 @@ class PriceCalculationUtilTest {
         @DisplayName("returns zero when previous price is zero")
         void returnsZeroWhenPreviousPriceIsZero() {
             BigDecimal result =
-                    PriceCalculationUtil.calculatePercentageChange( BigDecimal.ZERO, new BigDecimal("5.00"));
+                    PriceCalculationUtil.calculatePercentageChange(BigDecimal.ZERO, new BigDecimal("5.00"));
             assertEquals(BigDecimal.ZERO, result);
         }
 
@@ -192,7 +192,7 @@ class PriceCalculationUtilTest {
         @DisplayName("returns zero for empty list")
         void returnsZeroForEmpty() {
             BigDecimal result =
-                    PriceCalculationUtil.calculateAverage( Collections.emptyList());
+                    PriceCalculationUtil.calculateAverage(Collections.emptyList());
             assertEquals(BigDecimal.ZERO, result);
         }
 
@@ -208,8 +208,7 @@ class PriceCalculationUtilTest {
         @Test
         @DisplayName("returns zero when list has only nulls")
         void returnsZeroWhenAllNull() {
-            List<BigDecimal> prices =
-                    Arrays.asList(null, null);
+            List<BigDecimal> prices = Arrays.asList(null, null);
             BigDecimal result =
                     PriceCalculationUtil.calculateAverage( prices);
             assertEquals(BigDecimal.ZERO, result);
@@ -218,8 +217,7 @@ class PriceCalculationUtilTest {
         @Test
         @DisplayName("handles single element list")
         void handlesSingleElement() {
-            List<BigDecimal> prices =
-                    List.of(new BigDecimal("42.50"));
+            List<BigDecimal> prices = List.of(new BigDecimal("42.50"));
             BigDecimal result =
                     PriceCalculationUtil.calculateAverage( prices);
             assertEquals( new BigDecimal("42.50"), result);
@@ -253,7 +251,7 @@ class PriceCalculationUtilTest {
         @DisplayName("returns zero for empty list")
         void returnsZeroForEmpty() {
             BigDecimal result =
-                    PriceCalculationUtil.findLowestPrice( Collections.emptyList());
+                    PriceCalculationUtil.findLowestPrice(Collections.emptyList());
             assertEquals(BigDecimal.ZERO, result);
         }
 
@@ -294,7 +292,7 @@ class PriceCalculationUtilTest {
         @DisplayName("returns zero for empty list")
         void returnsZeroForEmpty() {
             BigDecimal result =
-                    PriceCalculationUtil.findHighestPrice( Collections.emptyList());
+                    PriceCalculationUtil.findHighestPrice(Collections.emptyList());
             assertEquals(BigDecimal.ZERO, result);
         }
 

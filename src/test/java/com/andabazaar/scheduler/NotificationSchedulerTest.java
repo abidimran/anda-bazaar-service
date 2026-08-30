@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("NotificationScheduler Tests")
 class NotificationSchedulerTest {
     @Mock private UserRepository userRepository;
+
     @Mock private NotificationRepository notificationRepository;
 
     @InjectMocks

@@ -30,8 +30,11 @@ import static org.mockito.Mockito.*;
 @DisplayName("EggRateFetchScheduler Tests")
 class EggRateFetchSchedulerTest {
     @Mock private EggRateApiClient eggRateApiClient;
+
     @Mock private StateRepository stateRepository;
+
     @Mock private CityRepository cityRepository;
+
     @Mock private DailyEggRateRepository dailyEggRateRepository;
 
     @InjectMocks

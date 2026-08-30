@@ -46,37 +46,37 @@ class ValidationUtilTest {
         @Test
         @DisplayName("returns true for valid email")
         void returnsTrueForValid() {
-            assertTrue( ValidationUtil.isValidEmail( "user@example.com"));
+            assertTrue(ValidationUtil.isValidEmail( "user@example.com"));
         }
 
         @Test
         @DisplayName("returns true for email with dots and plus")
         void returnsTrueForDotsAndPlus() {
-            assertTrue( ValidationUtil.isValidEmail( "user.name+tag@domain.co.in"));
+            assertTrue(ValidationUtil.isValidEmail( "user.name+tag@domain.co.in"));
         }
 
         @Test
         @DisplayName("returns false for null")
         void returnsFalseForNull() {
-            assertFalse( ValidationUtil.isValidEmail(null));
+            assertFalse(ValidationUtil.isValidEmail(null));
         }
 
         @Test
         @DisplayName("returns false for empty string")
         void returnsFalseForEmpty() {
-            assertFalse( ValidationUtil.isValidEmail(""));
+            assertFalse(ValidationUtil.isValidEmail(""));
         }
 
         @Test
         @DisplayName("returns false for missing @")
         void returnsFalseForMissingAt() {
-            assertFalse( ValidationUtil.isValidEmail( "userexample.com"));
+            assertFalse(ValidationUtil.isValidEmail( "userexample.com"));
         }
 
         @Test
         @DisplayName("returns false for missing domain")
         void returnsFalseForMissingDomain() {
-            assertFalse( ValidationUtil.isValidEmail( "user@"));
+            assertFalse(ValidationUtil.isValidEmail( "user@"));
         }
     }
 
@@ -89,31 +89,31 @@ class ValidationUtilTest {
         @Test
         @DisplayName("returns true for 10 digit phone")
         void returnsTrueForValid() {
-            assertTrue( ValidationUtil.isValidPhone( "9876543210"));
+            assertTrue(ValidationUtil.isValidPhone( "9876543210"));
         }
 
         @Test
         @DisplayName("returns false for null")
         void returnsFalseForNull() {
-            assertFalse( ValidationUtil.isValidPhone(null));
+            assertFalse(ValidationUtil.isValidPhone(null));
         }
 
         @Test
         @DisplayName("returns false for less than 10 digits")
         void returnsFalseForShort() {
-            assertFalse( ValidationUtil.isValidPhone( "12345"));
+            assertFalse(ValidationUtil.isValidPhone( "12345"));
         }
 
         @Test
         @DisplayName("returns false for more than 10 digits")
         void returnsFalseForLong() {
-            assertFalse( ValidationUtil.isValidPhone( "12345678901"));
+            assertFalse(ValidationUtil.isValidPhone( "12345678901"));
         }
 
         @Test
         @DisplayName("returns false for non-digit characters")
         void returnsFalseForNonDigits() {
-            assertFalse( ValidationUtil.isValidPhone( "98765-4321"));
+            assertFalse(ValidationUtil.isValidPhone( "98765-4321"));
         }
     }
 
@@ -126,31 +126,31 @@ class ValidationUtilTest {
         @Test
         @DisplayName("returns true for 6 digit pincode")
         void returnsTrueForValid() {
-            assertTrue( ValidationUtil.isValidPincode( "400001"));
+            assertTrue(ValidationUtil.isValidPincode( "400001"));
         }
 
         @Test
         @DisplayName("returns false for null")
         void returnsFalseForNull() {
-            assertFalse( ValidationUtil.isValidPincode(null));
+            assertFalse(ValidationUtil.isValidPincode(null));
         }
 
         @Test
         @DisplayName("returns false for 5 digits")
         void returnsFalseForShort() {
-            assertFalse( ValidationUtil.isValidPincode( "40001"));
+            assertFalse(ValidationUtil.isValidPincode( "40001"));
         }
 
         @Test
         @DisplayName("returns false for 7 digits")
         void returnsFalseForLong() {
-            assertFalse( ValidationUtil.isValidPincode( "4000012"));
+            assertFalse(ValidationUtil.isValidPincode( "4000012"));
         }
 
         @Test
         @DisplayName("returns false for non-digit characters")
         void returnsFalseForNonDigits() {
-            assertFalse( ValidationUtil.isValidPincode( "40A001"));
+            assertFalse(ValidationUtil.isValidPincode( "40A001"));
         }
     }
 
@@ -195,25 +195,25 @@ class ValidationUtilTest {
         @Test
         @DisplayName("returns true for positive")
         void returnsTrueForPositive() {
-            assertTrue( ValidationUtil.isNonNegative(5));
+            assertTrue(ValidationUtil.isNonNegative(5));
         }
 
         @Test
         @DisplayName("returns true for zero")
         void returnsTrueForZero() {
-            assertTrue( ValidationUtil.isNonNegative(0));
+            assertTrue(ValidationUtil.isNonNegative(0));
         }
 
         @Test
         @DisplayName("returns false for negative")
         void returnsFalseForNegative() {
-            assertFalse( ValidationUtil.isNonNegative(-1));
+            assertFalse(ValidationUtil.isNonNegative(-1));
         }
 
         @Test
         @DisplayName("returns false for null")
         void returnsFalseForNull() {
-            assertFalse( ValidationUtil.isNonNegative(null));
+            assertFalse(ValidationUtil.isNonNegative(null));
         }
     }
 

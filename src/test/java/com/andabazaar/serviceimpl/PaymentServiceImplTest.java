@@ -36,8 +36,11 @@ import static org.mockito.Mockito.*;
 @DisplayName("PaymentServiceImpl Tests")
 class PaymentServiceImplTest {
     @Mock private PaymentRepository paymentRepository;
+
     @Mock private UserRepository userRepository;
+
     @Mock private RazorpayService razorpayService;
+
     @Mock private PaymentMapper paymentMapper;
 
     @InjectMocks

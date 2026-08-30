@@ -12,40 +12,40 @@ public final class ValidationUtil {
 
     private static final Pattern PINCODE_PATTERN = Pattern.compile("^[0-9]{6}$");
 
-    public static boolean isNullOrEmpty( String value) {
+    public static boolean isNullOrEmpty(String value) {
         return value == null
                 || value.trim().isEmpty();
     }
 
-    public static boolean isValidEmail( String email) {
+    public static boolean isValidEmail(String email) {
         return email != null
                 && EMAIL_PATTERN.matcher(email)
                         .matches();
     }
 
-    public static boolean isValidPhone( String phone) {
+    public static boolean isValidPhone(String phone) {
         return phone != null
                 && PHONE_PATTERN.matcher(phone)
                         .matches();
     }
 
-    public static boolean isValidPincode( String pincode) {
+    public static boolean isValidPincode(String pincode) {
         return pincode != null
                 && PINCODE_PATTERN.matcher(pincode)
                         .matches();
     }
 
-    public static boolean isPositive( Number value) {
+    public static boolean isPositive(Number value) {
         return value != null
                 && value.doubleValue() > 0;
     }
 
-    public static boolean isNonNegative( Number value) {
+    public static boolean isNonNegative(Number value) {
         return value != null
                 && value.doubleValue() >= 0;
     }
 
-    public static boolean isValidId( Long id) {
+    public static boolean isValidId(Long id) {
         return id != null && id > 0;
     }
 }

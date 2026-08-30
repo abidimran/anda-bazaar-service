@@ -121,7 +121,7 @@ class AuthServiceImplTest {
             assertEquals("Abid", result.getLastName());
             assertEquals( "imran@example.com", result.getEmail());
             assertEquals(RoleType.USER, result.getRole());
-            assertEquals( UserStatus.ACTIVE, result.getStatus());
+            assertEquals(UserStatus.ACTIVE, result.getStatus());
             verify(userRepository).save(any(User.class));
             verify(notificationService)
                     .createNotification(any());
@@ -149,7 +149,7 @@ class AuthServiceImplTest {
             when(userRepository.existsByEmail( "imran@example.com"))
                     .thenReturn(true);
             BadRequestException exception =
-                    assertThrows( BadRequestException.class, () -> authService.register( registerRequest));
+                    assertThrows(BadRequestException.class, () -> authService.register( registerRequest));
             assertEquals( "Email already registered", exception.getMessage());
             verify(userRepository, never())
                     .save(any(User.class));
@@ -163,7 +163,7 @@ class AuthServiceImplTest {
             when(userRepository.existsByPhone( "9876543210"))
                     .thenReturn(true);
             BadRequestException exception =
-                    assertThrows( BadRequestException.class, () -> authService.register( registerRequest));
+                    assertThrows(BadRequestException.class, () -> authService.register( registerRequest));
             assertEquals( "Phone number already registered", exception.getMessage());
             verify(userRepository, never())
                     .save(any(User.class));
@@ -228,7 +228,7 @@ class AuthServiceImplTest {
         void throwsForBadCredentials() {
             when(authenticationManager.authenticate(any()))
                     .thenThrow( new BadCredentialsException( "Bad credentials"));
-            assertThrows( BadCredentialsException.class, () -> authService.login(loginRequest));
+            assertThrows(BadCredentialsException.class, () -> authService.login(loginRequest));
         }
 
         @Test
@@ -236,7 +236,7 @@ class AuthServiceImplTest {
         void throwsWhenUserNotFound() {
             when(userRepository.findByEmail( "imran@example.com"))
                     .thenReturn(Optional.empty());
-            assertThrows( BadRequestException.class, () -> authService.login(loginRequest));
+            assertThrows(BadRequestException.class, () -> authService.login(loginRequest));
         }
 
         @Test
@@ -246,7 +246,7 @@ class AuthServiceImplTest {
             when(userRepository.findByEmail( "imran@example.com"))
                     .thenReturn(Optional.of(testUser));
             BadRequestException exception =
-                    assertThrows( BadRequestException.class, () -> authService.login( loginRequest));
+                    assertThrows(BadRequestException.class, () -> authService.login( loginRequest));
             assertEquals( "User account is not active", exception.getMessage());
         }
     }
@@ -274,7 +274,7 @@ class AuthServiceImplTest {
         void throwsWhenNotFound() {
             when(userRepository.findByEmail( "unknown@example.com"))
                     .thenReturn(Optional.empty());
-            assertThrows( BadRequestException.class, () -> authService.getCurrentUser( "unknown@example.com"));
+            assertThrows(BadRequestException.class, () -> authService.getCurrentUser( "unknown@example.com"));
         }
 
         @Test
@@ -284,7 +284,7 @@ class AuthServiceImplTest {
             when(userRepository.findByEmail( "imran@example.com"))
                     .thenReturn(Optional.of(testUser));
             BadRequestException exception =
-                    assertThrows( BadRequestException.class, () -> authService.getCurrentUser( "imran@example.com"));
+                    assertThrows(BadRequestException.class, () -> authService.getCurrentUser( "imran@example.com"));
             assertEquals( "User account is not active", exception.getMessage());
         }
     }
